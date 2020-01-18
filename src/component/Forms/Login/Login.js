@@ -10,17 +10,17 @@ import Input from '../../UI/Input/Input'
 class Login extends Component {
     state = {
         form: {
-            email: {
+            username: {
                 elementType: 'input',
                 elementConfig: {
                     autoFocus: true,
-                    type: 'email',
-                    placeholder: 'Email address',
+                    type: 'text',
+                    placeholder: 'Username',
                     required: true
                 },
                 value: '',
-                id: "email",
-                label: 'Email address',
+                id: "usernme",
+                label: 'Username',
             },
             password: {
                 elementType: 'input',
@@ -49,14 +49,19 @@ class Login extends Component {
         updatedFormEl.value = e.target.value;
         updatedForm[id] = updatedFormEl
         this.setState({ form: updatedForm })
+
+        console.log(document.cookie);
     }
 
     loginHandler = event => {
+        
         event.preventDefault();
         const formData = {};
         for (let formId in this.state.form) {
             formData[formId] = this.state.form[formId].value
         }
+        document.cookie='username='+formData.username ;
+        document.cookie= 'passwords='+ formData.password ;
     }
 
     render() {

@@ -18,7 +18,7 @@ class App extends Component {
           <Route path="/login" component={User} />
           <Route path="/home" component={Home} />
           <Route path="/messages" component={Messages} />
-          <Redirect from='/' to='/home' />
+          {/* <Redirect from='/' to='/messages' /> */}
         </Layout>
       </BrowserRouter>
     )
