@@ -1,0 +1,18 @@
+.Account {
+    /* background: #eee */
+}
+
+.bgImage {
+    background-image: url('../../assets/Image/sky1.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.login,
+.image {
+    min-height: 100vh;
+}
+
+.loginHeading {
+    font-weight: 300;
+}

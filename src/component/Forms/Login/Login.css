@@ -1,0 +1,12 @@
+.btnLogin {
+    font-size: 0.9rem;
+    background: orangered;
+    color: white;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+    border-radius: 2rem;
+}
+
+.btnLogin:hover {
+    background: orange
+}
