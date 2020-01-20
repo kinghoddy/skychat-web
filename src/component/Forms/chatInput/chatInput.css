@@ -1,0 +1,20 @@
+.msgInput{
+    position: absolute;
+    bottom: 0;
+     width: 100%;
+     padding: 1rem .5rem;
+     background: rgba(255, 255, 255, 0.5);
+     left: 0;
+ }
+ .msgInput input{
+     width: 100%;
+     padding: .6rem 1.3rem;
+     background: rgb(240, 231, 231);
+     border: 0;
+     border-radius: 2rem;
+     font-size: 1.4rem;
+ }
+ 
+ .msgInput input:focus{
+     outline: 0;
+ }
