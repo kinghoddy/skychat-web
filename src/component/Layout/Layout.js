@@ -6,9 +6,9 @@ import classes from './Layout.css'
 
 
 class Layout extends Component {
+
     render() {
-        var toolbar = null;
-        console.log(this.props);
+
 
         // if()
         return (
