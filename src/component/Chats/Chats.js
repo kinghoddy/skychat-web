@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Chats.css";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 
 class Chat extends Component {
@@ -42,16 +42,14 @@ class Chat extends Component {
 });
   }
 
-  chatClickedHandler = ()=>{
 
-  }
 
   render() {
       var chats = <p>Loading</p>
       if(this.state.chats){
         chats = this.state.chats.map(cur =>(
             <Link
-            to={"/messages/" + cur.username}
+            to={"/" + this.props.match.params.profile + "/messages/" + cur.username}
             className={classes.Chats + " px-3 py-2  border-bottom d-flex align-items-center"}
             key={cur.username}
             onClick={()=>{
@@ -79,5 +77,5 @@ class Chat extends Component {
  
 }
 }
-export default Chat;
+export default withRouter( Chat);
 

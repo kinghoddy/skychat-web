@@ -3,6 +3,18 @@
     position: relative;
     height: 100%;
 }
+.icon{
+    height: 3rem;
+    width: 3rem ;
+    border-radius: 50%;
+    background: #ddd;
+    overflow: hidden;
+}
+.icon img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
 .chats{
     margin-bottom: 5.2  rem;
     overflow: auto;

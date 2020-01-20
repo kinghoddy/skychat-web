@@ -4,6 +4,7 @@ import Logo from '../../Logo/Logo';
 import classes from './Toolbar.css';
 
 const toolbar = props => {
+    
     return (
         <nav className={classes.Toolbar + " navbar navbar-expand navbar-light fixed-top "}>
             <div className="container-fluid h-100">
@@ -14,10 +15,10 @@ const toolbar = props => {
                 <div className="navbar-collapse collapse">
                     <ul className={"text-capitalize navbar-nav ml-auto "}>
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll-trigger" to='/notification'><i className='material-icons'>notifications</i></Link>
+                            <Link className="nav-link js-scroll-trigger" to='/:profile/notification'><i className='material-icons'>notifications</i></Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link js-scroll-trigger" to='/messages'>messages</Link>
+                            <Link className="nav-link js-scroll-trigger" to={"/"+ props.profile + '/messages'}>messages</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link js-scroll-trigger" to='/login'>Login</Link>

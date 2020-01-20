@@ -10,6 +10,7 @@ class Home extends Component {
     }
 
     componentDidMount(){
+                  
         var kv = document.cookie.split(';');
         var cookies = {}
         for (var id in kv){
@@ -31,7 +32,7 @@ class Home extends Component {
         }
         return (
             <div className={classes.Profile}>
-                <Toolbar />
+                <Toolbar profile={this.props.match.params.profile} />
                 <h1>{name}</h1>
             </div>
         )

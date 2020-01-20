@@ -27,7 +27,9 @@ class App extends Component {
           <Switch>
           <Route path="/login" exact component={User} />
           <Route path="/signUp" exact component={User} />
-          <Route path="/messages"  component={Messages} />
+          <Route path="/:profile/messages/:chatHead" component={Messages}/>
+                  )} />
+          <Route path="/:profile/messages"  component={Messages} />
           <Route path="/:profile" exact component={Profile} />
           {/* <Redirect from='/' to='/messages' /> */}
           </Switch>
