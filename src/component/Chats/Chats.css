@@ -2,8 +2,9 @@
     /* cursor: pointer; */
 }
 .picture{
-    height: 5rem;
-    width: 5rem;
+    height: 3rem;
+    flex-shrink: 0;
+    width: 3rem;
     border-radius: 50%;
     overflow: hidden;
 }

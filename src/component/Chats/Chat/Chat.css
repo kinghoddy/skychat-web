@@ -1,11 +1,23 @@
 .chat{
-    font-size: 1.4rem;
-    border-radius: 5rem;
+    font-size: 1.2rem;
+    border-radius: 2rem;
     font-family: cursive;
     font-weight: 400;
     padding: .5rem 1rem ;
     margin-bottom: 1rem;
     max-width: 90%;
+}
+.icon{
+    background: #ddd;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.icon img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .sent{
     background: orangered;
@@ -20,4 +32,7 @@
 }
 .lg{
     padding: .5rem 2rem;
+}
+.lg2{
+    padding: 1rem 1.3rem;
 }
