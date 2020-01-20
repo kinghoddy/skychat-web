@@ -10,3 +10,13 @@
 .btnLogin:hover {
     background: orange
 }
+
+.googleBtn {
+    border-radius: 2rem;
+    text-transform: capitalize;
+    background: #ddd
+}
+
+.googleBtn svg {
+    color: rgb(0, 60, 255) !important;
+}

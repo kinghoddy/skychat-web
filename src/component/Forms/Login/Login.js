@@ -8,6 +8,7 @@ import "firebase/auth";
 
 import classes from "./Login.css";
 import Input from "../../UI/Input/Input";
+import Spinner from '../../UI/Spinner/Spinner'
 import Alert from "../../UI/Alert/Alert";
 
 class Login extends Component {
@@ -37,7 +38,8 @@ class Login extends Component {
         id: "password"
       }
     },
-    errorMessage: null
+    errorMessage: null,
+    loading: false
   };
   inputChanged = (e, id) => {
     const updatedForm = {
@@ -50,12 +52,13 @@ class Login extends Component {
   };
 
   googleLogin = () => {
+    this.setState({ loading: true })
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
       .signInWithPopup(provider)
       .then(result => {
-        this.setState({ errorMessage: null });
+        this.setState({ errorMessage: null, loading: false });
         var user = result.user;
         console.log(user);
 
@@ -74,7 +77,8 @@ class Login extends Component {
               <strong>Failed</strong>
               {errorMessage}
             </span>
-          )
+          ),
+          loading: false
         });
       });
   };
@@ -85,10 +89,11 @@ class Login extends Component {
     for (let formId in this.state.form) {
       formData[formId] = this.state.form[formId].value;
     }
+    this.setState({ loading: true })
     axios
       .get("https://skymail-920ab.firebaseio.com/users.json")
       .then(res => {
-        this.setState({ errorMessage: null });
+        this.setState({ errorMessage: null, loading: false });
         var userData = null;
 
         for (let keys in res.data) {
@@ -96,8 +101,9 @@ class Login extends Component {
             res.data[keys].username === formData.username &&
             res.data[keys].password === formData.password
           ) {
-            userData = { ...res.data[keys] };
+
             document.cookie = "username=" + formData.username;
+            document.cookie = "userId=" + keys;
             document.cookie = "passwords=" + formData.password;
             this.props.history.push(formData.username);
           }
@@ -109,10 +115,10 @@ class Login extends Component {
                 <strong>User not found</strong> Make sure username and password
                 are correct{" "}
               </span>
-            )
+            ),
+            loading: false
           });
         }
-        console.log(userData);
       })
       .catch(res => {
         this.setState({
@@ -120,7 +126,8 @@ class Login extends Component {
             <span>
               <strong>Error</strong> Failed to connect to server
             </span>
-          )
+          ),
+          loading: false
         });
         console.log(res);
       });
@@ -135,7 +142,7 @@ class Login extends Component {
       });
     }
     return (
-      <form onSubmit={this.loginHandler}>
+      this.state.loading ? <Spinner /> : <form onSubmit={this.loginHandler}>
         {this.state.errorMessage ? (
           <Alert type="warning" show={true}>
             {this.state.errorMessage}
@@ -166,14 +173,11 @@ class Login extends Component {
           Sign in
         </button>
         <button
-          className={
-            classes.btnLogin +
-            " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"
-          }
+          className={classes.googleBtn + " btn btn-lg btn-block mb-2"}
           type="button"
-          onClick={this.googleLogin}
-        >
-          Sign in with google
+          onClick={this.googleLogin}>
+          <i className="fab fa-google mr-3"></i>
+          Log in in with google
         </button>
         <div className="text-center">
           <Link className="small" to="./home">

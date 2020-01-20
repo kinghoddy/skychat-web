@@ -21,7 +21,7 @@ const Account = props => {
           <div className={classes.login + " d-flex align-items-center py-5"}>
             <div className="container">
               <div className="row">
-                <div className="col-md-9   col-lg-8 mx-auto">
+                <div className="col-md-9   col-lg-8 mx-auto" >
                   <Logo type="l6" height="6rem" />
                   <h3 className={classes.loginHeading + " mb-4"}>
                     Welcome back!

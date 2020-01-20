@@ -1,9 +1,17 @@
 .Messages {
     height: 100vh;
 }
-.Navbar{
+
+.Navbar {
     height: 3.6rem;
 }
-.overflow{
+
+.overflow {
     overflow: auto;
+}
+
+.chatroom {
+    background-color: rgb(255, 249, 213);
+    background-size: cover;
+    background-position: center
 }

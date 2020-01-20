@@ -5,14 +5,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #eee
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: .5rem;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, .2);
 }
-::-webkit-scrollbar-thumb:hover{
+
+::-webkit-scrollbar-thumb:hover {
   background: #777;
 }

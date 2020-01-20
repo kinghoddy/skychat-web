@@ -4,7 +4,7 @@ const Alert = props => {
   return (
     <div
       className={[
-        "alert-dismissible fade alert alert-" + props.type,
+        "alert-dismissible my-3 fade alert alert-" + props.type,
         props.show ? "show" : null
       ].join(" ")}
       role="alert"

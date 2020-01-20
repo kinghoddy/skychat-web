@@ -1,0 +1,52 @@
+.cover {
+    height: 10rem;
+    background: #ccc;
+    position: relative;
+    margin-bottom: 5rem
+}
+
+.cover img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.dp {
+    height: 5rem;
+    width: 5rem;
+    position: absolute;
+    left: 10%;
+    bottom: -2.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ddd;
+    box-shadow: 0 .2rem .3rem rgba(0, 0, 0, .3)
+}
+
+.username {
+    position: absolute;
+    top: 100%;
+    margin: .5rem 1rem;
+    text-align: right;
+    right: 0;
+    text-transform: capitalize;
+    width: 60%;
+    /* background: gold */
+}
+
+.horizontal_scroll {
+    flex-wrap: nowrap;
+    overflow-x: auto
+}
+
+.horizontal_scroll::-webkit-scrollbar {
+    height: .2rem;
+}
+
+
+@media only screen and (min-width: 1200px) {
+    .username {
+        text-align: left;
+        left: calc(5rem + 10%)
+    }
+}

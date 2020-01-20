@@ -9,6 +9,7 @@ import "firebase/auth";
 
 import classes from './SignUp.css';
 import Input from '../../UI/Input/Input'
+import Spinner from '../../UI/Spinner/Spinner'
 import Picture from '../../../assets/Image/avatar.png';
 
 
@@ -51,8 +52,12 @@ class Signin extends Component {
                 id: "phone"
             }
         },
-        errorMessage : null,
-        image : Picture
+        errorMessage: null,
+        image: Picture,
+        loading: true
+    }
+    componentDidMount() {
+        this.setState({ loading: false })
     }
     inputChanged = (e, id) => {
         const updatedForm = {
@@ -60,53 +65,58 @@ class Signin extends Component {
         }
         const updatedFormEl = { ...updatedForm[id] }
         updatedFormEl.value = e.target.value;
-    
-        
+
+
         updatedForm[id] = updatedFormEl
-        
+
         this.setState({ form: updatedForm })
     }
 
-    googleLogin = ()=>{
-  var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider)
-  .then((result)=> {
-      this.setState({errorMessage : null})
-    var user = result.user;
-    console.log( user);
-    
-    const updatedForm = {
-        ...this.state.form
-    }
-    updatedForm.username.value = user.displayName
-    updatedForm.password.value = user.uid
-    this.setState({image : user.photoURL})
+    googleLogin = () => {
+        this.setState({ loading: true })
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                this.setState({ errorMessage: null, loading: false })
+                var user = result.user;
+                console.log(user);
 
-    this.setState({ form: updatedForm })
-  }).catch((error)=> {
-    var errorMessage = error.message;
-    this.setState({errorMessage : errorMessage})
-  });
-        
+                const updatedForm = {
+                    ...this.state.form
+                }
+                updatedForm.username.value = user.displayName
+                updatedForm.password.value = user.uid
+                this.setState({ image: user.photoURL })
+
+                this.setState({ form: updatedForm })
+            }).catch((error) => {
+                var errorMessage = error.message;
+                this.setState({ errorMessage: errorMessage, loading: false })
+            });
+
     }
-    
+
     signInHandler = event => {
         event.preventDefault();
+        this.setState({ loading: true })
         const formData = {};
         for (let formId in this.state.form) {
             formData[formId] = this.state.form[formId].value
         }
         formData.profilePicture = this.state.image
         axios.post('https://skymail-920ab.firebaseio.com/users.json', formData)
-        .then(res=>{
-            this.setState({errorMessage : null})
-            document.cookie='username='+formData.username ;
-            document.cookie= 'passwords='+ formData.password ;
-            this.props.history.push(formData.username)
-        }).catch(res=>{
-            console.log(res);
-            this.setState({errorMessage : <span><strong>Network Error</strong>Couldn't connect to database </span>})
-        })
+            .then(res => {
+                this.setState({ errorMessage: null, loading: false })
+                document.cookie = 'username=' + formData.username;
+                document.cookie = 'passwords=' + formData.password;
+                this.props.history.push(formData.username)
+            }).catch(res => {
+                console.log(res);
+                this.setState({
+                    errorMessage: <span><strong>Network Error </strong> Couldn't connect to database </span>,
+                    loading: false
+                })
+            })
     }
 
     render() {
@@ -118,8 +128,8 @@ class Signin extends Component {
             })
         }
         return (
-            <form onSubmit={this.signInHandler}>
-                {this.state.errorMessage? <Alert type="danger">{this.state.errorMessage}</Alert> : ''}
+            this.state.loading ? <Spinner /> : <form onSubmit={this.signInHandler}>
+                {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
                 {formElementArray.map(el => (
                     <Input elementType={el.config.elementType}
                         elementConfig={el.config.elementConfig}
@@ -131,10 +141,13 @@ class Signin extends Component {
                 ))}
 
                 <button className={classes.btnLogin + " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"} type="submit">Sign Up</button>
-                <button className={classes.btnLogin + " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"} type="button" onClick={this.googleLogin} >Sign up with google</button>
+                <button className={classes.googleBtn + " btn btn-lg btn-block  mb-2"} type="button" onClick={this.googleLogin}>
+                    <i className="fab fa-google mr-3"></i>
+
+                    Sign up with google</button>
                 <div className="text-center">
-                <Link className="small" to="/login">Already have an accout, Login</Link>
-        </div>
+                    <Link className="small" to="/login">Already have an accout, Login</Link>
+                </div>
             </form>
 
         )
