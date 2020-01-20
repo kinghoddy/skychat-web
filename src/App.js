@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { Route, Redirect,Switch } from 'react-router-dom';
+import { Route,Switch } from 'react-router-dom';
 import * as firebase from "firebase/app";
 
 import Layout from './component/Layout/Layout';

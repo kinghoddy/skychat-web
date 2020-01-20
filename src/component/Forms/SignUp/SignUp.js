@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
+import axios from 'axios';
+import Alert from '../../UI/Alert/Alert';
 
 import * as firebase from "firebase/app";
 import "firebase/analytics";
@@ -8,7 +9,7 @@ import "firebase/auth";
 
 import classes from './SignUp.css';
 import Input from '../../UI/Input/Input'
-
+import Picture from '../../../assets/Image/avatar.png';
 
 
 
@@ -45,18 +46,13 @@ class Signin extends Component {
                     type: 'tel',
                     placeholder: 'Phone number'
                 },
-                value: '',
+                value: '+234',
                 label: 'Phone number',
                 id: "phone"
-            },
-            checkbox: {
-                elementType: 'checkbox',
-                label: "Remember my password",
-                id: "checkbox",
-
             }
         },
-        image : 'https/gppcroshodi.ga/img/gppcr-logo.png'
+        errorMessage : null,
+        image : Picture
     }
     inputChanged = (e, id) => {
         const updatedForm = {
@@ -75,6 +71,7 @@ class Signin extends Component {
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider)
   .then((result)=> {
+      this.setState({errorMessage : null})
     var user = result.user;
     console.log( user);
     
@@ -86,9 +83,9 @@ class Signin extends Component {
     this.setState({image : user.photoURL})
 
     this.setState({ form: updatedForm })
-  }).catch(function(error) {
+  }).catch((error)=> {
     var errorMessage = error.message;
-    console.log(errorMessage, 'error');
+    this.setState({errorMessage : errorMessage})
   });
         
     }
@@ -102,12 +99,13 @@ class Signin extends Component {
         formData.profilePicture = this.state.image
         axios.post('https://skymail-920ab.firebaseio.com/users.json', formData)
         .then(res=>{
+            this.setState({errorMessage : null})
             document.cookie='username='+formData.username ;
             document.cookie= 'passwords='+ formData.password ;
-            var expire = new Date(Date.now() + 60*1000)
             this.props.history.push(formData.username)
         }).catch(res=>{
             console.log(res);
+            this.setState({errorMessage : <span><strong>Network Error</strong>Couldn't connect to database </span>})
         })
     }
 
@@ -121,6 +119,7 @@ class Signin extends Component {
         }
         return (
             <form onSubmit={this.signInHandler}>
+                {this.state.errorMessage? <Alert type="danger">{this.state.errorMessage}</Alert> : ''}
                 {formElementArray.map(el => (
                     <Input elementType={el.config.elementType}
                         elementConfig={el.config.elementConfig}

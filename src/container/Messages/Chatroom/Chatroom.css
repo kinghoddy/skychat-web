@@ -1,8 +1,22 @@
-.msgInput{
 
-    width: 100%;
-    padding: 1rem;
-}
 .chatroom{
-    
+    position: relative;
+    height: 100%;
+}
+.chats{
+    margin-bottom: 5.2  rem;
+    overflow: auto;
+    height: calc(100% - 5.2rem);
+}
+.chats > div{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    justify-content: flex-end;
+
+}
+.chats > div > *{
+    flex-grow: 0;
+    flex-shrink: 0;
+
 }

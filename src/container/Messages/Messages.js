@@ -4,32 +4,42 @@ import Chats from "../../component/Chats/Chats";
 import { Route, Link } from "react-router-dom";
 import Chatroom from "./Chatroom/Chatroom";
 
-const Messages = props => {
-        return (
-            <div className={classes.Messages}>
-                <nav className={classes.Navbar +" navbar navbar-expand fixed-top border-bottom bg-white navbar-light"}>
-                    <Route path='/messages/:chathead' render={()=>(
-                        <Link to="/messages" className="navbar-brand">
-                        <i className={'fa fa-arrow-left'} ></i>
-                   </Link>
-                    )} />
-                    <Link to="/" className="navbar-brand">
-                        Recipient img
-                   </Link>
-                   <Route path='/messages' exact render={() => (
-                     <h4 className="mb-0">
-                         Chats
-                    </h4>
-                )} />
-                <Route path='/messages/:chatHead' exact render={() => (
-                     <h4 className="mb-0">
-                         {props.location.pathname.replace(props.match.path + '/', '')}
-                    </h4>
-                )} />
-                </nav>
-                <Route path='/messages' exact component={Chats} />
-                <Route path='/messages/:chatHead' component={Chatroom} />
-            </div>
-        );
+class Messages extends Component {
+    state = {
+         chatData : {
+             icon : '',
+             onlineState  : true
+         }
     }
+
+    getChatData = (icon)=>{
+        console.log(this.props);
+        
+         const chatdata = {
+             ...this.state.chatData
+         }
+         chatdata.icon = icon
+         this.setState({chatData : {...chatdata}})         
+    }
+    render(){
+
+  return (
+    <div className={classes.Messages}>
+     
+      <div className="container-fluid h-100 p-0">
+        <div className="row h-100 no-gutters">
+          <div className={classes.overflow + " col-md-4 bg-white h-100"}>
+              <Chats clicked = {this.getChatData} />
+          </div> 
+          <div className={"h-100 col-md-8 h-100"}>
+            <Route path="/messages/:chatHead" render={()=>(<Chatroom 
+            {...this.state.chatData}/>)} />
+          </div>
+
+        </div>
+      </div>
+    </div>
+    );
+}
+};
 export default Messages;

@@ -1,6 +1,9 @@
 .Messages {
-    padding-top: 3.6rem;
+    height: 100vh;
 }
 .Navbar{
     height: 3.6rem;
+}
+.overflow{
+    overflow: auto;
 }

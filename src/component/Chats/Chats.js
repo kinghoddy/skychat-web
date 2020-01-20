@@ -52,9 +52,11 @@ class Chat extends Component {
         chats = this.state.chats.map(cur =>(
             <Link
             to={"/messages/" + cur.username}
-            className={classes.Chats + " px-3 py-2 bg-white border-bottom d-flex align-items-center"}
+            className={classes.Chats + " px-3 py-2  border-bottom d-flex align-items-center"}
             key={cur.username}
-            onClick={this.chatClickedHandler}
+            onClick={()=>{
+              this.props.clicked(cur.picture)
+            }}
             >
             <div className={classes.picture}>
               <img src={cur.picture} alt="chat Icon" />
@@ -79,16 +81,3 @@ class Chat extends Component {
 }
 export default Chat;
 
-
-/*        <Link
-        to={"/messages/" + cur.username}
-        className={classes.Chats + " px-3 bg-white border-bottom d-flex"}
-        >
-        <div className={classes.picture}>
-          <img src={cur.picture} alt="chat Icon" />
-        </div>
-        <div>
-          <h5>{cur.chatHead}</h5>
-          <p>{cur.lastChat}</p>
-        </div>
-      </Link> */
