@@ -3,6 +3,7 @@ import classes from "./Chatroom.css";
 
 import { Link, withRouter } from "react-router-dom";
 import ChatInput from "../../../component/Forms/chatInput/chatInput";
+import Chat from '../../../component/Chats/Chat/Chat';
 
 class Chatroom extends Component {
   state = {
@@ -40,7 +41,7 @@ class Chatroom extends Component {
   render() {
     return (
       <div className={classes.chatroom}>
-        <nav className="bg-white navbar navbar-expand navbar-light">
+        <nav className={classes.navbar +" bg-white navbar navbar-expand navbar-light"}>
           <Link to="" className={classes.icon + " p-0 navbar-brand"}>
             <img src={this.props.icon} alt="profile" />
           </Link>
@@ -57,7 +58,11 @@ class Chatroom extends Component {
         </nav>
         <div className={classes.chats}>
           <div>
-            <span>chatroom</span>
+            <Chat type='sent'>H</Chat>
+            <Chat type='received'>this is skymai</Chat>
+            <Chat type='sent'>Hello</Chat>
+            <Chat type='received'>this is skymai made b king hoddy using react js an </Chat>
+      
           </div>
         </div>
         {/* chat input */}
