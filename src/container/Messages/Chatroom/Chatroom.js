@@ -3,7 +3,7 @@ import classes from "./Chatroom.css";
 
 import { Link, withRouter } from "react-router-dom";
 import ChatInput from "../../../component/Forms/chatInput/chatInput";
-import Chat from '../../../component/Chats/Chat/Chat';
+import Chat from "../../../component/Chats/Chat/Chat";
 
 class Chatroom extends Component {
   state = {
@@ -21,19 +21,15 @@ class Chatroom extends Component {
         time: "12/12/12",
         seen: true
       }
-    ],
-    icon: "",
+    ]
   };
   inputChanged = e => {
     this.setState({ value: e.target.value });
   };
   componentDidMount() {
-    
     this.setState({
       icon: this.props.icon
     });
-  }
-  componentDidUpdate() {
   }
 
   sendChat = () => {};
@@ -41,7 +37,11 @@ class Chatroom extends Component {
   render() {
     return (
       <div className={classes.chatroom}>
-        <nav className={classes.navbar +" bg-white navbar navbar-expand navbar-light"}>
+        <nav
+          className={
+            classes.navbar + " bg-white navbar navbar-expand navbar-light"
+          }
+        >
           <Link to="" className={classes.icon + " p-0 navbar-brand"}>
             <img src={this.props.icon} alt="profile" />
           </Link>
@@ -58,11 +58,11 @@ class Chatroom extends Component {
         </nav>
         <div className={classes.chats}>
           <div>
-            <Chat type='sent'>H</Chat>
-            <Chat type='received'>this is skymai</Chat>
-            <Chat type='sent'>Hello</Chat>
-            <Chat type='received'>this is skymai made b king hoddy using react js an </Chat>
-      
+            {this.state.chats.map((cur,i )=> (
+              <Chat key={i} seen={cur.seen} time={cur.time} sender={cur.sender} icon={this.props.icon}>
+                {cur.message}
+              </Chat>
+            ))}
           </div>
         </div>
         {/* chat input */}
