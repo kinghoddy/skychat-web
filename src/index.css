@@ -1,11 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: 'Source Sans Pro', cursive,
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #eee
+  background: #eee;
+}
+
+a:hover {
+  text-decoration: none !important
 }
 
 ::-webkit-scrollbar {
@@ -19,3 +22,28 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
+
+h5,
+h4 {
+  font-family: 'Josefin Sans', cursive, sans-serif;
+}
+
+h3,
+h2 {
+  font-family: 'Gochi Hand',
+    cursive;
+  text-transform: capitalize
+}
+
+h1 {
+  font-family: 'ZCOOL QingKe HuangYou',
+    cursive;
+}
+
+/* 
+font-family: 'Josefin Sans', sans-serif;
+font-family: 'Gloria Hallelujah', cursive;
+font-family: 'ZCOOL QingKe HuangYou', cursive;
+font-family: 'Gochi Hand', cursive;
+font-family: 'Source Sans Pro', sans-serif;
+*/

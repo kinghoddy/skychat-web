@@ -39,7 +39,8 @@ class Login extends Component {
       }
     },
     errorMessage: null,
-    loading: false
+    loading: false,
+    userExist: null
   };
   inputChanged = (e, id) => {
     const updatedForm = {
@@ -61,13 +62,13 @@ class Login extends Component {
         this.setState({ errorMessage: null, loading: false });
         var user = result.user;
         console.log(user);
-
         const updatedForm = {
           ...this.state.form
         };
         updatedForm.username.value = user.displayName;
         updatedForm.password.value = user.uid;
         this.setState({ form: updatedForm });
+
       })
       .catch(error => {
         var errorMessage = error.message;
@@ -83,41 +84,46 @@ class Login extends Component {
       });
   };
 
+  componentDidMount() {
+
+    console.log(this.state.userExist);
+  }
   loginHandler = event => {
     event.preventDefault();
     const formData = {};
     for (let formId in this.state.form) {
       formData[formId] = this.state.form[formId].value;
     }
+
     this.setState({ loading: true })
     axios
       .get("https://skymail-920ab.firebaseio.com/users.json")
       .then(res => {
         this.setState({ errorMessage: null, loading: false });
-        var userData = null;
 
         for (let keys in res.data) {
           if (
-            res.data[keys].username === formData.username &&
-            res.data[keys].password === formData.password
+            res.data[keys].username === formData.username && res.data[keys].password === formData.password
           ) {
-
             document.cookie = "username=" + formData.username;
             document.cookie = "userId=" + keys;
             document.cookie = "passwords=" + formData.password;
-            this.props.history.push(formData.username);
+            this.setState({
+              userExist: formData.username
+            })
+            this.props.history.push(this.state.userExist);
           }
         }
-        if (!userData) {
+        if (!this.state.userExist) {
           this.setState({
             errorMessage: (
               <span>
                 <strong>User not found</strong> Make sure username and password
-                are correct{" "}
-              </span>
+              are correct
+                </span>
             ),
             loading: false
-          });
+          })
         }
       })
       .catch(res => {
@@ -131,6 +137,8 @@ class Login extends Component {
         });
         console.log(res);
       });
+
+
   };
 
   render() {

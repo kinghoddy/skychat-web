@@ -17,22 +17,22 @@ const toolbar = props => {
                     </Link>
                     <div className="navbar-collapse collapse">
                         <ul className={"text-capitalize navbar-nav ml-auto "}>
-                            <Link className="ml-auto nav-link js-scroll-trigger" to={"/" + props.profile + '/messages'}>
+                            <Link className="ml-auto nav-link js-scroll-trigger" to={'/messages'}>
                                 <i className="material-icons">chats</i>
                             </Link>
                             <div className="d-none d-lg-inline-flex">
                                 <li className="nav-item col-4 ">
-                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + props.profile + "/timeline"}>
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + props.profile}>
                                         <i className='material-icons'>account_circle</i>
                                     </NavLink>
                                 </li>
                                 <li className="nav-item col-4">
-                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/' + props.profile + '/notification'}><i className='material-icons'>notifications</i>
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notification'}><i className='material-icons'>notifications</i>
                                     </NavLink>
                                 </li>
 
                                 <li className="nav-item col-4">
-                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/' + props.profile + '/menu'}>
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/menu'}>
                                         <i className='material-icons'>menu</i>
                                     </NavLink>
                                 </li>
@@ -46,17 +46,17 @@ const toolbar = props => {
                 <div className="container-fluid navbar-collapse collapse p-0">
                     <ul className=" navbar-nav w-100 text-center">
                         <li className="nav-item col-4 ">
-                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + props.profile + "/timeline"}>
+                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + props.profile}>
                                 <i className='material-icons'>account_circle</i>
                             </NavLink>
                         </li>
                         <li className="nav-item col-4">
-                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/' + props.profile + '/notification'}><i className='material-icons'>notifications</i>
+                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notifications'}><i className='material-icons'>notifications</i>
                             </NavLink>
                         </li>
 
                         <li className="nav-item col-4">
-                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/' + props.profile + '/menu'}>
+                            <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/menu'}>
                                 <i className='material-icons'>menu</i>
                             </NavLink>
                         </li>

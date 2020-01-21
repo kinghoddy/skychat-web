@@ -29,10 +29,8 @@ class App extends Component {
         <Switch>
           <Route path="/login" exact component={User} />
           <Route path="/signUp" exact component={User} />
-          {this.state.auth ?
-            <Route path="/:profile/messages" component={Messages} /> : null
-          }
-          <Route path="/:profile" component={Profile} />
+          <Route path="/messages" component={Messages} />
+          <Route path="/:profile" exact component={Profile} />
           <Redirect from='/' to='/login' />
           <Route render={() => (<h1>Not found</h1>)} />
         </Switch>

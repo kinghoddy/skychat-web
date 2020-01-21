@@ -2,12 +2,49 @@
     height: 100vh;
 }
 
-.Navbar {
+.navbar {
     height: 3.6rem;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 100
+}
+
+.icon {
+    height: 2.5rem;
+    width: 2.5rem;
+    overflow: hidden;
+    background: #eee;
+    border-radius: 50%;
+}
+
+.icon img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover
 }
 
 .overflow {
     overflow: auto;
+
+}
+
+.bubble {
+    position: absolute;
+    right: 1.5rem;
+    bottom: 2rem;
+    height: 4rem;
+    border: 0;
+    border-radius: 50%;
+    width: 4rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, .3);
+    background: white;
+    color: red
+}
+
+.bubble:focus {
+    outline: 0;
+
 }
 
 .chatroom {

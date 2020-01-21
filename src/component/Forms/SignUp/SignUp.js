@@ -45,6 +45,8 @@ class Signin extends Component {
                 elementConfig: {
                     required: true,
                     type: 'tel',
+                    minLength: 5,
+                    maxLength: 12,
                     placeholder: 'Phone number'
                 },
                 value: '+234',
@@ -99,17 +101,19 @@ class Signin extends Component {
     signInHandler = event => {
         event.preventDefault();
         this.setState({ loading: true })
-        const formData = {};
+        const formData = {
+            profilePicture: this.state.image,
+            friendsId: ['-LyveIYgq2A2j984h8-D'],
+            chats: {}
+        };
         for (let formId in this.state.form) {
             formData[formId] = this.state.form[formId].value
         }
-        formData.profilePicture = this.state.image
         axios.post('https://skymail-920ab.firebaseio.com/users.json', formData)
             .then(res => {
                 this.setState({ errorMessage: null, loading: false })
-                document.cookie = 'username=' + formData.username;
-                document.cookie = 'passwords=' + formData.password;
-                this.props.history.push(formData.username)
+
+                this.props.history.push('/login')
             }).catch(res => {
                 console.log(res);
                 this.setState({
