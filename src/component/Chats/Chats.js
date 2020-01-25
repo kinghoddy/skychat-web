@@ -1,69 +1,101 @@
 import React, { Component } from "react";
 import classes from "./Chats.css";
-import { Link, withRouter } from "react-router-dom";
-import axios from "axios";
-import Spinner from '../UI/Spinner/Spinner'
+import { Link } from "react-router-dom";
+import Spinner from '../UI/Spinner/Spinner';
+import firebase from '../../firebase';
+import 'firebase/database';
+import PlaceHolder from '../../container/Messages/PlaceHolder/Placeholder'
 
 class Chat extends Component {
   state = {
     loading: false,
-    hastChats: false,
+    hasChats: false,
+    message: null,
+    chats: []
   };
 
   componentDidMount() {
-    var kv = document.cookie.split(";");
-    var cookies = {};
-    for (var id in kv) {
-      var cookie = kv[id].split("=");
-      cookies[cookie[0].trim()] = cookie[1];
-    }
-    this.setState({ loading: true })
-    axios.get("https://skymail-920ab.firebaseio.com/users/" + cookies.userId + '.json')
-      .then(res => {
-        this.setState({ loading: false })
-        console.log(res.data);
-        var chatsData = []
-        if (res.data.chats) {
-          this.setState({ hasChats: true })
-        }
-        for (let keys in res.data) {
+    this.setState({ loading: true, message: 'Connecting to database' })
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        var userId = user.uid
+        this.getChats(userId);
+      } else {
+        console.log('no user found');
+      }
+    })
 
-        }
-
-      })
-      .catch(res => {
-        this.setState({ loading: false })
-      })
   }
+
+  getChats = (uid) => {
+    this.setState({ message: 'Fetching user data' })
+
+    var ref = firebase.database().ref('users/' + uid + '/chatsId')
+    ref.on('value', s => {
+      var chatsId = s.val()
+      if (chatsId) {
+        this.setState({ message: 'Loading Chats', loading: true })
+        this.setState({ hasChats: true })
+        var chatArr = []
+        chatsId.forEach(cur => {
+          var chatRef = firebase.database().ref('chats/' + cur)
+          chatRef.on('value', snap => {
+            var user = snap.val()
+            for (let key in user.metadata) {
+              if (key !== uid) {
+                var chat = {
+                  chatHead: user.metadata[key].username,
+                  icon: user.metadata[key].profilePicture,
+                  link: cur
+                }
+
+                chatArr.push(chat)
+                this.setState({ chats: chatArr, loading: false })
+
+              }
+            }
+
+          })
+
+        })
+      } else {
+        this.setState({ loading: false })
+      }
+    })
+  }
+
+
 
 
 
   render() {
 
     return (
-      <div className={classes.chats}>
-        {this.state.loading ? <Spinner /> :
-          this.state.hastChats ? <Link
-            to={"/messages/"}
-            className={classes.Chat + " px-3 py-2  border-bottom d-flex align-items-center"}
-
-            onClick={() => {
-              this.props.clicked()
-            }}
-          >
-            <div className={classes.picture}>
-              <img src='' alt="chat Icon" />
+      <div className={classes.chats + ' h-100'}>
+        {this.state.loading ? <Spinner size="h6" message={this.state.message} /> :
+          this.state.hasChats ? this.state.chats.map(cur => (
+            <Link
+              to={"/messages/" + cur.link}
+              className={classes.Chat + " px-3 py-2  border-bottom d-flex align-items-center"}
+              key={cur}
+            >
+              <div className={classes.picture}>
+                <img src={cur.icon} alt="chat Icon" />
+              </div>
+              <div className="ml-3 text-dark">
+                <h5 className="font-weight-bold">{cur.chatHead}</h5>
+                <p className="m-0">Last chat</p>
+              </div>
+            </Link>
+          )) : <div className="text-center">
+              <PlaceHolder />
             </div>
-            <div className="ml-3 text-dark">
-              <h5 className="font-weight-bold">username</h5>
-              <p className="m-0">Last chat</p>
-            </div>
-          </Link> : <p className="my-5 text-center h5">No chats yet</p>}
+        }
 
       </div>
     )
 
   }
 }
-export default withRouter(Chat);
+export default Chat;
 

@@ -5,7 +5,7 @@ const chatInput = props => {
   return (
     <form onSubmit={props.sendChat} className={classes.msgInput + " row no-gutters"}>
       <div className="col-md-11 col-10">
-        <input type="text" onChange={props.changed} value={props.value} placeholder="Type your message" />
+        <input type="text" required onChange={props.changed} value={props.value} placeholder="Type your message" />
       </div>
       <div className="col-md-1 col-2  d-flex align-items-center align-self-stretch">
         <button className="w-100 p-0 d-flex align-items-center" style={{

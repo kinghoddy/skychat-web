@@ -11,6 +11,12 @@
     object-fit: cover;
 }
 
+.cover>img {
+    position: absolute;
+    left: 0;
+    top: 0
+}
+
 .dp {
     height: 5rem;
     width: 5rem;

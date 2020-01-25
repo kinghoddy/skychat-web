@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
-import * as firebase from "firebase/app";
-import "firebase/analytics";
 import "firebase/auth";
+import "firebase/database";
+import firebase from '../../../firebase';
+
 
 import classes from "./Login.css";
 import Input from "../../UI/Input/Input";
@@ -14,17 +14,17 @@ import Alert from "../../UI/Alert/Alert";
 class Login extends Component {
   state = {
     form: {
-      username: {
+      email: {
         elementType: "input",
         elementConfig: {
           autoFocus: true,
-          type: "text",
-          placeholder: "Username",
+          type: "email",
+          placeholder: "Email Address",
           required: true
         },
         value: "",
-        id: "usernme",
-        label: "Username"
+        id: 'email',
+        label: "Email address"
       },
       password: {
         elementType: "input",
@@ -39,8 +39,10 @@ class Login extends Component {
       }
     },
     errorMessage: null,
+    sMessage: 'Please Wait ! ! !',
     loading: false,
-    userExist: null
+    userExist: null,
+    shouldLogin: false
   };
   inputChanged = (e, id) => {
     const updatedForm = {
@@ -53,7 +55,8 @@ class Login extends Component {
   };
 
   googleLogin = () => {
-    this.setState({ loading: true })
+    this.setState({ loading: true, sMessage: 'Checking info' })
+
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase
       .auth()
@@ -62,20 +65,14 @@ class Login extends Component {
         this.setState({ errorMessage: null, loading: false });
         var user = result.user;
         console.log(user);
-        const updatedForm = {
-          ...this.state.form
-        };
-        updatedForm.username.value = user.displayName;
-        updatedForm.password.value = user.uid;
-        this.setState({ form: updatedForm });
-
+        this.fetchUser(user)
       })
       .catch(error => {
         var errorMessage = error.message;
         this.setState({
           errorMessage: (
             <span>
-              <strong>Failed</strong>
+              <strong>Failed </strong>
               {errorMessage}
             </span>
           ),
@@ -85,61 +82,57 @@ class Login extends Component {
   };
 
   componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        console.log(user);
+      } else {
+        // No user is signed in.
+      }
+    });
 
-    console.log(this.state.userExist);
   }
-  loginHandler = event => {
+  fetchUser = (user) => {
+    var username
+    if (user != null) {
+      username = user.displayName;
+      this.setState({ loading: false, errorMessage: null, shouldLogin: true })
+
+    } else {
+      var errorMessage = <strong>Failed</strong>
+      this.setState({ loading: false, errorMessage: errorMessage })
+    }
+    if (this.state.shouldLogin) {
+      var search = this.props.location.search
+      if (search) {
+        this.props.history.push('/' + search.substr(1));
+      } else {
+        this.props.history.push('/' + username);
+      }
+    }
+  }
+
+  signInHandler = event => {
     event.preventDefault();
+    this.setState({ loading: true })
     const formData = {};
     for (let formId in this.state.form) {
-      formData[formId] = this.state.form[formId].value;
+      formData[formId] = this.state.form[formId].value
     }
-
-    this.setState({ loading: true })
-    axios
-      .get("https://skymail-920ab.firebaseio.com/users.json")
+    firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
       .then(res => {
-        this.setState({ errorMessage: null, loading: false });
-
-        for (let keys in res.data) {
-          if (
-            res.data[keys].username === formData.username && res.data[keys].password === formData.password
-          ) {
-            document.cookie = "username=" + formData.username;
-            document.cookie = "userId=" + keys;
-            document.cookie = "passwords=" + formData.password;
-            this.setState({
-              userExist: formData.username
-            })
-            this.props.history.push(this.state.userExist);
-          }
-        }
-        if (!this.state.userExist) {
-          this.setState({
-            errorMessage: (
-              <span>
-                <strong>User not found</strong> Make sure username and password
-              are correct
-                </span>
-            ),
-            loading: false
-          })
-        }
+        // User is signed in.
+        var user = res.user
+        this.fetchUser(user)
       })
-      .catch(res => {
-        this.setState({
-          errorMessage: (
-            <span>
-              <strong>Error</strong> Failed to connect to server
-            </span>
-          ),
-          loading: false
-        });
-        console.log(res);
+      .catch((error) => {
+        // Handle Errors here.
+        var errorMessage = error.message;
+        this.setState({ loading: false, errorMessage: errorMessage })
+        // ...
       });
+  }
 
-
-  };
 
   render() {
     const formElementArray = [];
@@ -150,7 +143,7 @@ class Login extends Component {
       });
     }
     return (
-      this.state.loading ? <Spinner /> : <form onSubmit={this.loginHandler}>
+      this.state.loading ? <Spinner message={this.state.sMessage} /> : <form onSubmit={this.signInHandler}>
         {this.state.errorMessage ? (
           <Alert type="warning" show={true}>
             {this.state.errorMessage}

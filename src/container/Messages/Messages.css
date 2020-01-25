@@ -4,7 +4,7 @@
 
 .navbar {
     height: 3.6rem;
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 100
@@ -26,7 +26,7 @@
 
 .overflow {
     overflow: auto;
-
+    ;
 }
 
 .bubble {
@@ -39,7 +39,10 @@
     width: 4rem;
     box-shadow: 0 6px 15px rgba(0, 0, 0, .3);
     background: white;
-    color: red
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bubble:focus {
@@ -50,5 +53,28 @@
 .chatroom {
     background-color: rgb(255, 249, 213);
     background-size: cover;
-    background-position: center
+    background-position: center;
+    position: fixed;
+    bottom: 0;
+    z-index: 300;
+    height: 100vh;
+}
+
+.left {
+    position: fixed;
+    bottom: 0;
+    z-index: 50;
+    height: 100vh;
+}
+
+@media only screen and (min-width : 1200px) {
+
+    .chatroom,
+    .left {
+        position: relative;
+    }
+
+    .navbar {
+        position: absolute
+    }
 }

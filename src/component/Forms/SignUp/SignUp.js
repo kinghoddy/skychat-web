@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import Alert from '../../UI/Alert/Alert';
 
-import * as firebase from "firebase/app";
-import "firebase/analytics";
+import firebase from '../../../firebase';
 import "firebase/auth";
+import "firebase/database";
 
 import classes from './SignUp.css';
-import Input from '../../UI/Input/Input'
-import Spinner from '../../UI/Spinner/Spinner'
+import Input from '../../UI/Input/Input';
+import Spinner from '../../UI/Spinner/Spinner';
 import Picture from '../../../assets/Image/avatar.png';
+import cover from '../../../assets/Image/avatar_square.png';
 
 
 
@@ -29,6 +29,18 @@ class Signin extends Component {
                 id: "usernme",
                 label: 'Username',
             },
+            email: {
+                elementType: 'input',
+                elementConfig: {
+                    autoFocus: true,
+                    type: 'email',
+                    placeholder: 'Email',
+                    required: true
+                },
+                value: '',
+                id: "email",
+                label: 'Email',
+            },
             password: {
                 elementType: 'input',
                 elementConfig: {
@@ -39,23 +51,15 @@ class Signin extends Component {
                 value: '',
                 label: 'Your password',
                 id: "password"
-            },
-            phone: {
-                elementType: 'input',
-                elementConfig: {
-                    required: true,
-                    type: 'tel',
-                    minLength: 5,
-                    maxLength: 12,
-                    placeholder: 'Phone number'
-                },
-                value: '+234',
-                label: 'Phone number',
-                id: "phone"
             }
+
         },
+        userData: {
+
+        },
+        uid: null,
         errorMessage: null,
-        image: Picture,
+        sMessage: null,
         loading: true
     }
     componentDidMount() {
@@ -75,53 +79,88 @@ class Signin extends Component {
     }
 
     googleLogin = () => {
-        this.setState({ loading: true })
+        this.setState({ loading: true, sMessage: 'Checking info  !' })
         var provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(provider)
             .then((result) => {
-                this.setState({ errorMessage: null, loading: false })
-                var user = result.user;
-                console.log(user);
-
-                const updatedForm = {
-                    ...this.state.form
-                }
-                updatedForm.username.value = user.displayName
-                updatedForm.password.value = user.uid
-                this.setState({ image: user.photoURL })
-
-                this.setState({ form: updatedForm })
+                var user = result.user
+                this.saveUser(user)
             }).catch((error) => {
                 var errorMessage = error.message;
                 this.setState({ errorMessage: errorMessage, loading: false })
             });
-
     }
 
-    signInHandler = event => {
+    saveUser = (user) => {
+        var ref = firebase.database().ref('users/')
+        ref.once('value', s => {
+            const id = user.uid
+            if (s.val()[id]) {
+                this.setState({ loading: false, userExist: true })
+                console.log('userExist');
+            } else {
+                this.setState({ loading: true, sMessage: 'Completing Signup  !' })
+                ref.child(id).set({
+                    username: user.displayName.toLowerCase() ,
+                    coverPhoto: cover,
+                    profilePicture: user.photoURL
+                }).then(() => {
+                    this.setState({ loading: false, errorMessage : null })
+                    console.log('success');
+                    this.props.history.push(user.displayName)
+                }).catch(() => {
+                    this.setState({ loading: false, errorMessage: 'Failed to save user to database' })
+                })
+            }
+
+        })
+
+    }
+    signUpHandler = event => {
         event.preventDefault();
-        this.setState({ loading: true })
-        const formData = {
-            profilePicture: this.state.image,
-            friendsId: ['-LyveIYgq2A2j984h8-D'],
-            chats: {}
-        };
+        this.setState({ loading: true, sMessage : 'Checking info' })
+        const formData = {};
         for (let formId in this.state.form) {
             formData[formId] = this.state.form[formId].value
         }
-        axios.post('https://skymail-920ab.firebaseio.com/users.json', formData)
-            .then(res => {
-                this.setState({ errorMessage: null, loading: false })
+        var ref = firebase.database().ref('users')
+        ref.once('value', s => {
+            var usernameExist = false
+            for (let keys in s.val()) {
+                if (formData.username.toLowerCase() === s.val()[keys].username.toLowerCase()) {
+                    usernameExist = true
+                    console.log(s.val()[keys].username);
+                }
+            }
+            if (usernameExist) {
+                this.setState({ errorMessage: <span>Username <strong>{formData.username}</strong> Exists. Please <strong>Pick another username</strong></span>, loading: false })
+            } else {
+                firebase.auth().createUserWithEmailAndPassword(formData.email, formData.password)
+                    .then(res => {
+                        var user = firebase.auth().currentUser;
+                        this.setState({ sMessage: 'Please wait' })
+                        user.updateProfile({
+                            displayName: formData.username,
+                            photoURL: Picture
+                        }).then(() => {
+                            this.saveUser(user)
+                        }).catch((error) => {
+                            // An error happened.
+                            const errorMessage = 'Failed Authenticate'
+                            this.setState({ loading: false, errorMessage: errorMessage })
+                        });
+                    })
+                    .catch((error) => {
+                        // Handle Errors here.
+                        var errorMessage = error.message;
+                        this.setState({ loading: false, errorMessage: errorMessage })
+                        // ...
+                    });
+            }
+        })
 
-                this.props.history.push('/login')
-            }).catch(res => {
-                console.log(res);
-                this.setState({
-                    errorMessage: <span><strong>Network Error </strong> Couldn't connect to database </span>,
-                    loading: false
-                })
-            })
     }
+
 
     render() {
         const formElementArray = [];
@@ -132,8 +171,9 @@ class Signin extends Component {
             })
         }
         return (
-            this.state.loading ? <Spinner /> : <form onSubmit={this.signInHandler}>
+            this.state.loading ? <Spinner message={this.state.sMessage} /> : <form onSubmit={this.signUpHandler}>
                 {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
+
                 {formElementArray.map(el => (
                     <Input elementType={el.config.elementType}
                         elementConfig={el.config.elementConfig}

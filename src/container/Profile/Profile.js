@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import classes from './Profile.css';
-import axios from 'axios';
 import { Route, Switch } from 'react-router-dom'
 import Toolbar from '../../component/Navigation/Toolbar/Toolbar';
 import Alert from '../../component/UI/Alert/Alert';
 import Timeline from './Timeline/Timeline';
 import Spinner from '../../component/UI/Spinner/Spinner';
-import Menu from '../Menu/Menu'
+import Menu from '../Menu/Menu';
+
+
+import firebase from '../../firebase';
+import 'firebase/auth'
 
 
 class Profile extends Component {
@@ -23,115 +26,54 @@ class Profile extends Component {
 
         isUser: false,
         loading: false,
-        errorMessage: null
-    }
-    componentWillReceiveProps() {
-        var blackList = ['/login', '/menu', '/notifications']
-        if (blackList.indexOf(this.props.history.location.pathname) < 0) {
-            this.loadProfile()
-        }
+        errorMessage: null,
+        modalMessage: null
     }
     componentDidMount() {
-        var blackList = ['/login', '/menu', '/notifications']
-        if (blackList.indexOf(this.props.history.location.pathname) < 0) {
-            this.loadProfile()
-        }
+        this.loadUserdata()
     }
-    loadProfile = () => {
+    loadUserdata = () => {
         this.setState({ loading: true })
-        axios.get('https://skymail-920ab.firebaseio.com/users.json')
-            .then(res => {
-                this.setState({ loading: false })
-                var userExist = false;
-                var kv = document.cookie.split(';');
-                var cookies = {}
-                for (var id in kv) {
-                    var cookie = kv[id].split('=');
-                    cookies[cookie[0].trim()] = cookie[1]
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                const updatedUd = {
+                    username: user.displayName,
+                    email: user.email,
+                    profilePicture: user.photoURL,
+                    uid: user.uid
                 }
-                for (let keys in res.data) {
-                    // fetch your userData
-                    if (res.data[keys] === res.data[cookies.userId]) {
-                        const userdata = {
-                            ...res.data[keys]
-                        }
-                        this.setState({
-                            userData: userdata
-                        })
-                    }
-                    // fetch the profile data
-                    if (this.props.match.params.profile === res.data[keys].username) {
-                        const profiledata = {
-                            ...this.state.profileData
-                        }
-                        for (let key in res.data[keys]) {
-                            profiledata[key] = res.data[keys][key]
-                        }
-                        this.setState({
-                            profileData: profiledata
-                        })
-                        userExist = true
-                    }
+                // fetch the profile data
+                const userdata = {
+                    ...this.state.userdata
                 }
-                if (!userExist) {
-                    this.setState({
-                        errorMessage: "User not found"
-                    })
-                } else {
-                    this.setState({
-                        errorMessage: null
-                    })
+                for (let keys in updatedUd) {
+                    userdata[keys] = updatedUd[keys]
                 }
-                // gething friends data
-                let fData = []
-                this.state.profileData.friendsId.forEach(cur => {
-                    for (let keys in res.data) {
-                        if (keys === cur) {
-                            fData.push(res.data[keys])
-                            const profiledata = { ...this.state.profileData }
-                            profiledata.friendsData = fData
-                            this.setState({
-                                profileData: profiledata
-                            })
-                        }
-                    }
-                });
-
-                if (this.props.match.params.profile === this.state.userData.username) {
-                    this.setState({
-                        isUser: true
-                    })
-                } else {
-                    this.setState({
-                        isUser: false
-                    })
-                }
-            })
-            .catch(res => {
-                this.setState(
-                    {
-                        loading: false,
-                        errorMessage: <span><strong>Network Error </strong> Couldn't connect to database </span>,
-                    })
-
-            })
-
+                this.setState({
+                    userData: userdata, loading: false
+                })
+            } else {
+                this.setState({ modalMessage: 'You are not logged in', loading: false })
+            }
+        })
     }
-
     render() {
-
         return (
             <div className={classes.Profile}>
                 <Toolbar profile={this.state.profileData.username} />
-                {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
+
                 {this.state.loading ?
-                    <Spinner /> :
-                    ''
+                    <div style={{ height: '80vh' }}><Spinner /></div> : <React.Fragment>
+                        {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
+                        {this.state.modalMessage ? <Alert show={true} type="info">{this.state.modalMessage}</Alert> : ''}
+
+                        <Switch>
+                            <Route path='/notifications' exact render={() => (<h1>Notify</h1>)} />
+                            <Route path='/menu' exact render={() => (<Menu {...this.props} />)} />
+                            <Route path='/:profile' exact render={() => (<Timeline profile={this.props.match.params.profile}  {...this.state} />)} />
+                        </Switch>
+                    </React.Fragment>
                 }
-                <Switch>
-                    <Route path='/menu' exact render={() => (<Menu />)} />
-                    <Route path='/:profile' exact render={() => (<Timeline  {...this.state} />)} />
-                </Switch>
             </div>
         )
     }
