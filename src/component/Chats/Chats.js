@@ -48,7 +48,10 @@ class Chat extends Component {
               lastChat =
                 chats[Object.keys(chats)[Object.keys(chats).length - 1]];
               var lastChatMessage = lastChat.message;
+<<<<<<< HEAD
               var lastTime = "";
+=======
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 
               var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
               var months = [
@@ -71,6 +74,10 @@ class Chat extends Component {
               var week = weekDays[now.getDay()];
               var hour = now.getHours();
               var min = dec(now.getMinutes());
+<<<<<<< HEAD
+=======
+              var lastTime = now.getTime();
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
               var clock = " am";
               if (hour > 12) {
                 clock = " pm";
@@ -82,7 +89,10 @@ class Chat extends Component {
               }
               var current = new Date()
               var currentTime = current.getTime();
+<<<<<<< HEAD
               var lastTime = now.getTime();
+=======
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
               var difference = (currentTime - lastTime) / 3600000;
               if (current.getDate() === monthDay) {
                 lastTime = hour + ":" + min + clock;

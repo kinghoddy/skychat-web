@@ -60,6 +60,10 @@ class Profile extends Component {
         return (
             <div className={classes.Profile}>
                 <Toolbar profile={this.props.match.params.profile} />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 
                 {this.state.loading ?
                     <div style={{ height: '80vh' }}><Spinner /></div> : <React.Fragment>

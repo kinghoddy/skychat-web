@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import classes from "./Timeline.css";
+<<<<<<< HEAD
 import { Link, withRouter } from "react-router-dom";
+=======
+import { withRouter } from "react-router-dom";
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 import firebase from "../../../firebase";
 import "firebase/auth";
 import Spinner from "../../../component/UI/Spinner/Spinner";
 import Friends from "../../../component/Friends/Friends";
+<<<<<<< HEAD
 import Request from "../../../component/Friends/Request";
 import Alert from "../../../component/UI/Alert/Alert";
+=======
+import Alert from "../../../component/UI/Alert/Alert";
+import Post from '../../../component/Posts/Posts';
+import NewPost from '../../../component/Forms/NewPost/NewPost'
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 
 class Timeline extends Component {
   state = {
@@ -20,6 +30,10 @@ class Timeline extends Component {
     loading: false,
     profile: "",
     errorMessage: null,
+<<<<<<< HEAD
+=======
+    changeStyle: false,
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
     modalMessage: null
   };
 
@@ -36,6 +50,7 @@ class Timeline extends Component {
     }
   }
 
+<<<<<<< HEAD
   load = uname => {
     this.setState({ loading: true });
     var ref = firebase.database().ref("users/");
@@ -44,6 +59,17 @@ class Timeline extends Component {
       if (uname) {
         document.title = uname + " | Skychat";
 
+=======
+
+  load = uname => {
+    this.setState({ loading: true });
+    var ref = firebase.database().ref("users/");
+    ref.on("value", s => {
+      var userExist = false;
+      if (uname) {
+        document.title = uname + " | Skychat";
+
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
         var username = uname.toLowerCase();
         for (let keys in s.val()) {
           // fetch the profile data
@@ -106,6 +132,7 @@ class Timeline extends Component {
                   {this.state.loading ? (
                     <Spinner style={{ background: "#ccc" }} />
                   ) : (
+<<<<<<< HEAD
                     <h3 className={classes.username}>
                       {!this.state.isUser ? (
                         this.state.profileData.username
@@ -133,4 +160,41 @@ class Timeline extends Component {
   }
 }
 
+=======
+                      <h3 className={classes.username}>
+                        {!this.state.isUser ? (
+                          this.state.profileData.username
+                        ) : (
+                            <span>
+                              {this.state.profileData.username} <small>(You)</small>
+                            </span>
+                          )}
+                      </h3>
+                    )}
+                </div>
+              </div>
+              <Friends uid={this.state.profileData.uid} />
+              <NewPost
+                changed={this.inputChanged}
+                value={this.state.value}
+                sendPost={this.sendPost}
+              />
+              <Post
+              />
+
+            </div>
+
+            <div className="col-lg-4 order-lg-1 bg-white ">
+              <div className="row no-gutters">
+                <div className={" col "}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+>>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 export default withRouter(Timeline);
