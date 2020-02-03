@@ -17,7 +17,20 @@
 
 .formLabelGroup>input {
     background: #eee;
-    border: 0
+    border: 0;
+    box-shadow: none !important
+}
+
+.formLabelGroup>input:focus {
+    box-shadow: 0 3px 15px rgba(0, 0, 0, .2) !important
+}
+
+.formLabelGroup>input:focus:valid {
+    border-bottom: 2px solid rgba(65, 138, 17, 0.6)
+}
+
+.formLabelGroup>input:focus:not(:valid) {
+    border-bottom: 2px solid rgba(255, 68, 0, 0.6)
 }
 
 .formLabelGroup>label {

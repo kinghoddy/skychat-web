@@ -36,7 +36,7 @@
     text-align: right;
     right: 0;
     text-transform: capitalize;
-    font-weight: lighter;
+    /* font-weight: lighter; */
     width: 60%;
     /* background: gold */
 }

@@ -1,18 +1,116 @@
 .Account {
-    /* background: #eee */
+  background: #fff;
 }
 
 .bgImage {
-    background-image: url('../../assets/Image/sky1.jpg');
-    background-size: cover;
-    background-position: center;
+  font-size: 4rem !important;
+  /* background-image: url('../../assets/Image/sky1.jpg'); */
+  background-size: cover;
+  background-position: center;
+  animation: slide 30s infinite;
+  animation-fill-mode: both;
+  clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+}
+
+@keyframes slide {
+  0% {
+    background-image: url("../../assets/Image/sky1.jpg");
+  }
+
+  22% {
+    background-image: url("../../assets/Image/sky1.jpg");
+  }
+
+  25% {
+    background-image: url("../../assets/Image/sky6.jpg");
+  }
+
+  48% {
+    background-image: url("../../assets/Image/sky6.jpg");
+  }
+
+  58% {
+    background-image: url("../../assets/Image/sky2.jpg");
+  }
+
+  73% {
+    background-image: url("../../assets/Image/sky2.jpg");
+  }
+
+  75% {
+    background-image: url("../../assets/Image/sky5.jpg");
+  }
+
+  100% {
+    background-image: url("../../assets/Image/sky5.jpg");
+  }
+}
+
+@keyframes slide2 {
+  0% {
+    content: "Hey there,";
+  }
+
+  22% {
+    content: "Hey there,";
+  }
+
+  25% {
+    content: " Welcome to the best social media yet ever made ";
+  }
+
+  48% {
+    content: " Welcome to the best social media yet ever made ";
+  }
+
+  50% {
+    content: "Stay connected with friends";
+  }
+
+  72% {
+    content: "Stay connected with friends";
+  }
+
+  75% {
+    content: "The sky is your starting point";
+  }
+
+  100% {
+    content: "The sky is your starting point";
+  }
+}
+
+.bgImage::after {
+  content: "";
+  font-size: 3rem !important;
+  width: 25rem;
+  padding-left: 5rem;
+  animation: slide2 30s infinite both;
 }
 
 .login,
 .image {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 .loginHeading {
-    font-weight: 300;
+  font-weight: 300;
+}
+
+.login {
+  background-size: cover;
+  background-position: center;
+  animation: slide 30s infinite;
+  animation-fill-mode: both;
+  position: relative;
+}
+.login > div {
+  background: rgba(255, 255, 255, 0.658);
+}
+
+@media only screen and (min-width: 760px) {
+  .login {
+    background: none !important;
+    animation: none;
+  }
 }

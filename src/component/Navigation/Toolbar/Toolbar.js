@@ -1,12 +1,15 @@
 import React from 'react';
-import { Link, NavLink, Route, Switch } from 'react-router-dom';
+import { Link, NavLink, Route, Switch, withRouter } from 'react-router-dom';
 import Logo from '../../Logo/Logo';
 import classes from './Toolbar.css';
 import firebase from '../../../firebase';
 import 'firebase/auth';
 
 const toolbar = props => {
-    var profile = props.profile
+    var profile = props.profile,
+        shade = 'navbar-light',
+        logoType = 'l6',
+        bgColor = '#fff';
 
     var user = firebase.auth().currentUser
 
@@ -19,19 +22,33 @@ const toolbar = props => {
     window.addEventListener('scroll', () => {
 
     })
+    if (props.location.pathname === '/notifications') {
+        bgColor = '#f32';
+        logoType = 'l6'
+        shade = 'navbar-dark'
+    } else {
+        shade = 'navbar-light'
+        bgColor = '#fff'
+        logoType = 'l1'
+    }
+
 
     return (
         <React.Fragment>
 
-            <nav className={classes.Toolbar + " navbar navbar-expand navbar-light fixed-top "}>
+            <nav style={{
+                background: bgColor
+            }} className={classes.Toolbar + " navbar navbar-expand  fixed-top " + shade}>
                 <div className="container-fluid h-100">
-                    <Link to="/" className=" navbar-brand p-0 h-100">
-                        <Logo type='l6' />
-
+                    <Route path="/menu/:nest" render={() => (
+                        <i style={{ cursor: "pointer" }} onClick={props.history.goBack} className=" material-icons px-3">arrow_back</i>
+                    )} />
+                    <Link to="/" className=" navbar-brand p-0 pl-lg-3 h-100">
+                        <Logo type={logoType} width="10rem" />
                     </Link>
                     <div className="navbar-collapse collapse">
                         <ul className={"text-capitalize navbar-nav ml-auto "}>
-                            {user ? <Link className="ml-auto nav-link js-scroll-trigger" to={'/messages'}>
+                            {user ? <Link className="active ml-auto nav-link js-scroll-trigger" to={'/messages'}>
                                 <i className="material-icons">chats</i>
                             </Link> : ''
                             }
@@ -42,7 +59,7 @@ const toolbar = props => {
                                     </NavLink>
                                 </li>
                                 {user ? <li className="nav-item col-4">
-                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notification'}><i className='material-icons'>notifications</i>
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notifications'}><i className='material-icons'>notifications</i>
                                     </NavLink>
                                 </li> : ''}
 
@@ -96,4 +113,4 @@ const toolbar = props => {
     )
 }
 
-export default toolbar
+export default withRouter(toolbar)

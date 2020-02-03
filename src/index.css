@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Source Sans Pro', cursive,
+  font-family: 'Source Sans Pro',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -17,38 +17,54 @@ a:hover {
 }
 
 ::-webkit-scrollbar {
-  width: .5rem;
+  width: .1rem;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, .2);
+  background: rgba(133, 0, 0, 0.2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #777;
+  background: rgba(92, 0, 0, 0.5);
 }
 
 h5,
 h4 {
-  font-family: 'Josefin Sans', cursive, sans-serif;
+  font-family: 'Montserrat Alternates', sans-serif;
+  font-weight: 700;
+  color: #777
 }
 
 h3,
 h2 {
-  font-family: 'Gochi Hand',
+
+  text-transform: capitalize;
+  font-family: 'Architects Daughter',
     cursive;
-  text-transform: capitalize
+  font-weight: bolder
 }
 
 h1 {
-  font-family: 'ZCOOL QingKe HuangYou',
+  font-family: 'Gochi Hand',
     cursive;
+
 }
 
+::selection {
+  background: orangered;
+  color: white
+}
+
+@media only screen and (min-width : 1200px) {
+  ::-webkit-scrollbar {
+    width: .5rem;
+  }
+}
+
+
 /* 
-font-family: 'Josefin Sans', sans-serif;
-font-family: 'Gloria Hallelujah', cursive;
-font-family: 'ZCOOL QingKe HuangYou', cursive;
 font-family: 'Gochi Hand', cursive;
 font-family: 'Source Sans Pro', sans-serif;
+font-family: 'Montserrat Alternates', sans-serif;
+font-family: 'Architects Daughter', cursive;
 */
