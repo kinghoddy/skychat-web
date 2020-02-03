@@ -7,6 +7,7 @@ import Spinner from "../../../component/UI/Spinner/Spinner";
 import Friends from "../../../component/Friends/Friends";
 import Alert from "../../../component/UI/Alert/Alert";
 import Post from '../../../component/Posts/Posts';
+import NewPost from '../../../component/Forms/NewPost/NewPost'
 
 class Timeline extends Component {
   state = {
@@ -20,6 +21,7 @@ class Timeline extends Component {
     loading: false,
     profile: "",
     errorMessage: null,
+    changeStyle: false,
     modalMessage: null
   };
 
@@ -35,6 +37,7 @@ class Timeline extends Component {
       this.load(this.props.match.params.profile);
     }
   }
+
 
   load = uname => {
     this.setState({ loading: true });
@@ -119,7 +122,11 @@ class Timeline extends Component {
                 </div>
               </div>
               <Friends uid={this.state.profileData.uid} />
-
+              <NewPost
+                changed={this.inputChanged}
+                value={this.state.value}
+                sendPost={this.sendPost}
+              />
               <Post
               />
 

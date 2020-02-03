@@ -61,6 +61,7 @@ class Profile extends Component {
             <div className={classes.Profile}>
                 <Toolbar profile={this.props.match.params.profile} />
 
+
                 {this.state.loading ?
                     <div style={{ height: '80vh' }}><Spinner /></div> : <React.Fragment>
                         {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
