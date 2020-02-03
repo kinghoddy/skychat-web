@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "name": "skychat",
-=======
-  "name": "Skychat",
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
+  "name": "SkyChat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
