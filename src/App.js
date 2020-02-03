@@ -16,6 +16,7 @@ class App extends Component {
     toast: null
   }
   componentDidMount() {
+    this.checkOnlineState()
   }
 
   checkOnlineState = () => {

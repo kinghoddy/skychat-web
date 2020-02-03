@@ -48,7 +48,6 @@ class Chat extends Component {
               lastChat =
                 chats[Object.keys(chats)[Object.keys(chats).length - 1]];
               var lastChatMessage = lastChat.message;
-              var lastTime = "";
 
               var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
               var months = [
@@ -83,7 +82,6 @@ class Chat extends Component {
               }
               var current = new Date()
               var currentTime = current.getTime();
-              var lastTime = now.getTime();
               var difference = (currentTime - lastTime) / 3600000;
               if (current.getDate() === monthDay) {
                 lastTime = hour + ":" + min + clock;

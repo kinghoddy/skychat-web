@@ -152,7 +152,6 @@ class Chatroom extends Component {
             </i>
           </Link>
           <Link
-            to={this.state.receiverData.username}
             to={"/" + this.state.receiverData.username}
             className={classes.icon + " p-0 navbar-brand"}
           >

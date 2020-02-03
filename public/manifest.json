@@ -1,18 +1,6 @@
 {
   "short_name": "Skychat",
   "name": "Skychat",
-<<<<<<< HEAD
-  "icons": [
-    {
-      "src": "logo.png",
-      "type": "image/x-icon"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#0af",
-  "background_color": "#ffffff"
-=======
   "icons": [{
     "src": "logo.png",
     "type": "image/x-icon"
@@ -21,5 +9,4 @@
   "display": "standalone",
   "theme_color": "#311",
   "background_color": "#311"
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 }

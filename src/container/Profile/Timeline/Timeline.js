@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import classes from "./Timeline.css";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/auth";
 import Spinner from "../../../component/UI/Spinner/Spinner";
 import Friends from "../../../component/Friends/Friends";
-import Request from "../../../component/Friends/Request";
 import Alert from "../../../component/UI/Alert/Alert";
 import Post from '../../../component/Posts/Posts';
 import NewPost from '../../../component/Forms/NewPost/NewPost'
@@ -38,7 +37,6 @@ class Timeline extends Component {
       this.load(this.props.match.params.profile);
     }
   }
-
 
 
   load = uname => {
@@ -124,6 +122,14 @@ class Timeline extends Component {
                 </div>
               </div>
               <Friends uid={this.state.profileData.uid} />
+              <NewPost
+                changed={this.inputChanged}
+                value={this.state.value}
+                sendPost={this.sendPost}
+              />
+              <Post
+              />
+
             </div>
 
             <div className="col-lg-4 order-lg-1 bg-white ">
@@ -137,6 +143,5 @@ class Timeline extends Component {
     );
   }
 }
-
 
 export default withRouter(Timeline);
