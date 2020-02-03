@@ -152,11 +152,8 @@ class Chatroom extends Component {
             </i>
           </Link>
           <Link
-<<<<<<< HEAD
             to={this.state.receiverData.username}
-=======
             to={"/" + this.state.receiverData.username}
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
             className={classes.icon + " p-0 navbar-brand"}
           >
             <img src={this.state.receiverData.profilePicture} alt="" />

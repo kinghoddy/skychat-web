@@ -2,29 +2,20 @@ import React, { Component } from "react";
 import classes from "./Home.css";
 import Logo from '../../component/Logo/Logo';
 import demo3 from '../../assets/Image/demo/demo3.png'
-<<<<<<< HEAD
-import { Link } from 'react-router-dom'
-import demo2 from '../../assets/Image/demo/demo2.png'
-
-class Home extends Component {
-=======
 import { Link } from 'react-router-dom';
-import firebase from '../../firebase';
-import demo2 from '../../assets/Image/demo/demo2.png'
+import demo2 from '../../assets/Image/demo/demo2.png';
+import firebase from '../../firebase'
+
 
 class Home extends Component {
   state = {
     userData: null
   }
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
   componentDidMount() {
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
     metaThemeColor.setAttribute("content", "#200");
     document.title = "Skychat homepage";
-<<<<<<< HEAD
-  }
 
-=======
     this.checkUser()
   }
 
@@ -40,7 +31,6 @@ class Home extends Component {
     })
   }
 
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
   render() {
     return (
       <div className={classes.home} id="page-top">
@@ -73,43 +63,38 @@ class Home extends Component {
           <div className="container h-100">
             <div className="row h-100">
               <div className="col-lg-7 my-auto">
-<<<<<<< HEAD
                 <div className={classes.header_content + " mx-auto"}>
                   <h1 className="mb-5">Welcome to sky chat, the next social media hit !! . Stay connected with friends  24 / 7 </h1>
-=======
-                {this.state.userData ? <div className=" py-4 d-flex text-light align-items-center justify-content-center">
-                  <img style={{ height: "3rem" }} src={this.state.userData.profilePicture} className="rounded-circle " alt="" />
-                  <div className="text-light px-3 ">
+                  {this.state.userData ? <div className=" py-4 d-flex text-light align-items-center justify-content-center">
+                    <img style={{ height: "3rem" }} src={this.state.userData.profilePicture} className="rounded-circle " alt="" />
+                    <div className="text-light px-3 ">
 
-                    <h4 className="text-light h6">{this.state.userData.username} is already logged in</h4>
-                    <Link to={"/" + this.state.userData.username} className="btn btn-outline-light px-3 btn-sm  rounded-pill">Go to account</Link>
+                      <h4 className="text-light h6">{this.state.userData.username} is already logged in</h4>
+                      <Link to={"/" + this.state.userData.username} className="btn btn-outline-light px-3 btn-sm  rounded-pill">Go to account</Link>
+                    </div>
+                  </div>
+                    : null}
+                  <div className={classes.header_content + " mx-auto"}>
+                    <h1 className="mb-5">Welcome to skychat, the next social media hit !! . Stay connected with friends  24 / 7 </h1>
+                    <Link style={{ fontSize: "1.5rem" }} to="/SignUp" className="btn btn-outline-light px-5  rounded-pill">Get started</Link>
                   </div>
                 </div>
-                  : null}
-                <div className={classes.header_content + " mx-auto"}>
-                  <h1 className="mb-5">Welcome to skychat, the next social media hit !! . Stay connected with friends  24 / 7 </h1>
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
-                  <Link style={{ fontSize: "1.5rem" }} to="/SignUp" className="btn btn-outline-light px-5  rounded-pill">Get started</Link>
-                </div>
-              </div>
-              <div className="col-lg-5 my-auto">
-                <div className={classes.device_container}>
-                  <div className="device-mockup iphone6_plus portrait">
-                    <div className="device">
-                      <div className="screen">
-<<<<<<< HEAD
+                <div className="col-lg-5 my-auto">
+                  <div className={classes.device_container}>
+                    <div className="device-mockup iphone6_plus portrait">
+                      <div className="device">
+                        <div className="screen">
 
-                        <img src={demo2} className="img-fluid" alt="" />
-                      </div>
-                      <div className="button">
+                          <img src={demo2} className="img-fluid" alt="" />
+                        </div>
+                        <div className="button">
 
-=======
 
-                        <img src={demo2} className="img-fluid" alt="" />
-                      </div>
-                      <div className="button">
+                          <img src={demo2} className="img-fluid" alt="" />
+                        </div>
+                        <div className="button">
 
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -7,10 +7,7 @@ import User from './container/User/User';
 import Messages from './container/Messages/Messages';
 import Home from './container/Home/Home';
 import Modal from './component/UI/BtModal/BtModal';
-<<<<<<< HEAD
-=======
 import firebase from './firebase'
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
 import Toast from './component/UI/Toast/Toast';
 
 
@@ -19,20 +16,6 @@ class App extends Component {
     toast: null
   }
   componentDidMount() {
-<<<<<<< HEAD
-    window.addEventListener('load', (e) => {
-      if (navigator.onLine) {
-        // this.setState({ toast: 'You are  online!' })
-        setTimeout(() => {
-          this.setState({ toast: null })
-        }, 5000)
-      } else {
-        this.setState({ toast: 'You are offline!' })
-        setTimeout(() => {
-          this.setState({ toast: null })
-        }, 5000)
-=======
-    this.checkOnlineState()
   }
 
   checkOnlineState = () => {
@@ -57,7 +40,6 @@ class App extends Component {
 
         // When I disconnect, update the last time I was seen online
         lastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
->>>>>>> 4aefde3843e71bd3e9191c6e951d85dcf9736aa2
       }
     });
   }
