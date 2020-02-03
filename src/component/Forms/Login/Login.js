@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 
 import "firebase/auth";
 import "firebase/database";
-import firebase from '../../../firebase';
+import firebase from "../../../firebase";
 
+import google from "../../../assets/Image/google.png";
 
 import classes from "./Login.css";
 import Input from "../../UI/Input/Input";
-import Spinner from '../../UI/Spinner/Spinner'
+import Spinner from "../../UI/Spinner/Spinner";
+import Toast from "../../UI/Toast/Toast";
 import Alert from "../../UI/Alert/Alert";
+import cover from "../../../assets/Image/avatar_square.png";
 
 class Login extends Component {
   state = {
@@ -17,13 +20,12 @@ class Login extends Component {
       email: {
         elementType: "input",
         elementConfig: {
-          autoFocus: true,
           type: "email",
           placeholder: "Email Address",
           required: true
         },
         value: "",
-        id: 'email',
+        id: "email",
         label: "Email address"
       },
       password: {
@@ -31,6 +33,7 @@ class Login extends Component {
         elementConfig: {
           required: true,
           type: "password",
+          minLength: 6,
           placeholder: "Your password"
         },
         value: "",
@@ -39,10 +42,11 @@ class Login extends Component {
       }
     },
     errorMessage: null,
-    sMessage: 'Please Wait ! ! !',
+    sMessage: "Please Wait ! ! !",
     loading: false,
     userExist: null,
-    shouldLogin: false
+    shouldLogin: false,
+    toast: null
   };
   inputChanged = (e, id) => {
     const updatedForm = {
@@ -55,7 +59,7 @@ class Login extends Component {
   };
 
   googleLogin = () => {
-    this.setState({ loading: true, sMessage: 'Checking info' })
+    this.setState({ loading: true, sMessage: "Checking info" });
 
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -64,8 +68,13 @@ class Login extends Component {
       .then(result => {
         this.setState({ errorMessage: null, loading: false });
         var user = result.user;
-        console.log(user);
-        this.fetchUser(user)
+        console.log(result);
+        if (result.additionalUserInfo.isNewUser === true) {
+          this.setState({ toast: "Finish setting up your skymail account" });
+          this.saveUser(user);
+        } else {
+          this.fetchUser(user);
+        }
       })
       .catch(error => {
         var errorMessage = error.message;
@@ -82,57 +91,81 @@ class Login extends Component {
   };
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    document.title = "Login | Skychat";
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
-        console.log(user);
       } else {
         // No user is signed in.
       }
     });
-
   }
-  fetchUser = (user) => {
-    var username
+  fetchUser = user => {
+    var username;
     if (user != null) {
       username = user.displayName;
-      this.setState({ loading: false, errorMessage: null, shouldLogin: true })
-
+      this.setState({ loading: false, errorMessage: null, shouldLogin: true });
     } else {
-      var errorMessage = <strong>Failed</strong>
-      this.setState({ loading: false, errorMessage: errorMessage })
+      var errorMessage = <strong>Failed</strong>;
+      this.setState({ loading: false, errorMessage: errorMessage });
     }
     if (this.state.shouldLogin) {
-      var search = this.props.location.search
+      var search = this.props.location.search;
       if (search) {
-        this.props.history.push('/' + search.substr(1));
+        this.props.history.push("/" + search.substr(1));
       } else {
-        this.props.history.push('/' + username);
+        this.props.history.push("/" + username);
       }
     }
-  }
+  };
+
+  saveUser = user => {
+    var ref = firebase.database().ref("users/");
+    const id = user.uid;
+
+    this.setState({ loading: true, sMessage: "Completing Signup  !" });
+    ref
+      .child(id)
+      .set({
+        username: user.displayName.toLowerCase(),
+        coverPhoto: cover,
+        profilePicture: user.photoURL
+      })
+      .then(() => {
+        this.setState({ loading: false, errorMessage: null });
+        console.log("success");
+        this.props.history.push(user.displayName.toLowerCase());
+      })
+      .catch(() => {
+        this.setState({
+          loading: false,
+          errorMessage: "Failed to save user to database"
+        });
+      });
+  };
 
   signInHandler = event => {
     event.preventDefault();
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     const formData = {};
     for (let formId in this.state.form) {
-      formData[formId] = this.state.form[formId].value
+      formData[formId] = this.state.form[formId].value;
     }
-    firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(formData.email, formData.password)
       .then(res => {
         // User is signed in.
-        var user = res.user
-        this.fetchUser(user)
+        var user = res.user;
+        this.fetchUser(user);
       })
-      .catch((error) => {
+      .catch(error => {
         // Handle Errors here.
         var errorMessage = error.message;
-        this.setState({ loading: false, errorMessage: errorMessage })
+        this.setState({ loading: false, errorMessage: errorMessage });
         // ...
       });
-  }
-
+  };
 
   render() {
     const formElementArray = [];
@@ -142,13 +175,16 @@ class Login extends Component {
         config: this.state.form[key]
       });
     }
-    return (
-      this.state.loading ? <Spinner message={this.state.sMessage} /> : <form onSubmit={this.signInHandler}>
+    return this.state.loading ? (
+      <Spinner message={this.state.sMessage} />
+    ) : (
+      <form onSubmit={this.signInHandler}>
         {this.state.errorMessage ? (
           <Alert type="warning" show={true}>
             {this.state.errorMessage}
           </Alert>
         ) : null}
+        {this.state.toast ? <Toast>{this.state.toast}</Toast> : null}
 
         {formElementArray.map(el => (
           <Input
@@ -173,12 +209,19 @@ class Login extends Component {
         >
           Sign in
         </button>
+        <p className="text-center text-primary"> Or</p>
         <button
-          className={classes.googleBtn + " btn btn-lg btn-block mb-2"}
+          className={classes.googleBtn + " btn btn-lg btn-block  mb-2"}
           type="button"
-          onClick={this.googleLogin}>
-          <i className="fab fa-google mr-3"></i>
-          Log in in with google
+          onClick={this.googleLogin}
+        >
+          <img
+            src={google}
+            alt=" "
+            style={{ width: "2rem" }}
+            className="mr-4"
+          />
+          Sign up with google
         </button>
         <div className="text-center">
           <Link className="small" to="./home">

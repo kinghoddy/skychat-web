@@ -8,6 +8,9 @@ const Alert = props => {
         props.show ? "show" : null
       ].join(" ")}
       role="alert"
+      style={{
+        transition: "all 0.3s"
+      }}
     >
       <button
         type="button"

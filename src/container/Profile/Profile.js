@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import Toolbar from '../../component/Navigation/Toolbar/Toolbar';
 import Alert from '../../component/UI/Alert/Alert';
 import Timeline from './Timeline/Timeline';
+import Notify from '../../component/Notify/Notify';
 import Spinner from '../../component/UI/Spinner/Spinner';
 import Menu from '../Menu/Menu';
 
@@ -17,12 +18,6 @@ class Profile extends Component {
         userData: {
             username: '',
         },
-        profileData: {
-            username: '',
-            coverPhoto: '',
-            friendsId: [],
-            friendsData: []
-        },
 
         isUser: false,
         loading: false,
@@ -30,6 +25,7 @@ class Profile extends Component {
         modalMessage: null
     }
     componentDidMount() {
+
         this.loadUserdata()
     }
     loadUserdata = () => {
@@ -37,7 +33,7 @@ class Profile extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 const updatedUd = {
-                    username: user.displayName,
+                    username: user.displayName.toLowerCase(),
                     email: user.email,
                     profilePicture: user.photoURL,
                     uid: user.uid
@@ -53,24 +49,27 @@ class Profile extends Component {
                     userData: userdata, loading: false
                 })
             } else {
-                this.setState({ modalMessage: 'You are not logged in', loading: false })
+                this.setState({ errorMessage: 'You are not logged in', loading: false })
+                setTimeout(() => {
+                    this.setState({ errorMessage: null })
+                }, 1500)
             }
         })
     }
     render() {
         return (
             <div className={classes.Profile}>
-                <Toolbar profile={this.state.profileData.username} />
+                <Toolbar profile={this.props.match.params.profile} />
 
                 {this.state.loading ?
                     <div style={{ height: '80vh' }}><Spinner /></div> : <React.Fragment>
                         {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
-                        {this.state.modalMessage ? <Alert show={true} type="info">{this.state.modalMessage}</Alert> : ''}
 
                         <Switch>
-                            <Route path='/notifications' exact render={() => (<h1>Notify</h1>)} />
-                            <Route path='/menu' exact render={() => (<Menu {...this.props} />)} />
-                            <Route path='/:profile' exact render={() => (<Timeline profile={this.props.match.params.profile}  {...this.state} />)} />
+                            <Route path='/notifications' exact render={() => (
+                                <Notify />)} />
+                            <Route path='/menu' render={() => (<Menu {...this.props} />)} />
+                            <Route path='/:profile' exact render={() => (<Timeline {...this.state} />)} />
                         </Switch>
                     </React.Fragment>
                 }

@@ -1,0 +1,21 @@
+.Menu {}
+
+.MenuLink {
+    background: white;
+    padding: 0 2rem;
+    height: 4rem;
+    font-size: 1.1rem;
+    align-items: center;
+    color: #500;
+    border-bottom: 1px solid #eee
+}
+
+.MenuLink:hover {
+    background: #f3f3f3
+}
+
+.MenuLink img {
+    height: 3rem;
+    width: 3rem;
+    background: #ddd;
+}

@@ -7,18 +7,20 @@
     left: 0;
 }
 
-.msgInput input {
+.msgInput textarea {
     width: 100%;
-    padding: .4rem 1rem;
+    padding: .5rem 1rem;
     background: white;
     border: 0;
     box-shadow: 0 .2rem .2rem rgba(0, 0, 0, .2);
     border-radius: 2rem;
     font-size: 1rem;
+    max-height: 8rem !important;
 }
 
-.msgInput input:focus {
-    outline: 0;
+.msgInput textarea:focus {
+    outline: 0 !important;
+    border: 0 !important;
 }
 
 @media only screen and (min-width: 1200px) {

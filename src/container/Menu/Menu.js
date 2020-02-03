@@ -1,50 +1,125 @@
-import React, { Component } from 'react';
-import firebase from '../../firebase';
+import React, { Component } from "react";
+import firebase from "../../firebase";
 import "firebase/auth";
-import Spinner from '../../component/UI/Spinner/Spinner';
-import { Redirect } from 'react-router-dom'
+import Spinner from "../../component/UI/Spinner/Spinner";
+import { Link, Redirect, Route } from "react-router-dom";
+import classes from "./Menu.css";
 
+import Friends from "../../component/Friends/Friends";
+import Requests from "../../component/Friends/Request";
 
 class Menu extends Component {
-    state = {
-        loading: false,
-        shouldLogout: false
+  state = {
+    loading: false,
+    shouldLogout: false,
+    userData: {
+      profilePicture: "",
+      username: "",
+      uid: ""
     }
-    componentDidMount() {
-        firebase.auth().onAuthStateChanged((user) => {
-            this.setState({ loading: true })
-            if (user) {
-                this.setState({ loading: false, shouldLogout: false })
-            } else {
-                this.setState({ shouldLogout: true, loading: false })
-            }
-        });
+  };
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      this.setState({ loading: true });
+      if (user) {
+        const userdata = {
+          ...this.state.userData
+        };
+        userdata.profilePicture = user.photoURL;
+        userdata.uid = user.uid;
+        userdata.username = user.displayName.toLowerCase();
+        document.title =
+          user.displayName +
+          " Skychat | Menu" +
+          this.setState({
+            loading: false,
+            shouldLogout: false,
+            userData: userdata
+          });
+      } else {
+        this.setState({ shouldLogout: true, loading: false });
+      }
+    });
+  }
+  logOutHandler = () => {
+    this.setState({ loading: true });
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        this.setState({ loading: false, shouldLogout: true });
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+        console.log(error);
+        // An error happened.
+      });
+  };
+  render() {
+    var menu = (
+      <React.Fragment>
+        <Link to="" className={classes.MenuLink + " row no-gutters"}>
+          <div className="col-2 col-md-1 text-success">
+            <i className="material-icons">edit</i>
+          </div>
+          <div className="col d-flex justify-content-between align-items-center">
+            Edit profile
+            <img
+              src={this.state.userData.profilePicture}
+              className=" rounded-circle"
+              alt=""
+            />
+          </div>
+        </Link>
+        <Link
+          to="/menu/friends"
+          className={classes.MenuLink + " row no-gutters"}
+        >
+          <div className="col-2 col-md-1 text-primary">
+            <i className="material-icons">people</i>
+          </div>
+          <div className="col">Friends</div>
+        </Link>
+        <Link
+          to="/login"
+          onClick={this.logOutHandler}
+          className={classes.MenuLink + " row no-gutters"}
+        >
+          <div className="col-2 col-md-1 text-danger">
+            <i className="fa fa-door-open"></i>
+          </div>
+          Log out
+        </Link>
+      </React.Fragment>
+    );
+    if (this.state.shouldLogout) {
+      menu = <Redirect to="/login?menu" />;
     }
-    logOutHandler = () => {
-        this.setState({ loading: true })
-        firebase.auth().signOut()
-            .then(() => {
-                this.setState({ loading: false, shouldLogout: true })
-            }).catch((error) => {
-                this.setState({ loading: false })
-                console.log(error);
-                // An error happened.
-            });
-    }
-    render() {
-        var menu = <div>
-            <h1>Menu </h1>
-            <button onClick={this.logOutHandler} className="btn btn-danger btn-xl rounded-pill">Log out</button>
+    return this.state.loading ? (
+      <Spinner />
+    ) : (
+      <div className="row no-gutters justify-content-center">
+        <div className="col-lg-6 py-lg-4">
+          <Route
+            exact
+            path="/menu"
+            render={() => <React.Fragment>{menu}</React.Fragment>}
+          />
+
+          <Route
+            exact
+            path="/menu/friends"
+            render={() => (
+              <React.Fragment>
+                <Friends uid={this.state.userData.uid} />
+                <Requests userData={this.state.userData} />
+              </React.Fragment>
+            )}
+          />
         </div>
-        if (this.state.shouldLogout) {
-            menu = <Redirect to="/login?menu" />
-        }
-        return (
-            this.state.loading ? <Spinner /> : <div>
-                {menu}
-            </div>
-        )
-    }
+      </div>
+    );
+  }
 }
 
-export default Menu
+export default Menu;

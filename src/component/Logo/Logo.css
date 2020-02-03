@@ -1,8 +1,11 @@
 .Logo {
     padding: 0px;
-    height: 100%;
+    height: unset;
+    width : unset;
 }
 
 .Logo img {
     height: 100%;
+    object-fit: contain;
+    width : 100%
 }
