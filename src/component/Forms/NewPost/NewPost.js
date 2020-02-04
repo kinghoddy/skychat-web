@@ -33,6 +33,15 @@ const chatInput = props => {
           }}>send</i>
         </button>
       </div>
+      <div className="col-12 d-flex mt-3 justify-content-around">
+        <button className={classes.btn}>
+          <i className="material-icons text-success pr-2">photo</i>
+          Photo
+          </button>
+        <button className={classes.btn}>
+          <i className="material-icons text-danger pr-2">videocam</i>
+          Video</button>
+      </div>
     </form>
   )
 }

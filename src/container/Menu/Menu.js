@@ -58,7 +58,7 @@ class Menu extends Component {
   render() {
     var menu = (
       <React.Fragment>
-        <Link to="" className={classes.MenuLink + " row no-gutters"}>
+        <Link to="/edit-profile" className={classes.MenuLink + " row no-gutters"}>
           <div className="col-2 col-md-1 text-success">
             <i className="material-icons">edit</i>
           </div>
@@ -98,27 +98,27 @@ class Menu extends Component {
     return this.state.loading ? (
       <Spinner />
     ) : (
-      <div className="row no-gutters justify-content-center">
-        <div className="col-lg-6 py-lg-4">
-          <Route
-            exact
-            path="/menu"
-            render={() => <React.Fragment>{menu}</React.Fragment>}
-          />
+        <div className="row no-gutters justify-content-center">
+          <div className="col-lg-6 py-lg-4">
+            <Route
+              exact
+              path="/menu"
+              render={() => <React.Fragment>{menu}</React.Fragment>}
+            />
 
-          <Route
-            exact
-            path="/menu/friends"
-            render={() => (
-              <React.Fragment>
-                <Friends uid={this.state.userData.uid} />
-                <Requests userData={this.state.userData} />
-              </React.Fragment>
-            )}
-          />
+            <Route
+              exact
+              path="/menu/friends"
+              render={() => (
+                <React.Fragment>
+                  <Friends uid={this.state.userData.uid} />
+                  <Requests userData={this.state.userData} />
+                </React.Fragment>
+              )}
+            />
+          </div>
         </div>
-      </div>
-    );
+      );
   }
 }
 

@@ -9,6 +9,7 @@ import Home from './container/Home/Home';
 import Modal from './component/UI/BtModal/BtModal';
 import firebase from './firebase'
 import Toast from './component/UI/Toast/Toast';
+import Edit from './container/Edit/Edit'
 
 
 class App extends Component {
@@ -70,6 +71,7 @@ class App extends Component {
           <Redirect from='/undefined' to='/' />
           <Route path="/notifications" exact component={Profile} />
           <Route path="/menu" component={Profile} />
+          <Route path="/edit-profile" component={Edit} />
           <Route path="/:profile" exact component={Profile} />
           <Route path="/" component={Home} />
           <Route render={() => (<h1>Not found</h1>)} />
