@@ -1,0 +1,96 @@
+.cover {
+    background: #ddd;
+    height: 15rem
+}
+
+.btnBack {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    background: 0;
+    border: 0;
+    z-index: 500;
+}
+
+
+
+.cover img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%
+}
+
+.cover i {
+    position: absolute;
+    cursor: pointer;
+    right: 0;
+    bottom: 0;
+    font-size: 2rem;
+    color: white;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+}
+
+.btnBack i {
+    position: static !important;
+    background: none !important
+}
+
+.cover>i {
+    bottom: -2rem;
+    right: 1rem;
+}
+
+.profilePic {
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    top: 100%;
+    background: #cfcfcf;
+    left: 50%;
+    border: 5px solid white;
+}
+
+
+.profilePic img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover
+}
+
+.coperate h4 {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important
+}
+
+.coperate i {
+    cursor: pointer;
+
+}
+
+.icon {
+    font-size: 3rem
+}
+
+.progressBar {
+    height: .1rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: #ddd;
+    display: flex;
+}
+
+.progressBar span {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    width: 15rem;
+    background: red
+}
