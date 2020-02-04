@@ -68,6 +68,7 @@ class Menu extends Component {
               src={this.state.userData.profilePicture}
               className=" rounded-circle"
               alt=""
+
             />
           </div>
         </Link>
@@ -80,6 +81,14 @@ class Menu extends Component {
           </div>
           <div className="col">Friends</div>
         </Link>
+        <Link
+          to="/"
+          className={classes.MenuLink + " row no-gutters"}>
+          <div className="col-2 col-md-1 text-info">
+            <i className="material-icons">help</i>
+          </div>
+          Help amd feedback
+      </Link>
         <Link
           to="/login"
           onClick={this.logOutHandler}

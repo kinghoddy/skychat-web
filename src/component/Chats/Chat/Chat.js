@@ -22,11 +22,11 @@ class chat extends Component {
     }
     render() {
         var icon = ''
-        var user = firebase.auth().currentUser.displayName
+        var user = firebase.auth().currentUser
         let classname = classes.sent
         let message = this.props.children
 
-        if (this.props.sender === user) {
+        if (this.props.sender === user.uid || this.props.sender === user.displayName) {
             classname = classes.sent
             icon = null
         } else if (this.props.sender === 'time') {

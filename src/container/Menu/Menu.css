@@ -17,5 +17,8 @@
 .MenuLink img {
     height: 3rem;
     width: 3rem;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid #ddd;
     background: #ddd;
 }

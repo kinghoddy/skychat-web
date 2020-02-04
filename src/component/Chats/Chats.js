@@ -116,21 +116,26 @@ class Chat extends Component {
               }
               for (let key in user) {
                 if (key !== uid) {
-                  var chat = {
-                    chatHead: user[key].username,
-                    icon: user[key].profilePicture,
-                    link: cur,
-                    lastChat: lastChatMessage,
-                    time: lastTime
-                  };
-                  // eslint-disable-next-line no-loop-func
-                  chatArr.forEach((cur, i) => {
-                    if (cur.chatHead === chat.chatHead) {
-                      chatArr.splice(i, 1);
-                    }
-                  });
-                  chatArr.push(chat);
-                  this.setState({ chats: chatArr.reverse(), loading: false });
+                  firebase.database().ref('users/' + key)
+                    .on('value', snap => {
+                      var chat = {
+                        chatHead: snap.val().username,
+                        icon: snap.val().profilePicture,
+                        link: cur,
+                        lastChat: lastChatMessage,
+                        time: lastTime
+                      };
+                      // eslint-disable-next-line no-loop-func
+                      chatArr.forEach((cur, i) => {
+                        if (cur.chatHead === chat.chatHead) {
+                          chatArr.splice(i, 1);
+                        }
+                      });
+                      chatArr.push(chat);
+                      this.setState({ chats: chatArr.reverse(), loading: false });
+                    })
+
+
                 }
               }
             }

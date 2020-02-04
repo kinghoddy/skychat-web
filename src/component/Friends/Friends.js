@@ -65,7 +65,7 @@ class Friends extends Component {
                     <div className="col-12 px-3">
                         <div className={classes.horizontal_scroll + " row no-gutters "}>
                             {this.state.friendsData.map((cur, i) => (
-                                <div className="col-4 col-lg-3 px-2"
+                                <div className="col-4 col-lg-3 px-1"
                                     key={i}
                                 >
                                     <Link

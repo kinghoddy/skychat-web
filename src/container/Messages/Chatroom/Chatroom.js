@@ -72,7 +72,7 @@ class Chatroom extends Component {
         }
 
         var lastChat = chats[Object.keys(chats)[Object.keys(chats).length - 1]];
-        if (lastChat.sender !== this.state.senderData.username) {
+        if (lastChat.sender !== this.state.senderData.senderId) {
           this.setState({ play: true });
         }
         this.setState({ chats: chat, date: lastChat.date });
@@ -85,16 +85,20 @@ class Chatroom extends Component {
       }
       // get receiver data
       for (let keys in s.val().metadata) {
-        if (keys !== this.state.senderData.senderId) {
-          var receiverData = {};
-          receiverData.profilePicture = s.val().metadata[keys].profilePicture;
-          receiverData.username = s.val().metadata[keys].username;
-          this.setState({ receiverData: receiverData });
-          document.title =
-            receiverData.username +
-            " And " +
-            this.state.senderData.username +
-            " | Skychat";
+        if (this.state.senderData.senderId) {
+          if (keys !== this.state.senderData.senderId) {
+            firebase.database().ref('users/' + keys).on('value', snap => {
+              var receiverData = {};
+              receiverData.profilePicture = snap.val().profilePicture;
+              receiverData.username = snap.val().username;
+              this.setState({ receiverData: receiverData });
+              document.title =
+                receiverData.username +
+                " And " +
+                this.state.senderData.username +
+                " | Skychat";
+            })
+          }
         }
       }
       this.setState({ loading: false });
@@ -126,7 +130,7 @@ class Chatroom extends Component {
       .push({
         date: dat,
         message: val,
-        sender: this.state.senderData.username
+        sender: this.state.senderData.senderId
       })
       .then(res => { })
       .catch(() => {
@@ -196,13 +200,16 @@ class Chatroom extends Component {
                 >
                   <img
                     src={this.state.senderData.profilePicture}
-                    className="h-100 rounded-circle"
+                    className="h-100 rounded-circle "
                     alt=""
+                    style={{ width: '8rem ', objectFit: "cover" }}
                   />
                   <img
                     src={this.state.receiverData.profilePicture}
                     className="h-100 rounded-circle"
                     alt=""
+                    style={{ width: '8rem ', objectFit: "cover" }}
+
                   />
                 </div>
                 <h2 className="text-center h5">
