@@ -38,6 +38,8 @@ class Messages extends Component {
     this.load(this.props.match.params.chatId);
 
     document.title = "Skychat messenger";
+    var metaThemeColor = document.querySelector("meta[name=theme-color]");
+    metaThemeColor.setAttribute("content", 'var(--white)  ');
   }
   componentDidUpdate() {
     if (this.props.match.params.chatId !== this.state.chatId) {
@@ -48,7 +50,7 @@ class Messages extends Component {
   load(id) {
     if (
       window.innerWidth >= 1200 ||
-      (id !== undefined && id !== "start-chat")
+      (id !== undefined && id !== "new-group")
     ) {
       this.setState({ shouldShowChatroom: true });
     } else {
@@ -80,22 +82,40 @@ class Messages extends Component {
                     classes.navbar + " bg-white navbar navbar-expand navbar-light"
                   }
                 >
-                  <i
-                    onClick={() => {
-                      this.props.history.push("/menu");
-                    }}
-                    style={{ cursor: "pointer" }}
-                    className="material-icons mr-2"
-                  >
-                    arrow_back
-                </i>
+                  <Switch>
+
+                    <Route path='/messages/new-group' render={() => (<i
+                      onClick={() => {
+                        this.props.history.push("/messages");
+                      }}
+                      style={{ cursor: "pointer" }}
+                      className="material-icons mr-2"
+                    >
+                      arrow_back
+                </i>)} />
+
+                    <Route path='/messages' render={() => (<i
+                      onClick={() => {
+                        this.props.history.push("/menu");
+                      }}
+                      style={{ cursor: "pointer" }}
+                      className="material-icons mr-2"
+                    >
+                      arrow_back
+                </i>)} />
+                  </Switch>
                   <Link
                     to={"/" + this.state.userData.username}
                     className={classes.icon + " p-0 navbar-brand"}
                   >
                     <img src={this.state.userData.profilePicture} alt="" />
                   </Link>
-                  <h3 className="mb-0">Chats</h3>
+                  <Switch>
+
+                    <Route path={'/messages/new-group'} exact render={() => (<h3 className="mb-0">New group</h3>)} />
+                    <Route path={'/messages'} render={() => (<h3 className="mb-0">Chats</h3>)} />
+                  </Switch>
+
                   <div className="collapse navbar-collapse">
                     <ul className="navbar-nav ml-auto">
                       <li className="nav-item">
@@ -114,21 +134,21 @@ class Messages extends Component {
                 >
                   <Switch>
                     <Route
-                      path="/messages/start-chat"
-                      render={() => <StartChat clicked={this.getChatData} />}
+                      path="/messages/new-group"
+                      render={() => <StartChat username={this.state.userData.username} profilePicture={this.state.userData.profilePicture} uid={this.state.userData.uid} />}
                     />
                     <Route path="/messages" component={Chats} />
                   </Switch>
                   <Switch>
-                    <Route path="/messages/start-chat" />
+                    <Route path="/messages/new-group" />
                     <Route
                       path="/messages"
                       render={() => (
                         <Link
-                          to="/messages/start-chat"
+                          to="/messages/new-group"
                           className={classes.bubble}
                         >
-                          <i className="material-icons">chat_bubble</i>
+                          <i className="material-icons">group_add</i>
                         </Link>
                       )}
                     />
@@ -143,7 +163,7 @@ class Messages extends Component {
                   }}
                 >
                   <Switch>
-                    <Route path="/messages/start-chat" component={PlaceHolder} />{" "}
+                    <Route path="/messages/new-group" component={PlaceHolder} />{" "}
                     <Route path="/messages/:chatId" render={() => <Chatroom />} />
                     <Route path="/messages" component={PlaceHolder} />
                   </Switch>
@@ -153,7 +173,7 @@ class Messages extends Component {
                 )}
             </div>
           </div>
-        </div>
+        </div >
       );
   }
 }

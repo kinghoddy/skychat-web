@@ -7,14 +7,14 @@ import Signin from "../../component/Forms/SignUp/SignUp";
 import Logo from "../../component/Logo/Logo";
 const Account = props => {
   var metaThemeColor = document.querySelector("meta[name=theme-color]");
-  metaThemeColor.setAttribute("content", "#fff");
+  metaThemeColor.setAttribute("content", "var(--white)");
 
   return (
     <div className={"container-fluid " + classes.Account}>
       <div className="row no-gutter">
         <div
           className={
-            "text-white  col-md-4 col-lg-6 d-none d-md-flex align-items-center " +
+            "  col-md-4 col-lg-6 d-none d-md-flex align-items-center " +
             classes.bgImage
           }
         ></div>

@@ -7,6 +7,7 @@ import classes from "./Menu.css";
 
 import Friends from "../../component/Friends/Friends";
 import Requests from "../../component/Friends/Request";
+import Display from '../../component/Display/Display'
 
 class Menu extends Component {
   state = {
@@ -40,6 +41,8 @@ class Menu extends Component {
         this.setState({ shouldLogout: true, loading: false });
       }
     });
+    var metaThemeColor = document.querySelector("meta[name=theme-color]");
+    metaThemeColor.setAttribute("content", ' #fff');
   }
   logOutHandler = () => {
     this.setState({ loading: true });
@@ -82,6 +85,14 @@ class Menu extends Component {
           <div className="col">Friends</div>
         </Link>
         <Link
+          to="menu/display-settings"
+          className={classes.MenuLink + " row no-gutters"}>
+          <div className="col-2 col-md-1 text-warning">
+            <i className="material-icons">brightness_medium</i>
+          </div>
+          Display
+      </Link>
+        <Link
           to="/"
           className={classes.MenuLink + " row no-gutters"}>
           <div className="col-2 col-md-1 text-info">
@@ -115,6 +126,15 @@ class Menu extends Component {
               render={() => <React.Fragment>{menu}</React.Fragment>}
             />
 
+            <Route
+              exact
+              path="/menu/display-settings"
+              render={() => (
+                <React.Fragment>
+                  <Display />
+                </React.Fragment>
+              )}
+            />
             <Route
               exact
               path="/menu/friends"

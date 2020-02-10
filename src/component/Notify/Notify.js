@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Request from '../Friends/Request'
 
 
 export default class Notify extends Component {
@@ -9,8 +10,8 @@ export default class Notify extends Component {
     render() {
         return (
             <div>
-                Notify
-        </div>
+                <Request hideAll={true} userData={this.props.userData} />
+            </div>
         )
     }
 }

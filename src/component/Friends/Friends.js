@@ -5,6 +5,9 @@ import 'firebase/database';
 import firebase from '../../firebase';
 import Spinner from '../../component/UI/Spinner/Spinner'
 import Toast from '../UI/Toast/Toast';
+import Modal from '../UI/Modal/Modal';
+
+import friendsImg from '../../assets/Image/friends.png';
 
 class Friends extends Component {
     state = {
@@ -40,7 +43,7 @@ class Friends extends Component {
                                 friendsData.push(friend)
                             })
                     }
-                    this.setState({ friendsData: friendsData, loading: false })
+                    this.setState({ friendsData: friendsData.reverse(), loading: false })
                 } else {
                     this.setState({ friendsData: [], loading: false })
 
@@ -48,9 +51,53 @@ class Friends extends Component {
             })
         }
     }
+    allFriends = () => {
+        this.setState({ showAllFriends: true })
+    }
+
     render() {
         return (
             this.state.loading ? <Spinner fontSize="3px" /> : this.props.uid ? <div className="container-fluid p-0">
+                <Modal show={this.state.showAllFriends} modalClosed={() => this.setState({ showAllFriends: false, seeMore: false })} >
+                    <div className="d-flex  pb-3 align-items-center">
+                        <img
+                            className={classes.img}
+                            src={this.props.profilePicture}
+                            alt=""
+                        />
+                        <h4 className="h5 text-capitalize ml-4">{this.props.username}'s Friends <small>{this.state.friendsData.length}</small> </h4>
+                    </div>
+                    {this.state.friendsData.map((cur, i) => (
+                        !this.state.seeMore ? i < 2 ?
+                            <Link
+                                to={"/" + cur.username}
+                                className={classes.friendList}
+                                onClick={() => { this.setState({ showAllFriends: false, seeMore: false }) }}
+                                key={cur.username}
+                            >
+                                <img
+                                    src={cur.profilePicture}
+                                    alt=""
+                                />
+                                <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">{cur.username}</div>
+                            </Link>
+
+                            : null : <Link
+                                to={"/" + cur.username}
+                                className={classes.friendList}
+                                key={cur.username}
+                                onClick={() => { this.setState({ showAllFriends: false, seeMore: false }) }}
+
+                            >
+                                <img
+                                    src={cur.profilePicture}
+                                    alt=""
+                                />
+                                <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">{cur.username}</div>
+                            </Link>
+                    ))}
+                    {this.state.friendsData.length > 2 ? <button className="rounded-pill d-flex mx-auto my-3 btn btn-sm btn-outline-primary" onClick={() => { this.setState({ seeMore: !this.state.seeMore }) }}>{this.state.seeMore ? "See less" : "See more ->"}</button> : null}
+                </Modal>
                 {this.state.toast ? <Toast>{this.state.toast}</Toast> : null}
                 <div className="row bg-white border-bottom no-gutters">
                     <div className="col-12 px-3 d-flex align-items-center">
@@ -65,24 +112,35 @@ class Friends extends Component {
                     <div className="col-12 px-3">
                         <div className={classes.horizontal_scroll + " row no-gutters "}>
                             {this.state.friendsData.map((cur, i) => (
-                                <div className="col-4 col-lg-3 px-1"
+                                i < 3 ? <div className="col-4 col-lg-3 px-1"
                                     key={i}
                                 >
                                     <Link
                                         to={"/" + cur.username}
                                         className={classes.friendCard}
                                     >
-                                        <div className="card-picture overflow-hidden">
-                                            <img
-                                                className="card-img-top "
-                                                src={cur.profilePicture}
-                                                alt="cover"
-                                            />
-                                        </div>
+                                        <img
+                                            src={cur.profilePicture}
+                                            alt=""
+                                        />
                                         <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">{cur.username}</div>
                                     </Link>
-                                </div>
+                                </div> : null
                             ))}
+                            <div className="col-4 col-lg-3 px-1"
+                            >
+                                <button
+                                    onClick={this.allFriends}
+                                    className={classes.friendCard}
+                                >
+                                    <img
+                                        alt=""
+
+                                        src={friendsImg}
+                                    />
+                                    <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">See all friends</div>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
 .Account {
-  background: #fff;
+  background: var(--white);
 }
 
 .bgImage {
   font-size: 4rem !important;
-  /* background-image: url('../../assets/Image/sky1.jpg'); */
+  color: #fff;
   background-size: cover;
   background-position: center;
   animation: slide 30s infinite;
@@ -104,8 +104,9 @@
   animation-fill-mode: both;
   position: relative;
 }
-.login > div {
-  background: rgba(255, 255, 255, 0.658);
+
+.login>div {
+  /* background:; */
 }
 
 @media only screen and (min-width: 760px) {

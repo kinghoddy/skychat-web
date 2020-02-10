@@ -36,7 +36,7 @@ export default class VN extends Component {
                     className="sound-wave"
                     onStop={this.onStop}
                     onData={this.onData}
-                    strokeColor="#000000"
+                    strokeColor="VAR(--BLACK)000"
                     backgroundColor="#FF4081" />
                 <button onClick={this.startRecording} type="button">Start</button>
                 <button onClick={this.stopRecording} type="button">Stop</button>

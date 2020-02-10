@@ -4,6 +4,7 @@ import Logo from '../../component/Logo/Logo';
 import demo3 from '../../assets/Image/demo/demo3.png'
 import { Link } from 'react-router-dom';
 import firebase from '../../firebase';
+import 'firebase/auth';
 import demo2 from '../../assets/Image/demo/demo2.png'
 
 class Home extends Component {
@@ -12,12 +13,12 @@ class Home extends Component {
   }
   componentDidMount() {
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", "#200");
+    metaThemeColor.setAttribute("content", "#f7f7f7");
     document.title = "Skychat homepage";
     this.checkUser()
   }
 
-  checkUser() {
+  checkUser = () => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const userdata = {
@@ -61,12 +62,12 @@ class Home extends Component {
           <div className="container h-100">
             <div className="row h-100">
               <div className="col-lg-7 my-auto">
-                {this.state.userData ? <div className=" py-4 d-flex text-light align-items-center justify-content-center">
-                  <img style={{ height: "3rem" }} src={this.state.userData.profilePicture} className="rounded-circle " alt="" />
+                {this.state.userData ? <div className=" py-4 mx-auto d-flex text-light align-items-center justify-content-center">
+                  <img style={{ height: "5rem", flexShrink: 0, width: "5rem", objectFit: "cover" }} src={this.state.userData.profilePicture} className="bg-light rounded-circle " alt="" />
                   <div className="text-light px-3 ">
 
                     <h4 className="text-light h6">{this.state.userData.username} is already logged in</h4>
-                    <Link to={"/" + this.state.userData.username} className="btn btn-outline-light px-3 btn-sm  rounded-pill">Go to account</Link>
+                    <Link to={"/" + this.state.userData.username} className="btn btn-outline-light px-3 btn-sm  rounded-pill">Continue as {this.state.userData.username}</Link>
                   </div>
                 </div>
                   : null}
@@ -94,22 +95,6 @@ class Home extends Component {
           </div>
         </header>
 
-        <section className={[classes.bg_primary, classes.download, " text-center"].join(' ')} id="download">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-8 mx-auto">
-                <h2 className="section-heading">Discover what all the buzz is about!</h2>
-                <p>Our app is available on any mobile device! Download now to get started!</p>
-                <div className="badges">
-                  <Link className="badge-link" to="#">
-                    <img src="img/google-play-badge.svg" alt="" /></Link>
-                  <Link className="badge-link" to="#">
-                    <img src="img/app-store-badge.svg" alt="" /></Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
       </div>
     );

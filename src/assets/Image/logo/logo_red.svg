@@ -12,7 +12,7 @@ viewBox="0 0 0.354895 0.236593"
    ]]>
   </style>
   <linearGradient id="id0" gradientUnits="userSpaceOnUse" x1="0.160306" y1="-0.000161142" x2="0.194588" y2="0.236755">
-   <stop offset="0" style="stop-color:#FFF500"/>
+   <stop offset="0" style="stop-color:VAR(--WHITE)500"/>
    <stop offset="0.678431" style="stop-color:#E77817"/>
    <stop offset="1" style="stop-color:#DA251D"/>
   </linearGradient>

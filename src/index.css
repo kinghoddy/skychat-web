@@ -4,11 +4,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #eee;
+  background: var(--gray);
 }
 
 :root {
-  background: #eee;
+  background: var(--gray);
 
 }
 
@@ -32,7 +32,7 @@ h5,
 h4 {
   font-family: 'Montserrat Alternates', sans-serif;
   font-weight: 700;
-  color: #777
+  color: var(--gray-dark)
 }
 
 h3,
