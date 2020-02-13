@@ -94,22 +94,6 @@ class Home extends Component {
           </div>
         </header>
 
-        <section className={[classes.bg_primary, classes.download, " text-center"].join(' ')} id="download">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-8 mx-auto">
-                <h2 className="section-heading">Discover what all the buzz is about!</h2>
-                <p>Our app is available on any mobile device! Download now to get started!</p>
-                <div className="badges">
-                  <Link className="badge-link" to="#">
-                    <img src="img/google-play-badge.svg" alt="" /></Link>
-                  <Link className="badge-link" to="#">
-                    <img src="img/app-store-badge.svg" alt="" /></Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
       </div>
     );

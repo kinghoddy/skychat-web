@@ -13,7 +13,7 @@ class Modal extends Component {
     render() {
 
         return (
-            <React.Fragment>
+            this.props.show ? <React.Fragment>
 
                 <button type="button" id='mBtn' className="d-none" data-toggle="modal" data-target="#modelId">
                     Launch
@@ -23,7 +23,7 @@ class Modal extends Component {
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Skymail</h5>
+                                <h5 className="modal-title">{this.props.title}</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -43,7 +43,7 @@ class Modal extends Component {
                         </div>
                     </div>
                 </div>
-            </React.Fragment>
+            </React.Fragment> : null
 
         )
     }

@@ -127,7 +127,7 @@ export default class EditProfile extends Component {
                             <i className="material-icons">arrow_back</i>
                         </button>
                         <img alt="" src={this.state.userData.coverPhoto} />
-                        <input type="file" className="d-none" ref={this.file} />
+                        <input type="file" accept="image/*" className="d-none" ref={this.file} />
                         <div className={classes.profilePic}>
                             <img alt="" src={this.state.userData.profilePicture} className={" rounded-circle "} />
                             <i onClick={() => {

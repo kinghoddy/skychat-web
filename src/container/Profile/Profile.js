@@ -68,7 +68,7 @@ class Profile extends Component {
 
                         <Switch>
                             <Route path='/notifications' exact render={() => (
-                                <Notify />)} />
+                                <Notify {...this.state} />)} />
                             <Route path='/menu' render={() => (<Menu {...this.props} />)} />
                             <Route path='/:profile' exact render={() => (<Timeline {...this.state} />)} />
                         </Switch>

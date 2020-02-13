@@ -196,7 +196,7 @@ class Friends extends Component {
             You have {this.state.request.length} Friend request
             <small>(s)</small>{" "}
           </h1>
-          {this.state.request.map((cur, i) => (
+          {this.props.hideReq ? null : this.state.request.map((cur, i) => (
             <div
               className="row align-items-center py-2 px-3 no-gutters "
               key={cur.uid}
@@ -245,7 +245,7 @@ class Friends extends Component {
             </div>
           ))}
         </div>
-        <div className="border-bottom row no-gutters bg-light py-5">
+        {this.props.hideAll ? null : <div className="border-bottom row no-gutters bg-light py-5">
           <h3 className="col-12 pl-3 h5"> Find new friends to fly with</h3>
           <div className="col-12 px-3">
             <Search />
@@ -305,7 +305,7 @@ class Friends extends Component {
                 )
               )}
           </div>
-        </div>
+        </div>}
       </div>
     );
   }

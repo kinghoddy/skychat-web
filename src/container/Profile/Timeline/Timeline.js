@@ -3,14 +3,20 @@ import classes from "./Timeline.css";
 import { withRouter, Link } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/auth";
+import "firebase/storage";
 import Spinner from "../../../component/UI/Spinner/Spinner";
 import Friends from "../../../component/Friends/Friends";
+import Request from "../../../component/Friends/Request";
 import Alert from "../../../component/UI/Alert/Alert";
 import Post from '../../../component/Posts/Posts';
 import NewPost from '../../../component/Forms/NewPost/NewPost';
 import play from '../../../component/Audio/Audio'
 
 class Timeline extends Component {
+  constructor(props) {
+    super(props)
+    this.progBar = React.createRef()
+  }
   state = {
     profileData: {
       username: "",
@@ -23,10 +29,19 @@ class Timeline extends Component {
     profile: "",
     errorMessage: null,
     changeStyle: false,
+<<<<<<< HEAD
     modalMessage: null,
     postTitle: "",
     postBody: "",
     type: null
+=======
+    showPostForm: true,
+    modalMessage: null,
+    postTitle: "",
+    postBody: "",
+    type: null,
+    src: null
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
   };
 
   componentDidMount() {
@@ -62,6 +77,7 @@ class Timeline extends Component {
       body: this.state.postBody.split("\n").join("<br/>"),
       type: this.state.type,
       date: Date.now(),
+<<<<<<< HEAD
       uid: this.state.profileData.uid
     }
     firebase.database().ref('posts/')
@@ -104,6 +120,38 @@ class Timeline extends Component {
         }
       }, (error) => {
         this.setState({ loading: false })
+=======
+      src: this.state.src,
+      uid: this.state.profileData.uid
+    }
+    if (!Post.tittle && !Post.body && !Post.src) {
+
+      this.setState({ error: 'Type something or pick a media to upload a post' })
+    } else {
+
+      firebase.database().ref('posts/')
+        .push(Post).then(res => {
+          play('success')
+        })
+      this.setState({ postBody: '', postTitle: "", src: null, type: null, error: null })
+    }
+  }
+
+  upload = (type) => {
+
+    var files = document.createElement('input')
+    files.type = 'file'
+    if (type === 'images') {
+      files.accept = 'image/*'
+    } else {
+      files.accept = 'video/*'
+    }
+    this.setState({ showPostForm: false })
+    files.click()
+    files.onchange = e => {
+      console.log(files);
+      const storageRef = firebase.storage().ref('/' + this.state.profileData.username.toLowerCase())
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 
         switch (error.code) {
           case 'storage/unauthorized':
@@ -147,6 +195,59 @@ class Timeline extends Component {
         });
 
       })
+    }
+  }
+
+      const file = files.files[0];
+
+      if (file.size > 1000000 * 10) {
+        alert('File to big \n Maximum file size is 10mb')
+        this.setState({ showPostForm: true })
+
+      } else {
+        const uploadTask = storageRef.child(type + "/" + file.name).put(file);
+        uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          var progressMessage = 'Upload is ' + Math.floor(progress) + '% Done. (' + (snapshot.totalBytes / 1000000).toFixed(2) + ' mb) '
+          this.setState({ progressMessage: progressMessage })
+          this.progBar.current.style.width = progress + '%'
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              this.setState({ progressMessage: 'Upload is paused' })
+
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              break;
+          }
+        }, (error) => {
+          this.setState({ showPostForm: true })
+          switch (error.code) {
+            case 'storage/unauthorized':
+              // User doesn't have permission to access the object
+              this.setState({
+                error: "You don't have permission to access the object"
+              })
+              break;
+            case 'storage/canceled':
+              this.setState({ error: "Upload canceled" })
+              break;
+            case 'storage/unknown':
+              this.setState({ error: "Unknown error occurred" })
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
+        }, () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            this.setState({ showPostForm: true, progressMessage: null })
+            this.setState({ type: type, src: downloadURL.replace(file.name, file.name.split('.').join('_400x400.')) })
+            console.log(this.state.src, downloadURL);
+
+
+          });
+
+        })
+      }
     }
   }
 
@@ -234,16 +335,38 @@ class Timeline extends Component {
                 </div>
               </div>
               {this.state.isUser ? <div className="bg-white  text-center"> <Link to="/edit-profile" className="btn  btn-outline-dark rounded-pill px-5 mx-auto btn-sm" >Edit profile</Link></div> : null}
+<<<<<<< HEAD
               <Friends uid={this.state.profileData.uid} />
 
               {this.state.isUser ? <NewPost
+=======
+              <Friends {...this.state.profileData} />
+              {this.state.isUser ?
+                <Request hideAll={true} userData={this.props.userData} /> : null}
+
+              {this.state.isUser ? this.state.progressMessage ? null : !this.state.showPostForm ? <div style={{ height: '10rem' }} className="bg-white"> <Spinner fontSize="8px" /> </div> : <NewPost
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                 titleChanged={this.titleChanged}
                 bodyChanged={this.bodyChanged}
                 title={this.state.postTitle}
                 upload={this.upload}
+<<<<<<< HEAD
                 body={this.state.postBody}
                 sendPost={this.sendPost}
               /> : null}
+=======
+
+                src={this.state.src}
+                type={this.state.type}
+                body={this.state.postBody}
+                sendPost={this.sendPost}
+              /> : null}
+              {this.state.error ? (
+                <Alert type="warning" show={true}>
+                  {this.state.error}
+                </Alert>
+              ) : null}
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
               {this.state.progressMessage ? <div className={'row no-gutters pb-4 px-4 mb-2 bg-white'}>
                 <h4 className="h5 font-weight-bold">{this.state.progressMessage}</h4>
                 <div className={classes.progressBar}>
@@ -251,7 +374,11 @@ class Timeline extends Component {
                 </div>
               </div> : null}
               {this.state.profileData.uid ?
+<<<<<<< HEAD
                 <Post uid={this.state.profileData.uid} /> : null}
+=======
+                <Post uid={this.state.profileData.uid} likeeId={this.props.userData.uid} /> : null}
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 
             </div>
 
@@ -268,3 +395,8 @@ class Timeline extends Component {
 }
 
 export default withRouter(Timeline);
+// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment_400x400.JPG?alt=media&token=00113e3e-3cfb-4fde-ba0c-81403f49e798
+
+// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment.JPG?alt=media&token=430fa42c-fe53-47e7-92f6-f7e09dd01db1
+
+gs://skymail-920ab.appspot.com/noel odunmilade/images/comment_400x400.JPG
