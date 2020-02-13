@@ -11,7 +11,7 @@ class chat extends Component {
     componentDidMount() {
         let classname = this.chatRef.current.className;
 
-        if (this.chatRef.current.offsetHeight > 55 && this.chatRef.current.offsetHeight < 80) {
+        if (this.chatRef.current.offsetHeight > 40 && this.chatRef.current.offsetHeight < 80) {
             classname = [classname, classes.lg].join(' ')
         } else if (this.chatRef.current.offsetHeight > 80) {
             classname = [classname, classes.lg2].join(' ')
@@ -92,10 +92,15 @@ class chat extends Component {
         }
 
 
+        const colors = [' rgb(43, 144, 226)', 'rgb(226, 177, 43)', '#62a', '#e22', ' rgb(43, 226, 52)', 'rgb(226, 43, 180)']
+        const i = Math.floor(Math.random() * 6)
         return (
             <div className="d-flex">
                 {icon}
-                <div ref={this.chatRef} dangerouslySetInnerHTML={{ __html: message }} className={[classes.chat, classname].join(' ')}>
+                <div ref={this.chatRef} className={[classes.gchat, classname].join(' ')}>
+                    <p style={{ color: colors[i] }} className={classes.name}>{this.props.name} </p>
+                    <span dangerouslySetInnerHTML={{ __html: message }} >
+                    </span>
                 </div>
             </div>
         )

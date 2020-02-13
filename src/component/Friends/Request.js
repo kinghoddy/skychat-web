@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "firebase/database";
+import { withRouter } from 'react-router-dom';
 import firebase from "../../firebase";
 import Spinner from "../../component/UI/Spinner/Spinner";
 import Search from "../../component/Forms/Search/Searxh";
@@ -204,10 +205,15 @@ class Friends extends Component {
                 <img
                   src={cur.profilePicture}
                   alt=""
-                  className="img-fluid rounded-circle border"
+                  style={{
+                    height: "3.5rem",
+                    width: "3.5rem",
+                    objectFit: "cover"
+                  }}
+                  className=" rounded-circle border"
                 />
               </div>
-              <div className="col pl-4">
+              <div className="col-9 pl-4">
                 <h5 className="text-capitalize h6 font-weight-bold">
                   {cur.username}
                 </h5>
@@ -248,49 +254,56 @@ class Friends extends Component {
             {!this.state.allUsers ? (
               <Spinner fontSize="4px" />
             ) : (
-              this.state.allUsers.map((cur, i) =>
-                cur ? (
-                  <div
-                    className="row align-items-center py-2 px-3 no-gutters "
-                    key={i}
-                  >
-                    <div className="col-2 col-md-1">
-                      <img
-                        src={cur.profilePicture}
-                        alt=""
-                        className="img-fluid rounded-circle border"
-                      />
-                    </div>
-                    <div className="col pl-4">
-                      <h5 className="text-capitalize h6 font-weight-bold">
-                        {cur.username}
-                      </h5>
-                      <div>
-                        {cur.sent ? (
-                          <button
-                            onClick={() => {
-                              this.cancelRequest(cur.uid);
-                            }}
-                            className="btn btn btn-red"
-                          >
-                            X <span className="pl-3"> Cancel Request</span>
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              this.sendRequest(cur.uid, i);
-                            }}
-                            className="btn btn btn-outline-success"
-                          >
-                            + <span className="pl-4">Add friend</span>
-                          </button>
-                        )}
+                this.state.allUsers.map((cur, i) =>
+                  cur ? (
+                    <div
+                      className="row align-items-center py-2 px-3 no-gutters "
+                      key={i}
+                    >
+                      <div className="col-2 col-md-1" onClick={() => {
+                        this.props.history.push('/' + cur.username)
+                      }}>
+                        <img
+                          src={cur.profilePicture}
+                          alt=""
+                          style={{
+                            height: "3.5rem",
+                            width: "3.5rem",
+                            objectFit: "cover"
+                          }}
+                          className="rounded-circle border"
+                        />
+                      </div>
+                      <div className="col pl-4">
+                        <h5 className="text-capitalize h6 font-weight-bold">
+                          {cur.username}
+                        </h5>
+                        <div>
+                          {cur.sent ? (
+                            <button
+                              onClick={() => {
+                                this.cancelRequest(cur.uid);
+                              }}
+                              className="btn btn btn-red"
+                            >
+                              X <span className="pl-3"> Cancel Request</span>
+                            </button>
+                          ) : (
+                              <button
+                                onClick={() => {
+                                  this.sendRequest(cur.uid, i);
+                                }}
+                                className="btn btn btn-outline-success"
+                              >
+                                + <span className="pl-4">Add friend</span>
+                              </button>
+                            )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : null
-              )
-            )}
+                  ) : null
+                )
+              )}
           </div>
         </div>
       </div>
@@ -298,4 +311,4 @@ class Friends extends Component {
   }
 }
 
-export default Friends;
+export default withRouter(Friends);

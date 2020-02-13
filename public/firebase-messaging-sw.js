@@ -1,10 +1,6 @@
-import * as firebase from "firebase/app";
-import 'firebase/analytics'
+importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js')
 
-
-
-
-// Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyCKMoKc1Cft0WG1etZLvnmh5ytzdckkIcg",
     authDomain: "skymail-920ab.firebaseapp.com",
@@ -17,8 +13,13 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
 
+const messaging = firebase.messaging()
 
-
-export default firebase;
+messaging.setBackgroundMessageHandler(payload => {
+    const title = "Skymail"
+    const option = {
+        body: payload.data.status
+    }
+    return self.ServiceWorkerRegistration.showNotification(title, option)
+})

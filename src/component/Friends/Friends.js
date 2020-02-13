@@ -76,7 +76,7 @@ class Friends extends Component {
                                             <img
                                                 className="card-img-top "
                                                 src={cur.profilePicture}
-                                                alt="cover"
+                                                alt=""
                                             />
                                         </div>
                                         <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">{cur.username}</div>

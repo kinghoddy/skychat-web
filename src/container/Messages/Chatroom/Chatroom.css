@@ -1,6 +1,7 @@
 .chatroom {
     position: relative;
     height: 100%;
+    color: #000
 }
 
 .navbar {
@@ -14,7 +15,7 @@
     height: 3rem;
     width: 3rem;
     border-radius: 50%;
-    background: #ddd;
+    background: var(--gray-dark);
     overflow: hidden;
 }
 
@@ -54,6 +55,11 @@
     .chats {
         margin-bottom: 4.2rem;
         height: calc(100% - 4.2rem);
-        padding: 0 4rem;
+        padding: 0 6rem;
+    }
+
+    .icon {
+        height: 2.5rem;
+        width: 2.5rem
     }
 }

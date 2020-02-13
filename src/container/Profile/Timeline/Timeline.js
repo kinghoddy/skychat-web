@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import classes from "./Timeline.css";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import firebase from "../../../firebase";
 import "firebase/auth";
 import Spinner from "../../../component/UI/Spinner/Spinner";
 import Friends from "../../../component/Friends/Friends";
 import Alert from "../../../component/UI/Alert/Alert";
 import Post from '../../../component/Posts/Posts';
-import NewPost from '../../../component/Forms/NewPost/NewPost'
+import NewPost from '../../../component/Forms/NewPost/NewPost';
+import play from '../../../component/Audio/Audio'
 
 class Timeline extends Component {
   state = {
@@ -22,13 +23,27 @@ class Timeline extends Component {
     profile: "",
     errorMessage: null,
     changeStyle: false,
-    modalMessage: null
+    modalMessage: null,
+    postTitle: "",
+    postBody: "",
+    type: null
   };
 
   componentDidMount() {
     this.load(this.props.profile);
+
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", "#fff");
+    metaThemeColor.setAttribute("content", ' #171e25');
+  }
+  titleChanged = e => {
+    this.setState({
+      postTitle: e.target.value
+    })
+  }
+  bodyChanged = e => {
+    this.setState({
+      postBody: e.target.value
+    })
   }
 
   componentDidUpdate() {
@@ -37,7 +52,103 @@ class Timeline extends Component {
       this.load(this.props.match.params.profile);
     }
   }
+  sendPost = e => {
+    this.setState({ play: null })
+    e.preventDefault();
+    var Post = {
+      title: this.state.postTitle,
+      icon: this.state.profileData.profilePicture,
+      username: this.state.profileData.username,
+      body: this.state.postBody.split("\n").join("<br/>"),
+      type: this.state.type,
+      date: Date.now(),
+      uid: this.state.profileData.uid
+    }
+    firebase.database().ref('posts/')
+      .push(Post).then(res => {
 
+        play('success')
+      })
+    this.setState({ postBody: '', postTitle: "" })
+  }
+
+  upload = (types) => {
+    const type = types
+    // File or Blob named mountains.jpg
+    // this.setState({ loading: true, message: "Uploading image" })
+    var files = document.createElement('input')
+
+    files.click()
+    files.onchange = e => {
+      const storageRef = firebase.storage().ref('/' + this.state.userData.username.toLowerCase())
+
+      const file = files.files[0];
+
+      const uploadTask = storageRef.child(type + "/" + file.name).put(file);
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+        this.setState({ loading: false })
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        var progressMessage = 'Upload is ' + Math.floor(progress) + '% Done. (' + (snapshot.totalBytes / 1000000).toFixed(2) + ' mb) '
+        this.setState({ progressMessage: progressMessage })
+        this.progBar.current.style.width = progress + '%'
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            this.setState({ progressMessage: 'Upload is paused' })
+
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            break;
+          default:
+            break;
+        }
+      }, (error) => {
+        this.setState({ loading: false })
+
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            this.setState({
+              error: "You don't have permission to access the object"
+            })
+            break;
+          case 'storage/canceled':
+            this.setState({ error: "Upload canceled" })
+            break;
+          case 'storage/unknown':
+            this.setState({ error: "Unknown error occurred" })
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+          default:
+            this.setState({ error: "Unknown error occurred" })
+            break;
+        }
+      }, () => {
+        this.setState({ loading: true, progressMessage: null })
+
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          firebase.database().ref('users/' + this.state.userData.uid + "/" + type)
+            .set(downloadURL).then(cur => {
+              this.setState({ loading: false })
+            }).catch(err => {
+              this.setState({ loading: false, error: err })
+              console.log(err);
+            });
+          var user = firebase.auth().currentUser;
+
+          if (type === 'profilePicture') {
+            user.updateProfile({
+              photoURL: downloadURL
+            }).catch(function (error) {
+              this.setState({ error: error })
+              // An error happened.
+            })
+          }
+        });
+
+      })
+    }
+  }
 
   load = uname => {
     this.setState({ loading: true });
@@ -107,7 +218,7 @@ class Timeline extends Component {
                     <img src={this.state.profileData.profilePicture} alt="" />
                   </div>
                   {this.state.loading ? (
-                    <Spinner style={{ background: "#ccc" }} />
+                    <Spinner style={{ background: "var(--secondary)" }} />
                   ) : (
                       <h3 className={classes.username}>
                         {!this.state.isUser ? (
@@ -119,16 +230,28 @@ class Timeline extends Component {
                           )}
                       </h3>
                     )}
+
                 </div>
               </div>
+              {this.state.isUser ? <div className="bg-white  text-center"> <Link to="/edit-profile" className="btn  btn-outline-dark rounded-pill px-5 mx-auto btn-sm" >Edit profile</Link></div> : null}
               <Friends uid={this.state.profileData.uid} />
-              <NewPost
-                changed={this.inputChanged}
-                value={this.state.value}
+
+              {this.state.isUser ? <NewPost
+                titleChanged={this.titleChanged}
+                bodyChanged={this.bodyChanged}
+                title={this.state.postTitle}
+                upload={this.upload}
+                body={this.state.postBody}
                 sendPost={this.sendPost}
-              />
-              <Post
-              />
+              /> : null}
+              {this.state.progressMessage ? <div className={'row no-gutters pb-4 px-4 mb-2 bg-white'}>
+                <h4 className="h5 font-weight-bold">{this.state.progressMessage}</h4>
+                <div className={classes.progressBar}>
+                  <span ref={this.progBar} ></span>
+                </div>
+              </div> : null}
+              {this.state.profileData.uid ?
+                <Post uid={this.state.profileData.uid} /> : null}
 
             </div>
 

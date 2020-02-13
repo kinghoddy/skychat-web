@@ -4,6 +4,7 @@ import classes from "./Chatroom.css";
 import { Link, withRouter } from "react-router-dom";
 import ChatInput from "../../../component/Forms/chatInput/chatInput";
 import Chat from "../../../component/Chats/Chat/Chat";
+import GroupChat from "../../../component/Chats/Chat/groupChat";
 import "firebase/database";
 import "firebase/auth";
 import firebase from "../../../firebase";
@@ -21,7 +22,9 @@ class Chatroom extends Component {
       senderId: ""
     },
     loading: false,
+    description: undefined,
     date: null,
+    isGroup: true,
     changeStyle: false
   };
   inputChanged = e => {
@@ -36,7 +39,7 @@ class Chatroom extends Component {
         senderData.username = user.displayName;
         senderData.profilePicture = user.photoURL;
         this.setState({ senderData: senderData });
-        this.getChats(this.props.match.params.chatId);
+        this.getChats(this.props.match.params.chatId)
       } else {
         this.setState({ loading: false });
       }
@@ -60,52 +63,103 @@ class Chatroom extends Component {
       this.getChats(this.props.match.params.chatId)
     }
   }
-  getChats = (chatId) => {
-    var ref = firebase.database().ref("chats/" + chatId);
-    ref.on("value", s => {
-      this.setState({ play: false });
-      var chats = s.val().chats;
-      if (chats) {
-        var chat = [];
-        for (let keys in chats) {
-          chat.push(chats[keys]);
-        }
+  getChats = (chatId, uid) => {
+    const chatref = firebase.database().ref('chats/' + chatId)
+    chatref.on('value', s => {
+      let description = s.val().description
+      const groupIcon = s.val().icon
 
-        var lastChat = chats[Object.keys(chats)[Object.keys(chats).length - 1]];
-        if (lastChat.sender !== this.state.senderData.senderId) {
-          this.setState({ play: true });
+      // checking if its a group
+      if (description !== undefined) {
+        this.setState({ isGroup: true, description: description, groupIcon: groupIcon })
+        let members = {}
+        for (let keys in s.val().metadata) {
+          firebase.database().ref('users/' + keys).once('value', users => {
+            members[keys] = {
+              profilePicture: users.val().profilePicture,
+              username: users.val().username
+            }
+          }).then(res => {
+            var chats = []
+            for (let k in s.val().chats) {
+              const chat = {
+                ...s.val().chats[k]
+              }
+              if (members[chat.sender]) {
+                chat.name = members[chat.sender].username
+                chat.profilePicture = members[chat.sender].profilePicture
+              }
+              chats.push(chat)
+            }
+
+            var lastChat = chats[Object.keys(chats)[Object.keys(chats).length - 1]];
+            if (lastChat.sender !== this.state.senderData.senderId && lastChat.sender !== 'time' && lastChat.sender && lastChat.sender !== 'skymail' && this.state.senderData.senderId) {
+              Play()
+            }
+            this.setState({ chats: chats, date: lastChat.date, loading: false });
+
+            var con = document.getElementById("scroll");
+            if (con) {
+              con.scrollTop = con.scrollHeight + 100;
+            }
+          })
         }
-        this.setState({ chats: chat, date: lastChat.date });
-        var con = document.getElementById("scroll");
-        if (con) {
-          con.scrollTop = con.scrollHeight + 100;
-        }
+        this.setState({ members: members })
+
+
       } else {
-        // this.props.history.push('/messages/')
-      }
-      // get receiver data
-      for (let keys in s.val().metadata) {
-        if (this.state.senderData.senderId) {
-          if (keys !== this.state.senderData.senderId) {
-            firebase.database().ref('users/' + keys).on('value', snap => {
-              var receiverData = {};
-              receiverData.profilePicture = snap.val().profilePicture;
-              receiverData.username = snap.val().username;
-              this.setState({ receiverData: receiverData });
-              document.title =
-                receiverData.username +
-                " And " +
-                this.state.senderData.username +
-                " | Skychat";
-            })
+        this.setState({ isGroup: false })
+        var chats = s.val().chats;
+        if (chats) {
+          var chat = [];
+          for (let keys in chats) {
+            const allChats = chats[keys]
+            chat.push(allChats);
+          }
+
+          var lastChat = chats[Object.keys(chats)[Object.keys(chats).length - 1]];
+          if (lastChat.sender !== this.state.senderData.senderId && lastChat.sender !== 'time' && lastChat.sender && lastChat.sender !== 'skymail' && this.state.senderData.senderId) {
+            Play()
+
+          }
+          this.setState({ chats: chat, date: lastChat.date, loading: false });
+
+        }
+        // get receiver data
+        for (let keys in s.val().metadata) {
+          if (this.state.senderData.senderId) {
+            if (keys !== this.state.senderData.senderId) {
+              firebase.database().ref('users/' + keys).on('value', snap => {
+                var receiverData = {};
+                receiverData.profilePicture = snap.val().profilePicture;
+                receiverData.username = snap.val().username;
+                this.setState({ receiverData: receiverData });
+                document.title =
+                  receiverData.username +
+                  " And " +
+                  this.state.senderData.username +
+                  " | Skychat";
+                setTimeout(() => {
+                  var con = document.getElementById("scroll");
+                  con.scrollTop = con.scrollHeight + 100;
+
+                }, 50)
+
+              })
+            }
           }
         }
-      }
-      this.setState({ loading: false });
-    });
-  };
 
-  sendChats = event => {
+
+
+
+
+
+      }
+    })
+  }
+  send
+  Chats = event => {
     this.setState({ changeStyle: false });
     event.preventDefault();
     var chatId = this.props.match.params.chatId;
@@ -118,24 +172,29 @@ class Chatroom extends Component {
     var currentTime = now.getTime();
     var lastTime = new Date(this.state.date).getTime();
     var difference = (currentTime - lastTime) / 1000;
-    if (difference > 120) {
+    if (difference > 125) {
       ref.push({
         date: dat,
         message: dat,
         sender: "time"
-      });
+      }).then(res => {
+        ref.push({
+          date: dat,
+          message: val,
+          sender: this.state.senderData.senderId
+        })
+      })
+    } else {
+
+      ref
+        .push({
+          date: dat,
+          message: val,
+          sender: this.state.senderData.senderId
+        })
     }
 
-    ref
-      .push({
-        date: dat,
-        message: val,
-        sender: this.state.senderData.senderId
-      })
-      .then(res => { })
-      .catch(() => {
-        console.log("message not sent");
-      });
+
     this.setState({ value: "" });
   };
 
@@ -163,19 +222,19 @@ class Chatroom extends Component {
           </Link>
           {this.state.receiverData.username ? (
             <div>
-              <h1 className="mb-0 h5 text-capitalize">
+              <h1 className="mb-0 h5 text-capitalize" style={{ lineHeight: "1" }}>
                 {this.state.receiverData.username.substring(0, 18) +
                   (Array.from(this.state.receiverData.username).length > 18
                     ? "..."
                     : "")}
               </h1>
-              <h6 className="m-0 font-weight-light">Active 3mins ago</h6>
+              <p style={{ lineHeight: "1" }} className="m-0 font-weight-light">Active 3mins ago</p>
             </div>
           ) : null}
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="">
+                <Link className="nav-link py-0" to="">
                   <i className="material-icons">info</i>
                 </Link>
               </li>
@@ -198,38 +257,57 @@ class Chatroom extends Component {
                   className="mb-3 d-flex justify-content-center"
                   style={{ height: "8rem" }}
                 >
-                  <img
-                    src={this.state.senderData.profilePicture}
-                    className="h-100 rounded-circle "
-                    alt=""
-                    style={{ width: '8rem ', objectFit: "cover" }}
-                  />
-                  <img
-                    src={this.state.receiverData.profilePicture}
+                  {this.state.isGroup ? <img
+                    src={this.state.groupIcon}
                     className="h-100 rounded-circle"
                     alt=""
                     style={{ width: '8rem ', objectFit: "cover" }}
 
-                  />
+                  /> : <React.Fragment>
+
+                      <img
+                        src={this.state.senderData.profilePicture}
+                        className="h-100 rounded-circle "
+                        alt=""
+                        style={{ width: '8rem ', objectFit: "cover" }}
+                      />
+                      <img
+                        src={this.state.receiverData.profilePicture}
+                        className="h-100 rounded-circle"
+                        alt=""
+                        style={{ width: '8rem ', objectFit: "cover" }}
+
+                      />
+                    </React.Fragment>}
                 </div>
                 <h2 className="text-center h5">
-                  {" "}
-                  You and {this.state.receiverData.username} are now friends{" "}
+                  You and {this.state.receiverData.username} are now friends
                 </h2>
               </div>
             ) : null}
-            {this.state.play ? <Play /> : null}
+
             {this.state.chats.map((cur, i) => {
+
               return (
-                <Chat
+                this.state.isGroup ? <GroupChat
                   key={i}
                   seen={cur.seen}
                   date={cur.date}
+                  added={cur.added}
+                  name={cur.name}
+                  sender={cur.sender}
+                  icon={cur.profilePicture}
+                >{cur.message}
+                </GroupChat> : <Chat
+                  key={i}
+                  seen={cur.seen}
+                  date={cur.date}
+                  added={cur.added}
                   sender={cur.sender}
                   icon={this.state.receiverData.profilePicture}
                 >
-                  {cur.message}
-                </Chat>
+                    {cur.message}
+                  </Chat>
               );
             })}
             {this.state.loading ? (

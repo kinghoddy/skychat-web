@@ -46,12 +46,13 @@ export default class EditProfile extends Component {
         })
     }
 
-    upload = (type) => {
+    upload = (types) => {
+        const type = types
         // File or Blob named mountains.jpg
-        this.setState({ loading: true, message: "Uploading image" })
+        // this.setState({ loading: true, message: "Uploading image" })
         var files = this.file.current
         files.click()
-        files.addEventListener('change', e => {
+        files.onchange = e => {
             const storageRef = firebase.storage().ref('/' + this.state.userData.username.toLowerCase())
             const file = files.files[0];
 
@@ -69,7 +70,6 @@ export default class EditProfile extends Component {
 
                         break;
                     case firebase.storage.TaskState.RUNNING: // or 'running'
-                        console.log('Upload is running');
                         break;
                 }
             }, (error) => {
@@ -114,7 +114,7 @@ export default class EditProfile extends Component {
                 });
 
             })
-        })
+        }
     }
     render() {
 

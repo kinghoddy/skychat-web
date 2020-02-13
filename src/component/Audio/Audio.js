@@ -1,18 +1,14 @@
-import React, { Component } from "react";
 import loading from "../../assets/audio/ui_loading.wav";
+import success from "../../assets/audio/completed.wav";
 
-export default class Play extends Component {
-  constructor(props) {
-    super(props);
-    this.audio = React.createRef();
+export default type => {
+  var audio = document.createElement('audio');
+
+  if (type === 'success') {
+    audio.src = success
+  } else {
+    audio.src = loading
   }
-  state = {
-    src: loading
-  };
-  componentDidMount() {
-    this.audio.current.play();
-  }
-  render() {
-    return <audio ref={this.audio} src={this.state.src} autoPlay />;
-  }
+  audio.play()
 }
+

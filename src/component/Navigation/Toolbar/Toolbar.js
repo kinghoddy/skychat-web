@@ -9,7 +9,7 @@ const toolbar = props => {
     var profile = props.profile,
         shade = 'navbar-light',
         logoType = 'l6',
-        bgColor = '#fff';
+        bgColor = 'var(--white)';
 
     var user = firebase.auth().currentUser
 
@@ -28,7 +28,7 @@ const toolbar = props => {
         shade = 'navbar-dark'
     } else {
         shade = 'navbar-light'
-        bgColor = '#fff'
+        bgColor = 'var(--white)'
         logoType = 'l1'
     }
 
@@ -44,7 +44,8 @@ const toolbar = props => {
                         <i style={{ cursor: "pointer" }} onClick={props.history.goBack} className=" material-icons px-3">arrow_back</i>
                     )} />
                     <Link to="/" className=" navbar-brand p-0 pl-lg-3 h-100">
-                        <Logo type={logoType} width="10rem" />
+                        {localStorage.getItem('skychatTheme') === 'dark' ? <Logo type={'l5'} width="10rem" /> : <Logo type={logoType} width="10rem" />}
+
                     </Link>
                     <div className="navbar-collapse collapse">
                         <ul className={"text-capitalize navbar-nav ml-auto "}>
@@ -86,7 +87,7 @@ const toolbar = props => {
                 <Route render={() => (
                     <nav className={classes.Navbar + " fixed-bottom d-lg-none navbar navbar-expand navbar-light"}>
                         <div className="container-fluid navbar-collapse collapse p-0">
-                            <ul className=" navbar-nav w-100 text-center">
+                            <ul className=" navbar-nav w-100 text-center " >
                                 <li className="nav-item col-4 ">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + profile}>
                                         <i className='material-icons'>account_circle</i>

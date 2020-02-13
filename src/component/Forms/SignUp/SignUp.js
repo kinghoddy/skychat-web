@@ -59,7 +59,7 @@ class Signin extends Component {
   componentDidMount() {
     document.title = "Sign up | Skychat";
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", "#eee");
+    metaThemeColor.setAttribute("content", "var(--light)");
     this.setState({ loading: false });
   }
   inputChanged = (e, id) => {

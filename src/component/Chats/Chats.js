@@ -43,7 +43,11 @@ class Chat extends Component {
           chatRef.on("value", snap => {
             var user = snap.val().metadata;
             var chats = snap.val().chats;
+            var description = snap.val().description
             var lastChat;
+            console.log(chats);
+
+
             if (chats) {
               lastChat =
                 chats[Object.keys(chats)[Object.keys(chats).length - 1]];
@@ -72,8 +76,11 @@ class Chat extends Component {
               var min = dec(now.getMinutes());
               var lastTime = now.getTime();
               var clock = " am";
-              if (hour > 12) {
+              if (hour > 11) {
                 clock = " pm";
+              }
+              if (hour > 12) {
+
                 hour -= 12
               }
               function dec(num) {
@@ -111,34 +118,57 @@ class Chat extends Component {
                 lastTime = week + '  ' + hour + ':' + min + clock
               }
 
-              if (lastChat.sender === username) {
+              if (lastChat.sender === uid || lastChat.sender === username) {
                 lastChatMessage = "You: " + lastChat.message;
               }
-              for (let key in user) {
-                if (key !== uid) {
-                  firebase.database().ref('users/' + key)
-                    .on('value', snap => {
-                      var chat = {
-                        chatHead: snap.val().username,
-                        icon: snap.val().profilePicture,
-                        link: cur,
-                        lastChat: lastChatMessage,
-                        time: lastTime
-                      };
-                      // eslint-disable-next-line no-loop-func
-                      chatArr.forEach((cur, i) => {
-                        if (cur.chatHead === chat.chatHead) {
-                          chatArr.splice(i, 1);
-                        }
-                      });
-                      chatArr.push(chat);
-                      this.setState({ chats: chatArr.reverse(), loading: false });
-                    })
+              // remember that cur = chatsId[keys]
+              if (description !== undefined) {
+                var chat = {
+                  chatHead: cur,
+                  icon: snap.val().icon,
+                  link: cur,
+                  lastChat: lastChatMessage,
+                  time: lastTime
+                };
+                // eslint-disable-next-line no-loop-func
+                chatArr.forEach((cur, i) => {
+                  if (cur.chatHead === chat.chatHead) {
+                    chatArr.splice(i, 1);
+                  }
+                });
+                chatArr.push(chat);
+                this.setState({ chats: chatArr.reverse() });
+              } else {
+
+                for (let key in user) {
+                  if (key !== uid) {
+                    firebase.database().ref('users/' + key)
+                      .on('value', snap => {
+                        var chat = {
+                          chatHead: snap.val().username,
+                          icon: snap.val().profilePicture,
+                          link: cur,
+                          lastChat: lastChatMessage,
+                          time: lastTime
+                        };
+                        // eslint-disable-next-line no-loop-func
+                        chatArr.forEach((cur, i) => {
+                          if (cur.chatHead === chat.chatHead) {
+                            chatArr.splice(i, 1);
+                          }
+                        });
+                        chatArr.push(chat);
+                        this.setState({ chats: chatArr.reverse() });
+                      })
 
 
+                  }
                 }
               }
+              this.setState({ loading: false });
             }
+
+
           });
         }
       } else {

@@ -3,24 +3,34 @@ import classes from './NewPost.css'
 
 const chatInput = props => {
   const input = React.createRef()
+  const body = React.createRef()
 
   const changeHeight = (e) => {
-    input.current.style.height = input.current.scrollHeight + 'px'
+    body.current.style.height = body.current.scrollHeight + 1 + 'px'
+  }
+  const showForm = () => {
+    body.current.style.display = "flex"
   }
 
   return (
-    <form onSubmit={props.sendPost} className={classes.msgInput + " mt-2 row no-gutters"}>
+    <form autocomplete="off" onSubmit={props.sendPost} className={classes.msgInput + " mt-2 row no-gutters"}>
       <div className="col-12">
-        <h5>Add new post</h5>
+        <h5> + Add new post</h5>
       </div>
       <div className="col-md-11 col-10">
-        <textarea id="newPostForm" ref={input}
-          onInput={changeHeight}
+        <input id="newPostTitle" ref={input}
+          onFocus={showForm}
           rows="1"
-          type="text" required onChange={props.changed}
-          value={props.value} placeholder="Write a post" />
+          type="text" required onChange={props.titleChanged}
+          value={props.title} placeholder="Write a post" />
+        <textarea id="newPostBody" ref={body}
+          onInput={changeHeight}
+          style={{ display: "none" }}
+          rows="1"
+          type="text" onChange={props.bodyChanged}
+          value={props.body} placeholder="Post body...." />
       </div>
-      <div className="col-md-1 col-2 pb-1  d-flex align-items-center" style={{ alignSelf: "flex-end" }}>
+      <div className="col-md-1 col-2 pb-1  d-flex align-items-center" style={{ alignSelf: "flex-start" }}>
         <button className="w-100 p-0 d-flex align-items-center" style={{
           border: 0,
           outline: 0,
@@ -34,11 +44,15 @@ const chatInput = props => {
         </button>
       </div>
       <div className="col-12 d-flex mt-3 justify-content-around">
-        <button className={classes.btn}>
+        <button type="button" onClick={() => (
+          props.upload('photo')
+        )} className={classes.btn}>
           <i className="material-icons text-success pr-2">photo</i>
           Photo
           </button>
-        <button className={classes.btn}>
+        <button type="button" onClick={() => (
+          props.upload('video')
+        )} className={classes.btn}>
           <i className="material-icons text-danger pr-2">videocam</i>
           Video</button>
       </div>

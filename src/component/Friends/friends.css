@@ -8,18 +8,18 @@
 }
 
 .friendCard {
-    /* background: #eee; */
     display: inline-block;
     text-transform: capitalize;
     min-height: 10rem
 }
 
 .friendCard img {
-    border: 1px solid #eee;
+    border: 1px solid var(--light);
     border-top-left-radius: 1.3rem;
     border-top-right-radius: 1.3rem;
     object-fit: cover;
     object-position: center;
+    background: var(--light);
     height: 6.5rem;
 }
 
