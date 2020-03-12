@@ -119,20 +119,10 @@ class Friends extends Component {
                                         to={"/" + cur.username}
                                         className={classes.friendCard}
                                     >
-<<<<<<< HEAD
-                                        <div className="card-picture overflow-hidden">
-                                            <img
-                                                className="card-img-top "
-                                                src={cur.profilePicture}
-                                                alt=""
-                                            />
-                                        </div>
-=======
                                         <img
                                             src={cur.profilePicture}
                                             alt=""
                                         />
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                                         <div style={{ fontSize: ' .9rem ' }} className="text-dark px-2  py-1 card-body">{cur.username}</div>
                                     </Link>
                                 </div> : null

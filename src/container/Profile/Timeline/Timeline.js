@@ -29,19 +29,12 @@ class Timeline extends Component {
     profile: "",
     errorMessage: null,
     changeStyle: false,
-<<<<<<< HEAD
-    modalMessage: null,
-    postTitle: "",
-    postBody: "",
-    type: null
-=======
     showPostForm: true,
     modalMessage: null,
     postTitle: "",
     postBody: "",
     type: null,
     src: null
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
   };
 
   componentDidMount() {
@@ -76,137 +69,45 @@ class Timeline extends Component {
       username: this.state.profileData.username,
       body: this.state.postBody.split("\n").join("<br/>"),
       type: this.state.type,
-      date: Date.now(),
-<<<<<<< HEAD
-      uid: this.state.profileData.uid
-    }
-    firebase.database().ref('posts/')
-      .push(Post).then(res => {
-
-        play('success')
-      })
-    this.setState({ postBody: '', postTitle: "" })
-  }
-
-  upload = (types) => {
-    const type = types
-    // File or Blob named mountains.jpg
-    // this.setState({ loading: true, message: "Uploading image" })
-    var files = document.createElement('input')
-
-    files.click()
-    files.onchange = e => {
-      const storageRef = firebase.storage().ref('/' + this.state.userData.username.toLowerCase())
-
-      const file = files.files[0];
-
-      const uploadTask = storageRef.child(type + "/" + file.name).put(file);
-      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-        this.setState({ loading: false })
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        var progressMessage = 'Upload is ' + Math.floor(progress) + '% Done. (' + (snapshot.totalBytes / 1000000).toFixed(2) + ' mb) '
-        this.setState({ progressMessage: progressMessage })
-        this.progBar.current.style.width = progress + '%'
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
-            this.setState({ progressMessage: 'Upload is paused' })
-
-            break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            break;
-          default:
-            break;
-        }
-      }, (error) => {
-        this.setState({ loading: false })
-=======
       src: this.state.src,
+      date: Date.now(),
       uid: this.state.profileData.uid
     }
-    if (!Post.tittle && !Post.body && !Post.src) {
-
-      this.setState({ error: 'Type something or pick a media to upload a post' })
-    } else {
+    if (Post.title || Post.body || Post.src) {
 
       firebase.database().ref('posts/')
         .push(Post).then(res => {
+          this.setState({ src: null, type: null })
           play('success')
         })
-      this.setState({ postBody: '', postTitle: "", src: null, type: null, error: null })
+      this.setState({ postBody: '', postTitle: "" })
+    } else {
+      this.setState({ error: "Type something or pick an image/video to post" })
     }
   }
 
-  upload = (type) => {
+  upload = (types) => {
+    // File or Blob named mountains.jpg
 
+    this.setState({ showPostForm: false, error: null })
     var files = document.createElement('input')
     files.type = 'file'
-    if (type === 'images') {
-      files.accept = 'image/*'
+    if (types === 'images') {
+      files.setAttribute('accept', 'image/*')
     } else {
-      files.accept = 'video/*'
+      files.setAttribute('accept', 'video/*')
     }
-    this.setState({ showPostForm: false })
     files.click()
     files.onchange = e => {
-      console.log(files);
-      const storageRef = firebase.storage().ref('/' + this.state.profileData.username.toLowerCase())
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
-
-        switch (error.code) {
-          case 'storage/unauthorized':
-            // User doesn't have permission to access the object
-            this.setState({
-              error: "You don't have permission to access the object"
-            })
-            break;
-          case 'storage/canceled':
-            this.setState({ error: "Upload canceled" })
-            break;
-          case 'storage/unknown':
-            this.setState({ error: "Unknown error occurred" })
-            // Unknown error occurred, inspect error.serverResponse
-            break;
-          default:
-            this.setState({ error: "Unknown error occurred" })
-            break;
-        }
-      }, () => {
-        this.setState({ loading: true, progressMessage: null })
-
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          firebase.database().ref('users/' + this.state.userData.uid + "/" + type)
-            .set(downloadURL).then(cur => {
-              this.setState({ loading: false })
-            }).catch(err => {
-              this.setState({ loading: false, error: err })
-              console.log(err);
-            });
-          var user = firebase.auth().currentUser;
-
-          if (type === 'profilePicture') {
-            user.updateProfile({
-              photoURL: downloadURL
-            }).catch(function (error) {
-              this.setState({ error: error })
-              // An error happened.
-            })
-          }
-        });
-
-      })
-    }
-  }
+      const storageRef = firebase.storage().ref('/' + this.props.userData.username.toLowerCase())
 
       const file = files.files[0];
-
-      if (file.size > 1000000 * 10) {
-        alert('File to big \n Maximum file size is 10mb')
-        this.setState({ showPostForm: true })
-
+      if (file.size > 10000000) {
+        this.setState({ showPostForm: true, error: "File too large \n Maximum size is 10mb" })
       } else {
-        const uploadTask = storageRef.child(type + "/" + file.name).put(file);
+        const uploadTask = storageRef.child(types + "/" + file.name).put(file);
         uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+          this.setState({ showPostForm: false })
           var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           var progressMessage = 'Upload is ' + Math.floor(progress) + '% Done. (' + (snapshot.totalBytes / 1000000).toFixed(2) + ' mb) '
           this.setState({ progressMessage: progressMessage })
@@ -219,9 +120,12 @@ class Timeline extends Component {
               break;
             case firebase.storage.TaskState.RUNNING: // or 'running'
               break;
+            default:
+              break;
           }
         }, (error) => {
           this.setState({ showPostForm: true })
+
           switch (error.code) {
             case 'storage/unauthorized':
               // User doesn't have permission to access the object
@@ -236,20 +140,44 @@ class Timeline extends Component {
               this.setState({ error: "Unknown error occurred" })
               // Unknown error occurred, inspect error.serverResponse
               break;
+            default:
+              this.setState({ error: "Unknown error occurred" })
+              break;
           }
         }, () => {
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            this.setState({ showPostForm: true, progressMessage: null })
-            this.setState({ type: type, src: downloadURL.replace(file.name, file.name.split('.').join('_400x400.')) })
-            console.log(this.state.src, downloadURL);
+          this.setState({ showPostForm: false, progressMessage: null })
+          if (types === 'images') {
+
+            var starsRef = uploadTask.snapshot.ref;
+
+            // Get the download URL
+            starsRef.getDownloadURL().then((URL) => {
+              const url = URL.replace(file.name, file.name.split('.').join('_600x600.'))
+              console.log(url);
+              // Insert url into an <img> tag to "download"
+              setTimeout(() => {
+
+                this.setState({ showPostForm: true, type: types, progressMessage: null, src: url })
+              }, 1000)
+            })
+          } else {
+            uploadTask.snapshot.ref.getDownloadURL().then(url => {
+              this.setState({ showPostForm: true, type: types, progressMessage: null, src: url })
+            })
+          }
 
 
-          });
 
-        })
+        });
       }
+
+
+
     }
   }
+
+
+
 
   load = uname => {
     this.setState({ loading: true });
@@ -335,26 +263,15 @@ class Timeline extends Component {
                 </div>
               </div>
               {this.state.isUser ? <div className="bg-white  text-center"> <Link to="/edit-profile" className="btn  btn-outline-dark rounded-pill px-5 mx-auto btn-sm" >Edit profile</Link></div> : null}
-<<<<<<< HEAD
-              <Friends uid={this.state.profileData.uid} />
-
-              {this.state.isUser ? <NewPost
-=======
               <Friends {...this.state.profileData} />
               {this.state.isUser ?
                 <Request hideAll={true} userData={this.props.userData} /> : null}
 
               {this.state.isUser ? this.state.progressMessage ? null : !this.state.showPostForm ? <div style={{ height: '10rem' }} className="bg-white"> <Spinner fontSize="8px" /> </div> : <NewPost
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                 titleChanged={this.titleChanged}
                 bodyChanged={this.bodyChanged}
                 title={this.state.postTitle}
                 upload={this.upload}
-<<<<<<< HEAD
-                body={this.state.postBody}
-                sendPost={this.sendPost}
-              /> : null}
-=======
 
                 src={this.state.src}
                 type={this.state.type}
@@ -366,7 +283,6 @@ class Timeline extends Component {
                   {this.state.error}
                 </Alert>
               ) : null}
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
               {this.state.progressMessage ? <div className={'row no-gutters pb-4 px-4 mb-2 bg-white'}>
                 <h4 className="h5 font-weight-bold">{this.state.progressMessage}</h4>
                 <div className={classes.progressBar}>
@@ -374,11 +290,7 @@ class Timeline extends Component {
                 </div>
               </div> : null}
               {this.state.profileData.uid ?
-<<<<<<< HEAD
-                <Post uid={this.state.profileData.uid} /> : null}
-=======
                 <Post uid={this.state.profileData.uid} likeeId={this.props.userData.uid} /> : null}
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 
             </div>
 
@@ -395,8 +307,3 @@ class Timeline extends Component {
 }
 
 export default withRouter(Timeline);
-// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment_400x400.JPG?alt=media&token=00113e3e-3cfb-4fde-ba0c-81403f49e798
-
-// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment.JPG?alt=media&token=430fa42c-fe53-47e7-92f6-f7e09dd01db1
-
-gs://skymail-920ab.appspot.com/noel odunmilade/images/comment_400x400.JPG

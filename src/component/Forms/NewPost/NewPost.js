@@ -13,11 +13,7 @@ const chatInput = props => {
   }
 
   return (
-<<<<<<< HEAD
-    <form autocomplete="off" onSubmit={props.sendPost} className={classes.msgInput + " mt-2 row no-gutters"}>
-=======
     <form autoComplete="off" onSubmit={props.sendPost} className={classes.msgInput + " mt-2 row no-gutters"}>
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
       <div className="col-12">
         <h5> + Add new post</h5>
       </div>
@@ -25,11 +21,7 @@ const chatInput = props => {
         <input id="newPostTitle" ref={input}
           onFocus={showForm}
           rows="1"
-<<<<<<< HEAD
-          type="text" required onChange={props.titleChanged}
-=======
           type="text" onChange={props.titleChanged}
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
           value={props.title} placeholder="Write a post" />
         <textarea id="newPostBody" ref={body}
           onInput={changeHeight}
@@ -53,15 +45,11 @@ const chatInput = props => {
       </div>
 
       {props.src ? <div className={classes.media + " col-12 d-flex mt-3 justify-content-around"}>
-        {props.type === 'video' ? <video src={props.src}> </video> : props.type === 'images' ? <img src={props.src} /> : null}
+        {props.type === 'video' ? <video src={props.src}> </video> : props.type === 'images' ? <img src={props.src} alt="" /> : null}
       </div> : null}
       <div className="col-12 d-flex mt-3 justify-content-around">
         <button type="button" onClick={() => (
-<<<<<<< HEAD
-          props.upload('photo')
-=======
           props.upload('images')
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
         )} className={classes.btn}>
           <i className="material-icons text-success pr-2">photo</i>
           Photo

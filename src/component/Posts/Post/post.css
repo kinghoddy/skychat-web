@@ -16,10 +16,6 @@
 
 .title {
   font-family: Arial, Helvetica, sans-serif;
-<<<<<<< HEAD
-  border-top: 1px solid var(--secondary)
-=======
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 }
 
 .date {
@@ -37,11 +33,12 @@
   background: var(--light);
 }
 
-.con > img {
+.con>img {
   max-height: 20rem;
   width: 100%;
   object-fit: cover;
 }
+
 .con::after,
 .con::before {
   position: absolute;
@@ -50,40 +47,28 @@
   height: 100%;
   border-left: 2px solid rgba(0, 0, 0, 0.5);
   width: 1.5rem;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.35) 10%,
-    rgba(0, 0, 0, 0.2) 20%,
-    rgba(0, 0, 0, 0.1) 40%,
-    rgba(0, 0, 0, 0) 100%,
-    transparent
-  );
+  background: linear-gradient(to right,
+      rgba(0, 0, 0, 0.35) 10%,
+      rgba(0, 0, 0, 0.2) 20%,
+      rgba(0, 0, 0, 0.1) 40%,
+      rgba(0, 0, 0, 0) 100%,
+      transparent);
 }
+
 .con::after {
   transform: rotateY(180deg);
   right: 0;
 }
 
-.con > video {
+.con>video {
   width: 100%;
   object-fit: contain;
-<<<<<<< HEAD
-  height: 100%
-}
-
-.btn {
-  background: none;
-  border: none;
-  color: #777;
-  outline: none;
-  display: flex;
-  align-items: center;
-}
-=======
   object-position: center;
   max-height: 20rem;
+  display: block;
   background: #000;
 }
+
 .comment {
   flex: 1;
   margin: 0 auto 0 0.7rem;
@@ -102,10 +87,12 @@
   max-width: 100%;
   background: var(--light);
 }
+
 .btnCon {
   /* background: var(--light); */
   border-top: 1px solid var(--light);
 }
+
 .btn {
   transition: all 0.3s;
   background: none;
@@ -116,6 +103,7 @@
   display: flex;
   align-items: center;
 }
+
 .btn:hover,
 .btn:active {
   outline: 0;
@@ -124,19 +112,21 @@
 }
 
 @media only screen and (min-width: 760px) {
-  .con > img {
+  .con>img {
     max-height: 35rem;
   }
-  .con > video {
+
+  .con>video {
     max-height: 30rem;
   }
 }
+
 @media only screen and (min-width: 760px) {
-  .con > img {
+  .con>img {
     max-height: 25rem;
   }
-  .con > video {
+
+  .con>video {
     max-height: 20rem;
   }
 }
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432

@@ -1,4 +1,4 @@
-.Chats {
+.nots {
     position: relative;
 }
 
@@ -8,7 +8,6 @@
     width: 3rem;
     border-radius: 50%;
     overflow: hidden;
-    background: var(--gray)
 }
 
 .picture img {

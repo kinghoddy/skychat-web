@@ -1,17 +1,4 @@
 .Modal {
-<<<<<<< HEAD
-    position: fixed;
-    z-index: 500;
-    background-color: white;
-    width: 70%;
-    border: 1px solid #ccc;
-    box-shadow: 1px 1px 1px var(--black);
-    padding: 16px;
-    left: 15%;
-    top: 30%;
-    box-sizing: border-box;
-    transition: all 0.3s ease-out;
-=======
   position: fixed;
   z-index: 2500;
   background-color: var(--white);
@@ -26,13 +13,13 @@
   box-sizing: border-box;
   transition: all 0.3s ease-out;
 }
+
 .cancel {
   position: absolute;
   right: 0.5rem;
   top: 1rem;
   background: none;
   border: none;
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 }
 
 @media (min-width: 600px) {

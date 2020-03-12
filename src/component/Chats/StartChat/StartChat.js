@@ -4,6 +4,7 @@ import classes from './StartChat.css';
 import 'firebase/database';
 import { withRouter } from 'react-router-dom'
 import Spinner from '../../UI/Spinner/Spinner'
+import Picture from '../../../assets/Image/group.png'
 
 class StartChat extends Component {
 

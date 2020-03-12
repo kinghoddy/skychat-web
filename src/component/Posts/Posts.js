@@ -26,10 +26,6 @@ export default class Posts extends Component {
             this.getPosts(this.props.uid)
         }
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
     getPosts = (uid) => {
         this.setState({ loading: true })
         const ref = firebase.database().ref('posts/').orderByChild('uid').equalTo(uid)
@@ -39,18 +35,11 @@ export default class Posts extends Component {
                 const post = {
                     title: s.val()[key].title,
                     body: s.val()[key].body,
-<<<<<<< HEAD
-=======
                     id: key,
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                     icon: s.val()[key].icon,
                     username: s.val()[key].username,
                     date: s.val()[key].date,
                     type: s.val()[key].type,
-<<<<<<< HEAD
-                    src: s.val()[key].src,
-                }
-=======
                     liked: false,
                     likes: s.val()[key].likes,
                     src: s.val()[key].src,
@@ -61,7 +50,6 @@ export default class Posts extends Component {
                         post.liked = true
                     }
                 }
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                 posts.push(post)
             }
             this.setState({ posts: posts.reverse(), loading: false })
@@ -76,22 +64,11 @@ export default class Posts extends Component {
                 {this.state.posts.map(cur => (
 
                     <Post
-<<<<<<< HEAD
-                        title={cur.title}
-                        username={cur.username}
-                        icon={cur.icon}
-                        body={cur.body}
-                        key={cur.date}
-                        date={cur.date}
-                        type={cur.type}
-                        src={cur.src} />
-=======
 
                         {...cur}
                         key={cur.id}
                         likeeId={this.props.likeeId}
                     />
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                 ))}
                 <p>No more posts </p>
 

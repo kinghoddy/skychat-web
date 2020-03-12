@@ -1,15 +1,8 @@
 .cover {
-<<<<<<< HEAD
-    height: 13rem;
-    background: var(--secondary);
-    position: relative;
-    margin-bottom: 5rem;
-=======
   height: 13rem;
   background: var(--secondary);
   position: relative;
   margin-bottom: 5rem;
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 }
 
 .cover img {
@@ -18,25 +11,13 @@
   object-fit: cover;
 }
 
-.cover > img {
+.cover>img {
   position: absolute;
   left: 0;
   top: 0;
 }
 
 .dp {
-<<<<<<< HEAD
-    height: 7rem;
-    width: 7rem;
-    position: absolute;
-    left: 8%;
-    z-index: 50;
-    bottom: -2.5rem;
-    border-radius: 50%;
-    overflow: hidden;
-    background: var(--gray);
-    border: 4px solid white;
-=======
   height: 7rem;
   width: 7rem;
   position: absolute;
@@ -47,7 +28,6 @@
   overflow: hidden;
   background: var(--gray);
   border: 4px solid white;
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 }
 
 .username {
@@ -68,6 +48,7 @@
 .horizontal_scroll::-webkit-scrollbar {
   height: 0.2rem;
 }
+
 .progressBar {
   height: 0.2rem;
   width: 100%;

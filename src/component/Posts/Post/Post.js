@@ -24,10 +24,7 @@ export default props => {
     var week = weekDays[now.getDay()];
     var hour = now.getHours();
     var min = dec(now.getMinutes());
-<<<<<<< HEAD
-=======
     var lastTime = now.getTime();
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
     var clock = " am";
     if (hour > 12) {
         clock = " pm";
@@ -47,10 +44,10 @@ export default props => {
         current.getDate() - monthDay > 1 &&
         current.getDate() - monthDay < 7
     ) {
-        date = week + " " + hour + ":" + min + clock;
+        date = week + " at " + hour + ":" + min + clock;
     } else if (year === current.getFullYear()) {
         date =
-            month + " " + monthDay + " " + hour + ":" + min + clock;
+            month + " at " + monthDay + " " + hour + ":" + min + clock;
     } else if (year > current.getFullYear()) {
         date =
             month +
@@ -67,8 +64,6 @@ export default props => {
         date = week + '  ' + hour + ':' + min + clock
     }
 
-<<<<<<< HEAD
-=======
     const [showBtn, setShowBtn] = useState(false)
     const like = () => {
         const ref = firebase.database().ref('posts/' + props.id + "/likes/" + props.likeeId)
@@ -87,7 +82,6 @@ export default props => {
     }
 
 
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 
     return (
         <div className="mb-3 bg-white" >
@@ -105,39 +99,15 @@ export default props => {
             }
             {
                 props.type ? <div className={classes.con}>
-<<<<<<< HEAD
-                    {props.type === 'img' ?
-                        <img alt="" src={props.src} className="border-0" />
-                        : null}
-                    {props.type === 'vid' ?
-                        <video src={props.src}></video>
-=======
                     {props.type === 'images' ?
                         <img alt="" src={props.src} className="border-0" />
                         : null}
                     {props.type === 'video' ?
                         <video controls loop src={props.src}></video>
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
                         : null}
                 </div> : null
             }
 
-<<<<<<< HEAD
-            <div className="border-top d-flex justify-content-around py-2">
-                <button className={classes.btn}>
-                    <i className="material-icons pr-3">thumb_up</i>
-                    Like
-                </button>
-                <button className={classes.btn}>
-                    <i className="material-icons pr-3">comment</i>
-                    Comment
-                </button>
-                <button className={classes.btn}>
-                    <i className="material-icons pr-3">share</i>
-                    Share
-                </button>
-
-=======
             <div className={classes.btnCon + " justify-content-end d-flex  py-2"}>
                 <input onBlur={() => {
                     setShowBtn(false)
@@ -165,7 +135,6 @@ export default props => {
 
                 <i className="material-icons pr-3 text-warning">thumb_up</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.5rem" }}>{likes.length}</span>
                 <i className="material-icons ml-5 pr-3 text-success">comment</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.5rem" }}>{0}</span>
->>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
             </div>
         </div >
 
