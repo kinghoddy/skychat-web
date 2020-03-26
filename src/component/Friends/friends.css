@@ -24,11 +24,13 @@
   height: 6.5rem;
   width: 100%;
 }
+
 .friendList {
   display: flex;
   align-items: center;
   margin: 0.5rem 0;
 }
+
 .img {
   height: 2.5rem;
   width: 2.5rem;
@@ -37,6 +39,7 @@
   border-radius: 50%;
   background: var(--gray);
 }
+
 .friendList img {
   background: var(--gray);
   height: 3.5rem;

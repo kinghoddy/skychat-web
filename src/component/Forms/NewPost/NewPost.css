@@ -40,6 +40,8 @@
   border: none;
   color: var(--gray-dark);
 }
+<<<<<<< HEAD
+=======
 .media {
   width: 50%;
   border-radius: 1rem;
@@ -50,6 +52,7 @@
   width: 100%;
   object-fit: cover;
 }
+>>>>>>> 3133f985b69791eda1883a2f7977345286f0d432
 
 .btn:hover {
   color: VAR(--BLACK);

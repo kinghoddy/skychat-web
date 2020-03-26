@@ -26,7 +26,6 @@ export default class Posts extends Component {
             this.getPosts(this.props.uid)
         }
     }
-
     getPosts = (uid) => {
         this.setState({ loading: true })
         const ref = firebase.database().ref('posts/').orderByChild('uid').equalTo(uid)

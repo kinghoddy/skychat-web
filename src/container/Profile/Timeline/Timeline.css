@@ -11,7 +11,7 @@
   object-fit: cover;
 }
 
-.cover > img {
+.cover>img {
   position: absolute;
   left: 0;
   top: 0;
@@ -48,6 +48,7 @@
 .horizontal_scroll::-webkit-scrollbar {
   height: 0.2rem;
 }
+
 .progressBar {
   height: 0.2rem;
   width: 100%;

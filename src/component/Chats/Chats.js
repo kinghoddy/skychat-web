@@ -44,8 +44,9 @@ class Chat extends Component {
             var user = snap.val().metadata;
             var chats = snap.val().chats;
             var description = snap.val().description
+            var modified = snap.val().modified
+
             var lastChat;
-            console.log(chats);
 
 
             if (chats) {
@@ -68,6 +69,7 @@ class Chat extends Component {
                 "Dec"
               ];
               var now = new Date(lastChat.date);
+              if (!modified) modified = lastChat.date
               var month = months[now.getMonth()];
               var year = now.getFullYear();
               var monthDay = now.getDate();
@@ -88,20 +90,18 @@ class Chat extends Component {
                 else return num;
               }
               var current = new Date()
-              var currentTime = current.getTime();
-              var difference = (currentTime - lastTime) / 3600000;
               if (current.getDate() === monthDay) {
                 lastTime = hour + ":" + min + clock;
-              } else if ((current.getDate() - monthDay === 1) || (current.getDate() - monthDay === -30) || (difference > 24 && difference < 48)) {
+              } else if (current.getDate() - monthDay === 1 || current.getDate() - monthDay === -30) {
                 lastTime = "Yesterday " + hour + ":" + min + clock;
               } else if (
                 current.getDate() - monthDay > 1 &&
                 current.getDate() - monthDay < 7
               ) {
-                lastTime = week + " " + hour + ":" + min + clock;
+                lastTime = week + " at " + hour + ":" + min + clock;
               } else if (year === current.getFullYear()) {
                 lastTime =
-                  month + " " + monthDay + " " + hour + ":" + min + clock;
+                  month + " " + monthDay + " at " + hour + ":" + min + clock;
               } else if (year > current.getFullYear()) {
                 lastTime =
                   month +
@@ -128,6 +128,7 @@ class Chat extends Component {
                   icon: snap.val().icon,
                   link: cur,
                   lastChat: lastChatMessage,
+                  modified: modified,
                   time: lastTime
                 };
                 // eslint-disable-next-line no-loop-func
@@ -147,6 +148,7 @@ class Chat extends Component {
                         var chat = {
                           chatHead: snap.val().username,
                           icon: snap.val().profilePicture,
+                          modified: modified,
                           link: cur,
                           lastChat: lastChatMessage,
                           time: lastTime
@@ -157,6 +159,13 @@ class Chat extends Component {
                             chatArr.splice(i, 1);
                           }
                         });
+
+                        chatArr.sort((a, b) => {
+
+                          return (
+                            a.modified - b.modified
+                          )
+                        })
                         chatArr.push(chat);
                         this.setState({ chats: chatArr.reverse() });
                       })
@@ -197,7 +206,7 @@ class Chat extends Component {
                 key={cur.link}
               >
                 <div className={classes.picture}>
-                  <img src={cur.icon} alt="chat Icon" />
+                  <img src={cur.icon} alt="" />
                 </div>
                 <div style={{ minWidth: "11rem" }} className="ml-3 text-dark  ">
                   <h3 className=" font-weight-bold h5 m-0">

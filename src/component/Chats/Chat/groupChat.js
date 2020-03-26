@@ -61,7 +61,7 @@ class chat extends Component {
                 message = 'Yesterday at ' + hour + ':' + min + clock
             } else if ((current.getDate() - monthDay) > 1 && current.getDate() - monthDay < 7) {
                 message = week + ' at ' + hour + ':' + min + clock
-            } else if (year === current.getFullYear() && current.getDate() - monthDay > 7) {
+            } else if (year === current.getFullYear()) {
                 message = month + ' ' + monthDay + ' at ' + hour + ':' + min + clock
             } else if (year > current.getFullYear()) {
                 message = month + ' ' + monthDay + ' ' + year + ' at ' + hour + ':' + min + clock

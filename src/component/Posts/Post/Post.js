@@ -44,10 +44,10 @@ export default props => {
         current.getDate() - monthDay > 1 &&
         current.getDate() - monthDay < 7
     ) {
-        date = week + " " + hour + ":" + min + clock;
+        date = week + " at " + hour + ":" + min + clock;
     } else if (year === current.getFullYear()) {
         date =
-            month + " " + monthDay + " " + hour + ":" + min + clock;
+            month + " " + monthDay + " at " + monthDay + " " + hour + ":" + min + clock;
     } else if (year > current.getFullYear()) {
         date =
             month +

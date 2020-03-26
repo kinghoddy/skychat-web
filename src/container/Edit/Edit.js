@@ -27,7 +27,7 @@ export default class EditProfile extends Component {
     componentDidMount() {
         document.title = "Edit userdata | Skychat";
         var metaThemeColor = document.querySelector("meta[name=theme-color]");
-        metaThemeColor.setAttribute("content", '#300  ');
+        metaThemeColor.setAttribute("content", '#030  ');
         this.setState({ loading: true })
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
@@ -95,17 +95,18 @@ export default class EditProfile extends Component {
 
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     firebase.database().ref('users/' + this.state.userData.uid + "/" + type)
-                        .set(downloadURL).then(cur => {
+                        .set(downloadURL.replace(type, type + '_600x600')).then(cur => {
+                            
                             this.setState({ loading: false })
+                             
                         }).catch(err => {
                             this.setState({ loading: false, error: err })
-                            console.log(err);
                         });
                     var user = firebase.auth().currentUser;
 
                     if (type === 'profilePicture') {
                         user.updateProfile({
-                            photoURL: downloadURL
+                            photoURL: downloadURL.replace(type, type + '_600x600')
                         }).catch(function (error) {
                             this.setState({ error: error })
                             // An error happened.

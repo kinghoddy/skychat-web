@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Home.css";
 import Logo from '../../component/Logo/Logo';
-import demo3 from '../../assets/Image/demo/demo3.png'
 import { Link } from 'react-router-dom';
 import firebase from '../../firebase';
 import 'firebase/auth';

@@ -158,8 +158,7 @@ class Chatroom extends Component {
       }
     })
   }
-  send
-  Chats = event => {
+  sendChats = event => {
     this.setState({ changeStyle: false });
     event.preventDefault();
     var chatId = this.props.match.params.chatId;
@@ -167,6 +166,7 @@ class Chatroom extends Component {
     var ref = firebase.database().ref("chats/" + chatId + "/chats");
     var val = this.state.value.split("\n").join("<br/>");
     var dat = Date.now();
+    firebase.database().ref("chats/" + chatId + '/modified').set(dat)
 
     var now = new Date();
     var currentTime = now.getTime();
@@ -177,15 +177,14 @@ class Chatroom extends Component {
         date: dat,
         message: dat,
         sender: "time"
-      }).then(res => {
-        ref.push({
-          date: dat,
-          message: val,
-          sender: this.state.senderData.senderId
-        })
       })
-    } else {
+      ref.push({
+        date: dat,
+        message: val,
+        sender: this.state.senderData.senderId
+      })
 
+    } else {
       ref
         .push({
           date: dat,
@@ -222,13 +221,13 @@ class Chatroom extends Component {
           </Link>
           {this.state.receiverData.username ? (
             <div>
-              <h1 className="mb-0 h5 text-capitalize" style={{ lineHeight: "1" }}>
+              <h1 className="text-dark mb-0 h5 text-capitalize" style={{ lineHeight: "1" }}>
                 {this.state.receiverData.username.substring(0, 18) +
                   (Array.from(this.state.receiverData.username).length > 18
                     ? "..."
                     : "")}
               </h1>
-              <p style={{ lineHeight: "1" }} className="m-0 font-weight-light">Active 3mins ago</p>
+              <p style={{ lineHeight: "1" }} className="m-0 font-weight-light">Active now</p>
             </div>
           ) : null}
           <div className="collapse navbar-collapse">
