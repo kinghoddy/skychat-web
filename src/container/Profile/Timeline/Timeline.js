@@ -283,8 +283,3 @@ class Timeline extends Component {
 }
 
 export default withRouter(Timeline);
-// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment_400x400.JPG?alt=media&token=00113e3e-3cfb-4fde-ba0c-81403f49e798
-
-// https://firebasestorage.googleapis.com/v0/b/skymail-920ab.appspot.com/o/noel%20odunmilade%2Fimages%2Fcomment.JPG?alt=media&token=430fa42c-fe53-47e7-92f6-f7e09dd01db1
-
-gs://skymail-920ab.appspot.com/noel odunmilade/images/comment_400x400.JPG
