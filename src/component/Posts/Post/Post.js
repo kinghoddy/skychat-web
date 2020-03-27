@@ -98,6 +98,7 @@ export default props => {
                     <h4 className={classes.coprate + " h5"}>{props.username}</h4>
                     <p className={classes.date}>{date}</p>
                 </div>
+                <i className="material-icons ml-auto">more</i>
             </div>
             {props.title ?
                 <h1 className={classes.title + " h3 px-4 py-2 "}>{props.title}</h1> : null}
