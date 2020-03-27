@@ -99,7 +99,8 @@ export default props => {
                     <p className={classes.date}>{date}</p>
                 </div>
             </div>
-            <h1 className={classes.title + " h3 px-4 py-2 "}>{props.title}</h1>
+            {props.title ?
+                <h1 className={classes.title + " h3 px-4 py-2 "}>{props.title}</h1> : null}
             {props.body ? <p className="px-3 pb-2" dangerouslySetInnerHTML={{ __html: props.body }}>
             </p> : null
             }
