@@ -78,8 +78,14 @@ export default props => {
     let likes = []
     if (props.likes) {
         for (let keys in props.likes)
-            likes.push(keys)
+            firebase.database().ref('users/' + keys).on('value', s => {
+                let user = s.val()
+                likes.push(user)
+            })
     }
+    const lastLike = likes[likes.length - 1]
+    console.log(lastLike);
+
 
 
 
@@ -108,7 +114,7 @@ export default props => {
                 </div> : null
             }
 
-            <div className={classes.btnCon + " justify-content-end d-flex  py-2"}>
+            <div className={classes.btnCon + " justify-content-end d-flex align-items-center  py-2"}>
                 <input onBlur={() => {
                     setShowBtn(false)
                 }} onFocus={() => {
@@ -118,11 +124,12 @@ export default props => {
                     <i className="material-icons ">comment</i>
                     {/* Comment */}
                 </button> : <React.Fragment>
-
+                        <i className="material-icons ml-3 pr-2 text-success">comment</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.3rem" }}>{0}</span>
                         <button style={{ color: props.liked ? 'gold' : null }} className={classes.btn} onClick={like}>
                             <i className="material-icons ">thumb_up</i>
                             {/* Like */}
                         </button>
+                        <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.3rem" }}>{likes.length}</span>
 
                         <button className={classes.btn}>
                             <i className="material-icons ">share</i>
@@ -131,11 +138,14 @@ export default props => {
                     </React.Fragment>}
 
             </div>
-            <div className="d-flex px-4 py-2 align-items-center ">
+            <div className="d-flex px-3 py-2 align-items-center ">
 
-                <i className="material-icons pr-3 text-warning">thumb_up</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.5rem" }}>{likes.length}</span>
-                <i className="material-icons ml-5 pr-3 text-success">comment</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.5rem" }}>{0}</span>
+                {lastLike ?
+                    <span className="ml-auto">
+                        Liked by  <strong className="text-capitalize px-1"> {lastLike.username} </strong>  {likes.length - 1 > 0 ? <React.Fragment>and <strong className=" px-1"> {likes.length - 1} </strong> other(s)</React.Fragment> : null}
+                    </span> : null}
             </div>
+
         </div >
 
     )

@@ -152,13 +152,12 @@ class Timeline extends Component {
 
             // Get the download URL
             starsRef.getDownloadURL().then((URL) => {
-              const url = URL.replace(file.name, file.name.split('.').join('_600x600.'))
+              const url = URL.replace(file.name, file.name.split('.').join('_1024x1024.'))
               console.log(url);
               // Insert url into an <img> tag to "download"
               setTimeout(() => {
-
                 this.setState({ showPostForm: true, type: types, progressMessage: null, src: url })
-              }, 1000)
+              }, 2000)
             })
           } else {
             uploadTask.snapshot.ref.getDownloadURL().then(url => {
@@ -239,7 +238,7 @@ class Timeline extends Component {
         ) : null}
         <div className="container ">
           <div className="row ">
-            <div className="col-md-8 col-lg-6 p-0 order-md-2 px-lg-3">
+            <div className="col-md-8 col-lg-7 p-0 order-md-2 px-lg-3">
               <div className="row no-gutters bg-white">
                 <div className={classes.cover + " col "}>
                   <img src={this.state.profileData.coverPhoto} alt="" />
@@ -294,7 +293,7 @@ class Timeline extends Component {
 
             </div>
 
-            <div className="col-md-4 col-lg-3 order-md-1 bg-white ">
+            <div className="col-md-4 col-lg-2 order-md-1 bg-white ">
               <div className="row no-gutters">
                 <div className={" col "}></div>
               </div>
