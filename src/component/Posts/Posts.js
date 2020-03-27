@@ -3,6 +3,7 @@ import Post from './Post/Post';
 import firebase from '../../firebase';
 import 'firebase/database';
 import 'firebase/auth';
+import 'firebase/storage';
 
 import Toast from '../UI/Toast/Toast'
 import Spinner from '../UI/Spinner/Spinner'
@@ -26,33 +27,52 @@ export default class Posts extends Component {
             this.getPosts(this.props.uid)
         }
     }
+    deletePost = (id, src) => {
+        if (src) {
+            var desertRef = firebase.storage().ref(src);
+            desertRef.delete().then(() => {
+                firebase.database().ref('posts/' + id).set(null)
+            })
+        } else {
+            firebase.database().ref('posts/' + id).set(null)
+        }
+    }
     getPosts = (uid) => {
         this.setState({ loading: true })
         const ref = firebase.database().ref('posts/').orderByChild('uid').equalTo(uid)
         ref.on('value', s => {
             const posts = []
             for (let key in s.val()) {
-                const post = {
-                    title: s.val()[key].title,
-                    body: s.val()[key].body,
-                    id: key,
-                    icon: s.val()[key].icon,
-                    username: s.val()[key].username,
-                    date: s.val()[key].date,
-                    type: s.val()[key].type,
-                    liked: false,
-                    likes: s.val()[key].likes,
-                    src: s.val()[key].src,
-                }
-                if (post.likes) {
-
-                    if (post.likes[this.props.likeeId]) {
-                        post.liked = true
+                firebase.database().ref('users/' + s.val()[key].uid).on('value', snap => {
+                    const post = {
+                        title: s.val()[key].title,
+                        body: s.val()[key].body,
+                        id: key,
+                        icon: snap.val().profilePicture,
+                        username: snap.val().username,
+                        date: s.val()[key].date,
+                        type: s.val()[key].type,
+                        liked: false,
+                        storageRef: s.val()[key].storageRef,
+                        likes: s.val()[key].likes,
+                        src: s.val()[key].src,
                     }
-                }
-                posts.push(post)
+                    if (s.val()[key].uid === this.props.likeeId) {
+                        post.isMine = true
+                    }
+                    if (post.likes) {
+
+                        if (post.likes[this.props.likeeId]) {
+                            post.liked = true
+                        }
+                    }
+                    posts.push(post)
+                })
+
             }
             this.setState({ posts: posts.reverse(), loading: false })
+
+
 
         })
     }
@@ -67,10 +87,11 @@ export default class Posts extends Component {
 
                         {...cur}
                         key={cur.id}
+                        deletePost={() => { this.deletePost(cur.id, cur.storageRef) }}
                         likeeId={this.props.likeeId}
                     />
                 ))}
-                <p>No more posts </p>
+                <p className="text-center">No more posts </p>
 
             </div>
         )

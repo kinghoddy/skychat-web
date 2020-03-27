@@ -25,6 +25,7 @@ class Home extends Component {
           profilePicture: user.photoURL
         }
         this.setState({ userData: userdata })
+        this.props.history.push('/feed')
       }
     })
   }

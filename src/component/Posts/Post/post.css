@@ -1,3 +1,6 @@
+.Post {
+  position: relative;
+}
 .icon {
   height: 2.5rem;
   width: 2.5rem;
@@ -6,14 +9,43 @@
 }
 
 .coprate {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 400;
   color: VAR(--BLACK);
   padding: 0;
+  font-family: "Source Sans Pro", sans-serif;
   text-transform: capitalize;
   margin: 0;
 }
+.more {
+  position: absolute;
+  right: 1.8rem;
+  top: 1.2rem;
+  width: 10rem;
+  background: var(--white);
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s;
+  box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--light);
+}
+.more button {
+  display: flex;
+  width: 100%;
+  height: 2.5rem;
+  color: var(--dark);
+  border: 0;
+  background: none;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--light);
+}
 
+.moreCon:focus + .more,
+.moreCon:hover + .more,
+.moreCon:active + .more,
+.more:hover {
+  visibility: visible;
+  opacity: 1;
+}
 .title {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -25,7 +57,6 @@
 }
 
 .con {
-  border-radius: 0.9rem;
   overflow: hidden;
   width: 100%;
   height: auto;
@@ -35,6 +66,7 @@
 }
 
 .con > img {
+  min-height: 13rem;
   max-height: 80vh;
   width: 100%;
   object-fit: cover;
@@ -68,6 +100,8 @@
   object-fit: contain;
   object-position: center;
   max-height: 82vh;
+  min-height: 13rem;
+
   display: block;
   background: #000;
 }

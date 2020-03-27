@@ -45,7 +45,7 @@ const chatInput = props => {
       </div>
 
       {props.src ? <div className={classes.media + " col-12 d-flex mt-3 justify-content-around"}>
-        {props.type === 'video' ? <video src={props.src}> </video> : props.type === 'images' ? <img src={props.src} alt="" /> : null}
+        {props.type === 'video' ? <video src={props.src} autoPlay loop> </video> : props.type === 'images' ? <img src={props.src} alt="" /> : null}
       </div> : null}
       <div className="col-12 d-flex mt-3 justify-content-around">
         <button type="button" onClick={() => (

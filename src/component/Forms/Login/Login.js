@@ -101,9 +101,9 @@ class Login extends Component {
     });
   }
   fetchUser = user => {
-    var username;
+    var uid;
     if (user != null) {
-      username = user.displayName;
+      uid = user.uid;
       this.setState({ loading: false, errorMessage: null, shouldLogin: true });
     } else {
       var errorMessage = <strong>Failed</strong>;
@@ -114,7 +114,7 @@ class Login extends Component {
       if (search) {
         this.props.history.push("/" + search.substr(1));
       } else {
-        this.props.history.push("/" + username);
+        this.props.history.push("/" + uid);
       }
     }
   };
@@ -134,7 +134,7 @@ class Login extends Component {
       .then(() => {
         this.setState({ loading: false, errorMessage: null });
         console.log("success");
-        this.props.history.push(user.displayName.toLowerCase());
+        this.props.history.push(id);
       })
       .catch(() => {
         this.setState({
@@ -178,62 +178,62 @@ class Login extends Component {
     return this.state.loading ? (
       <Spinner message={this.state.sMessage} />
     ) : (
-      <form onSubmit={this.signInHandler}>
-        {this.state.errorMessage ? (
-          <Alert type="warning" show={true}>
-            {this.state.errorMessage}
-          </Alert>
-        ) : null}
-        {this.state.toast ? <Toast>{this.state.toast}</Toast> : null}
+        <form onSubmit={this.signInHandler}>
+          {this.state.errorMessage ? (
+            <Alert type="warning" show={true}>
+              {this.state.errorMessage}
+            </Alert>
+          ) : null}
+          {this.state.toast ? <Toast>{this.state.toast}</Toast> : null}
 
-        {formElementArray.map(el => (
-          <Input
-            elementType={el.config.elementType}
-            elementConfig={el.config.elementConfig}
-            value={el.config.value}
-            id={el.id}
-            key={el.config.id}
-            label={el.config.label}
-            changed={e => {
-              this.inputChanged(e, el.id);
-            }}
-          />
-        ))}
+          {formElementArray.map(el => (
+            <Input
+              elementType={el.config.elementType}
+              elementConfig={el.config.elementConfig}
+              value={el.config.value}
+              id={el.id}
+              key={el.config.id}
+              label={el.config.label}
+              changed={e => {
+                this.inputChanged(e, el.id);
+              }}
+            />
+          ))}
 
-        <button
-          className={
-            classes.btnLogin +
-            " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"
-          }
-          type="submit"
-        >
-          Sign in
+          <button
+            className={
+              classes.btnLogin +
+              " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"
+            }
+            type="submit"
+          >
+            Sign in
         </button>
-        <p className="text-center text-primary"> Or</p>
-        <button
-          className={classes.googleBtn + " btn btn-lg btn-block  mb-2"}
-          type="button"
-          onClick={this.googleLogin}
-        >
-          <img
-            src={google}
-            alt=" "
-            style={{ width: "2rem" }}
-            className="mr-4"
-          />
+          <p className="text-center text-primary"> Or</p>
+          <button
+            className={classes.googleBtn + " btn btn-lg btn-block  mb-2"}
+            type="button"
+            onClick={this.googleLogin}
+          >
+            <img
+              src={google}
+              alt=" "
+              style={{ width: "2rem" }}
+              className="mr-4"
+            />
           Sign up with google
         </button>
-        <div className="text-center">
-          <Link className="small" to="./home">
-            Forgot password?
+          <div className="text-center">
+            <Link className="small" to="./home">
+              Forgot password?
           </Link>{" "}
-          <br />
-          <Link className="small" to="/SignUp">
-            Create new account
+            <br />
+            <Link className="small" to="/SignUp">
+              Create new account
           </Link>
-        </div>
-      </form>
-    );
+          </div>
+        </form>
+      );
   }
 }
 

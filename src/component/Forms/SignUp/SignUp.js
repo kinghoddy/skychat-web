@@ -101,7 +101,6 @@ class Signin extends Component {
           photo: s.val()[id].profilePicture,
           name: s.val()[id].username
         });
-        console.log("userExist");
       } else {
         this.setState({ loading: true, sMessage: "Completing Signup  !" });
         ref
@@ -113,8 +112,7 @@ class Signin extends Component {
           })
           .then(() => {
             this.setState({ loading: false, errorMessage: null });
-            console.log("success");
-            this.props.history.push(user.displayName.toLowerCase());
+            this.props.history.push(id);
           })
           .catch(() => {
             this.setState({
@@ -217,59 +215,59 @@ class Signin extends Component {
         </p>
       </div>
     ) : (
-      <form onSubmit={this.signUpHandler}>
-        {this.state.errorMessage ? (
-          <Alert type="danger" show={true}>
-            {this.state.errorMessage}
-          </Alert>
-        ) : (
-          ""
-        )}
+          <form onSubmit={this.signUpHandler}>
+            {this.state.errorMessage ? (
+              <Alert type="danger" show={true}>
+                {this.state.errorMessage}
+              </Alert>
+            ) : (
+                ""
+              )}
 
-        {formElementArray.map(el => (
-          <Input
-            elementType={el.config.elementType}
-            elementConfig={el.config.elementConfig}
-            value={el.config.value}
-            id={el.id}
-            key={el.config.id}
-            label={el.config.label}
-            changed={e => {
-              this.inputChanged(e, el.id);
-            }}
-          />
-        ))}
+            {formElementArray.map(el => (
+              <Input
+                elementType={el.config.elementType}
+                elementConfig={el.config.elementConfig}
+                value={el.config.value}
+                id={el.id}
+                key={el.config.id}
+                label={el.config.label}
+                changed={e => {
+                  this.inputChanged(e, el.id);
+                }}
+              />
+            ))}
 
-        <button
-          className={
-            classes.btnLogin +
-            " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"
-          }
-          type="submit"
-        >
-          Sign Up
+            <button
+              className={
+                classes.btnLogin +
+                " btn btn-lg btn-block  text-uppercase font-weight-bold mb-2"
+              }
+              type="submit"
+            >
+              Sign Up
         </button>
-        <p className="text-center text-primary"> Or</p>
-        <button
-          className={classes.googleBtn + " btn btn-lg btn-block  mb-2"}
-          type="button"
-          onClick={this.googleLogin}
-        >
-          <img
-            src={google}
-            alt=" "
-            style={{ width: "2rem" }}
-            className="mr-4"
-          />
+            <p className="text-center text-primary"> Or</p>
+            <button
+              className={classes.googleBtn + " btn btn-lg btn-block  mb-2"}
+              type="button"
+              onClick={this.googleLogin}
+            >
+              <img
+                src={google}
+                alt=" "
+                style={{ width: "2rem" }}
+                className="mr-4"
+              />
           Sign up with google
         </button>
-        <div className="text-center">
-          <Link className="small" to="/login">
-            Already have an accout, Login
+            <div className="text-center">
+              <Link className="small" to="/login">
+                Already have an accout, Login
           </Link>
-        </div>
-      </form>
-    );
+            </div>
+          </form>
+        );
   }
 }
 

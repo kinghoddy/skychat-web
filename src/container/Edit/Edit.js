@@ -45,7 +45,32 @@ export default class EditProfile extends Component {
             }
         })
     }
+    updateName = (e) => {
+        e.preventDefault()
+        let user = firebase.auth().currentUser
 
+        user
+            .updateProfile({
+                displayName: this.state.userData.username.toLowerCase()
+            }).then(() => {
+                var ref = firebase.database().ref("users/");
+                const id = user.uid;
+                ref
+                    .child(id + "/username")
+                    .set(user.displayName.toLowerCase(),
+                    )
+            })
+
+    }
+    nameChanged = (e) => {
+        let user = firebase.auth().currentUser
+        const userdata = { ...this.state.userData }
+        userdata.username = e.target.value
+        this.setState({
+            userData: userdata
+        })
+
+    }
     upload = (types) => {
         const type = types
         // File or Blob named mountains.jpg
@@ -95,10 +120,10 @@ export default class EditProfile extends Component {
 
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                     firebase.database().ref('users/' + this.state.userData.uid + "/" + type)
-                        .set(downloadURL.replace(type, type + '_600x600')).then(cur => {
-                            
+                        .set(downloadURL.replace(type, type + '_1024x1024')).then(cur => {
+
                             this.setState({ loading: false })
-                             
+
                         }).catch(err => {
                             this.setState({ loading: false, error: err })
                         });
@@ -106,7 +131,7 @@ export default class EditProfile extends Component {
 
                     if (type === 'profilePicture') {
                         user.updateProfile({
-                            photoURL: downloadURL.replace(type, type + '_600x600')
+                            photoURL: downloadURL.replace(type, type + '_1024x1024')
                         }).catch(function (error) {
                             this.setState({ error: error })
                             // An error happened.
@@ -150,18 +175,18 @@ export default class EditProfile extends Component {
                                 </div>
                             </div> : null}
                         {this.state.loading ? null : <React.Fragment >
-                            <div className={'row no-gutters mb-2 bg-white'}>
+                            <form className={'row no-gutters mb-2 bg-white'} onSubmit={this.updateName}>
                                 <div className={'col-2 text-center text-primary'}>
                                     <i className={"material-icons " + classes.icon}>person</i>
                                 </div>
                                 <div className={'col-8'}>
                                     <h4 className="h6 font-weight-light">Username</h4>
-                                    <h4 className="h5 text-capitalize">{this.state.userData.username}</h4>
+                                    <input type="text" className={classes.input + " h5 text-capitalize"} onChange={this.nameChanged} value={this.state.userData.username} />
                                 </div>
                                 <div className={'col-2 text-center text-secondary'}>
-                                    <i className={"material-icons md-24"}>edit</i>
+                                    <button className="btn btn-outline-dark btn-sm"><i className={"material-icons md-24"}>check</i></button>
                                 </div>
-                            </div>
+                            </form>
                             <div className={'row no-gutters mb-2 bg-white'}>
                                 <div className={'col-2 text-center text-info'}>
                                     <i className={"material-icons " + classes.icon}>phone</i>

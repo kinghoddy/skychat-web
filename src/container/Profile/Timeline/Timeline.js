@@ -70,6 +70,7 @@ class Timeline extends Component {
       body: this.state.postBody.split("\n").join("<br/>"),
       type: this.state.type,
       src: this.state.src,
+      storageRef: "/" + this.props.userData.username.toLowerCase() + "/" + this.state.type + '/' + this.state.sref,
       date: Date.now(),
       uid: this.state.profileData.uid
     }
@@ -156,12 +157,12 @@ class Timeline extends Component {
               console.log(url);
               // Insert url into an <img> tag to "download"
               setTimeout(() => {
-                this.setState({ showPostForm: true, type: types, progressMessage: null, src: url })
+                this.setState({ showPostForm: true, type: types, progressMessage: null, src: url, sref: file.name.split('.').join('_1024x1024.') })
               }, 2000)
             })
           } else {
             uploadTask.snapshot.ref.getDownloadURL().then(url => {
-              this.setState({ showPostForm: true, type: types, progressMessage: null, src: url })
+              this.setState({ showPostForm: true, type: types, progressMessage: null, src: url, sref: file.name })
             })
           }
 
@@ -177,44 +178,23 @@ class Timeline extends Component {
 
 
 
-
-  load = uname => {
+  load = uid => {
     this.setState({ loading: true });
+    var userExist = false;
     var ref = firebase.database().ref("users/");
-    ref.on("value", s => {
-      var userExist = false;
-      if (uname) {
-        document.title = uname + " | Skychat";
-
-        var username = uname.toLowerCase();
-        for (let keys in s.val()) {
-          // fetch the profile data
-          if (username === s.val()[keys].username) {
-            userExist = true;
-            const profiledata = {
-              ...this.state.profileData
-            };
-            for (let key in s.val()[keys]) {
-              profiledata[key] = s.val()[keys][key];
-            }
-            profiledata.uid = keys;
-
-            this.setState({
-              profileData: profiledata
-            });
-          }
+    if (uid) {
+      ref.child(uid).on('value', s => {
+        userExist = true;
+        const profiledata = {
+          ...this.state.profileData
+        };
+        for (let key in s.val()) {
+          profiledata[key] = s.val()[key];
         }
-        if (!userExist) {
-          this.setState({
-            errorMessage: (
-              <span>
-                User <strong className="text-capitalize">{username}</strong> not
-                found
-              </span>
-            )
-          });
-        }
-        if (username === this.props.userData.username) {
+        this.setState({
+          profileData: profiledata, loading: false
+        });
+        if (profiledata.username === this.props.userData.username) {
           this.setState({
             isUser: true
           });
@@ -223,10 +203,23 @@ class Timeline extends Component {
             isUser: false
           });
         }
-        this.setState({ loading: false });
-      }
-    });
-  };
+
+        if (!userExist) {
+          this.setState({
+            errorMessage: (
+              <span>
+                User <strong className="text-capitalize">{profiledata.username}</strong> not
+                found
+              </span>
+            )
+          });
+        }
+
+      })
+
+    }
+  }
+
 
   render() {
     return (

@@ -69,6 +69,7 @@ export default props => {
         const ref = firebase.database().ref('posts/' + props.id + "/likes/" + props.likeeId)
         if (props.liked) {
             ref.set(null).then(() => {
+
             })
         } else {
             ref.set(Date.now()).then(() => {
@@ -84,21 +85,38 @@ export default props => {
             })
     }
     const lastLike = likes[likes.length - 1]
-    console.log(lastLike);
+    let video = React.createRef()
 
+    window.addEventListener('scroll', () => {
+        let videos = video.current
+        if (videos !== null) {
+            if (videos.getBoundingClientRect().top <= 300 && videos.getBoundingClientRect().top > 0) {
+                videos.play()
+            } else {
+                videos.pause()
+            }
+
+        }
+
+        // console.log(video.current.getClientBoundingTriangle());
+
+    })
 
 
 
     return (
-        <div className="mb-3 bg-white" >
+        <div className={classes.Post + " mb-3 bg-white"} >
             <div className="d-flex align-items-center px-3 py-2">
                 <img src={props.icon} alt="" className={classes.icon + " border rounded-circle"} />
                 <div className="px-3">
 
-                    <h4 className={classes.coprate + " h5"}>{props.username}</h4>
+                    <h4 className={classes.coprate + " h6"}>{props.username}</h4>
                     <p className={classes.date}>{date}</p>
                 </div>
-                <i className="material-icons ml-auto">more</i>
+                <i className={classes.moreCon + " material-icons ml-auto"}>more_vert</i>
+                <div className={classes.more}>
+                    {props.isMine ? <button onClick={props.deletePost} >Delete post</button> : null}
+                </div>
             </div>
             {props.title ?
                 <h1 className={classes.title + " h3 px-4 py-2 "}>{props.title}</h1> : null}
@@ -111,7 +129,7 @@ export default props => {
                         <img alt="" src={props.src} className="border-0" />
                         : null}
                     {props.type === 'video' ?
-                        <video controls loop src={props.src}></video>
+                        <video ref={video} controls loop src={props.src}></video>
                         : null}
                 </div> : null
             }

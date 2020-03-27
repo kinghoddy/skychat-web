@@ -7,6 +7,7 @@ import firebase from './firebase'
 import Toast from './component/UI/Toast/Toast';
 import { WOW } from 'wowjs';
 import asyncComponent from './hoc/asyncComponent';
+import Feed from './component/feed/feed'
 
 import 'firebase/messaging';
 
@@ -40,7 +41,7 @@ class App extends Component {
     let theme = localStorage.getItem('skychatTheme');
     let domeTheme = dark
     if (theme === null) {
-      localStorage.setItem('skychatTheme', 'dark')
+      localStorage.setItem('skychatTheme', 'light')
     } else if (theme === 'dark') {
       domeTheme = dark
     }
@@ -121,6 +122,7 @@ class App extends Component {
           <Redirect from='/undefined' to='/' />
           <Route path="/notifications" exact component={Profile} />
           <Route path="/menu" component={Profile} />
+          <Route path="/feed" component={Profile} />
           <Route path="/edit-profile" component={Edit} />
           <Route path="/:profile" exact component={Profile} />
           <Route path="/" component={Home} />

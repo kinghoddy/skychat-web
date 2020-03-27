@@ -7,6 +7,7 @@ import Timeline from './Timeline/Timeline';
 import Notify from '../../component/Notify/Notify';
 import Spinner from '../../component/UI/Spinner/Spinner';
 import Menu from '../Menu/Menu';
+import Feed from '../../component/feed/feed'
 
 
 import firebase from '../../firebase';
@@ -69,6 +70,7 @@ class Profile extends Component {
                         <Switch>
                             <Route path='/notifications' exact render={() => (
                                 <Notify {...this.state} />)} />
+                            <Route path='/feed' render={() => (<Feed {...this.state.userData} />)} />
                             <Route path='/menu' render={() => (<Menu {...this.props} />)} />
                             <Route path='/:profile' exact render={() => (<Timeline {...this.state} />)} />
                         </Switch>

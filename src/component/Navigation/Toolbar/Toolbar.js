@@ -15,7 +15,7 @@ const toolbar = props => {
 
     if (!profile) {
         if (user) {
-            profile = user.displayName
+            profile = user.uid
         }
     }
 
@@ -54,17 +54,22 @@ const toolbar = props => {
                             </Link> : ''
                             }
                             <div className="d-none d-lg-inline-flex">
-                                <li className="nav-item col-4 ">
+                                {user ? <li className="nav-item col-3 ">
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/feed"}>
+                                        <i className='material-icons'>home</i>
+                                    </NavLink>
+                                </li> : null}
+                                <li className="nav-item col-3 ">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + profile}>
                                         <i className='material-icons'>account_circle</i>
                                     </NavLink>
                                 </li>
-                                {user ? <li className="nav-item col-4">
+                                {user ? <li className="nav-item col-3">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notifications'}><i className='material-icons'>notifications</i>
                                     </NavLink>
                                 </li> : ''}
 
-                                {user ? <li className="nav-item col-4">
+                                {user ? <li className="nav-item col-3">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/menu'}>
                                         <i className='material-icons'>menu</i>
                                     </NavLink>
@@ -88,17 +93,22 @@ const toolbar = props => {
                     <nav className={classes.Navbar + " fixed-bottom d-lg-none navbar navbar-expand navbar-light"}>
                         <div className="container-fluid navbar-collapse collapse p-0">
                             <ul className=" navbar-nav w-100 text-center " >
-                                <li className="nav-item col-4 ">
+                                <li className="nav-item col-3 ">
+                                    <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/feed"}>
+                                        <i className='material-icons'>home</i>
+                                    </NavLink>
+                                </li>
+                                <li className="nav-item col-3 ">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={"/" + profile}>
                                         <i className='material-icons'>account_circle</i>
                                     </NavLink>
                                 </li>
-                                {profile ? <li className="nav-item col-4">
+                                {profile ? <li className="nav-item col-3">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/notifications'}><i className='material-icons'>notifications</i>
                                     </NavLink>
                                 </li> : ''}
 
-                                {profile ? <li className="nav-item col-4">
+                                {profile ? <li className="nav-item col-3">
                                     <NavLink activeClassName={classes.active} className="nav-link js-scroll-trigger" to={'/menu'}>
                                         <i className='material-icons'>menu</i>
                                     </NavLink>
