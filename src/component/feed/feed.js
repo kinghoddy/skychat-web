@@ -5,7 +5,8 @@ import { withRouter } from 'react-router-dom'
 import 'firebase/auth';
 import Spinner from '../UI/Spinner/Spinner';
 import Toast from '../UI/Toast/Toast'
-import Post from '../Posts/Post/Post'
+import Post from '../Posts/Post/Post';
+import play from '../Audio/Audio'
 
 class Feed extends Component {
     state = {
@@ -45,14 +46,15 @@ class Feed extends Component {
     deletePost = (id, src) => {
         if (src) {
             var desertRef = firebase.storage().ref(src);
-            desertRef.delete().then(() => {
-                firebase.database().ref('posts/' + id).set(null)
-            })
+            desertRef.delete()
+            firebase.database().ref('posts/' + id).set(null)
         } else {
             firebase.database().ref('posts/' + id).set(null)
         }
     }
     getPosts = () => {
+        document.documentElement.scrollTop = 0;
+
         this.setState({ loading: true })
         const ref = firebase.database().ref('users/')
         ref.child(this.props.uid).on('value', s => {
@@ -93,6 +95,14 @@ class Feed extends Component {
                             if (snap.val()[key].uid === this.props.uid) {
                                 post.isMine = true
                             }
+                            if (snap.val()[key].comments) {
+                                const com = []
+                                for (let keys in snap.val()[key].comments) {
+                                    com.push(snap.val()[key].comments[keys])
+                                }
+                                post.comments = com.reverse()
+                            }
+
                             if (post.likes) {
                                 if (post.likes[this.props.uid]) {
                                     post.liked = true
@@ -105,7 +115,7 @@ class Feed extends Component {
                 }
                 // setTimeout(() => {
                 this.setState({ posts: Posts.reverse(), loading: false })
-                // }, 2)
+                // }, 2000)
 
 
             })
@@ -116,17 +126,35 @@ class Feed extends Component {
             this.props.history.push('/login?feed')
         }
     }
+    postComment = (e, text, id) => {
+        e.preventDefault()
+        console.log('post', text, id);
+        firebase.database().ref('users/' + this.props.uid).once('value', s => {
+            const comment = {
+                username: s.val().username,
+                profilePicture: s.val().profilePicture,
+                uid: this.props.uid,
+                date: Date.now(),
+                comment: text
+            }
+            firebase.database().ref('posts/' + id + "/comments").push(comment).then(() => {
+                play('success')
+            })
+        })
+
+    }
     render() {
         return (
-            <div className="pt-2 ">
+            <div className={classes.wrapper + " pt-2 mx-auto"}>
                 {this.state.toast ? <Toast message={this.setState.toast} /> : null}
-                <h4 className="pl-4 py-3 bg-white h6 m-0">Posts from you and your friends <small>{this.state.posts.length}</small> </h4>
+
 
                 {this.state.loading ? <div style={{ height: "5rem" }}><Spinner fontSize="3px" /></div> : this.state.posts.map(cur => (
 
                     <Post
 
                         {...cur}
+                        postComment={(e, val) => { this.postComment(e, val, cur.id) }}
                         key={cur.id}
                         deletePost={() => { this.deletePost(cur.id, cur.storageRef) }}
                         likeeId={this.props.uid}

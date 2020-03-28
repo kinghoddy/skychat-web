@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import classes from './post.css';
 import firebase from '../../../firebase';
+import { Link } from 'react-router-dom';
 export default props => {
     let date = 'Dec 12 2019 at 5:30pm'
     var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -101,13 +102,15 @@ export default props => {
         // console.log(video.current.getClientBoundingTriangle());
 
     })
-
+    const [value, changed] = useState('')
 
 
     return (
         <div className={classes.Post + " mb-3 bg-white"} >
             <div className="d-flex align-items-center px-3 py-2">
-                <img src={props.icon} alt="" className={classes.icon + " border rounded-circle"} />
+                <Link to={"/" + props.uid}>
+                    <img src={props.icon} alt="" className={classes.icon + " border rounded-circle"} />
+                </Link>
                 <div className="px-3">
 
                     <h4 className={classes.coprate + " h6"}>{props.username}</h4>
@@ -134,38 +137,54 @@ export default props => {
                 </div> : null
             }
 
-            <div className={classes.btnCon + " justify-content-end d-flex align-items-center  py-2"}>
+            <form onSubmit={(e) => { changed(''); setShowBtn(false); props.postComment(e, value) }} className={classes.btnCon + "  d-flex align-items-center px-2 "}>
                 <input onBlur={() => {
-                    setShowBtn(false)
+                    if (!value) {
+                        setShowBtn(false)
+                    }
                 }} onFocus={() => {
                     setShowBtn(true)
-                }} type="text" placeholder="Comment....." className={classes.comment} value={props.value} onChange={props.changed} required />
-                {showBtn ? <button className={classes.btn}>
-                    <i className="material-icons ">comment</i>
-                    {/* Comment */}
+                }} type="text" placeholder="Comment....." className={classes.comment} value={value} onChange={(e) => { changed(e.target.value) }} required />
+                {showBtn ? <button className={classes.btn} type="submit" >
+                    <i className="material-icons " >chat_bubble_outline</i>
                 </button> : <React.Fragment>
-                        <i className="material-icons ml-3 pr-2 text-success">comment</i> <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.3rem" }}>{0}</span>
-                        <button style={{ color: props.liked ? 'gold' : null }} className={classes.btn} onClick={like}>
-                            <i className="material-icons ">thumb_up</i>
+                        <button type="button" style={{ color: props.liked ? 'red' : null }} className={classes.btn} onClick={like}>
+                            <i className="material-icons ">{props.liked ? 'favorite' : 'favorite_border'}</i>
                             {/* Like */}
                         </button>
-                        <span style={{ fontFamily: "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif", fontSize: "1.3rem" }}>{likes.length}</span>
 
-                        <button className={classes.btn}>
+
+                        <button type="button" className={classes.btn}>
                             <i className="material-icons ">share</i>
                             {/* Share */}
                         </button>
                     </React.Fragment>}
-
-            </div>
-            <div className="d-flex px-3 py-2 align-items-center ">
+            </form>
+            <div className="d-flex px-3  align-items-center ">
 
                 {lastLike ?
-                    <span className="ml-auto">
+                    <span className="">
                         Liked by  <strong className="text-capitalize px-1"> {lastLike.username} </strong>  {likes.length - 1 > 0 ? <React.Fragment>and <strong className=" px-1"> {likes.length - 1} </strong> other(s)</React.Fragment> : null}
                     </span> : null}
             </div>
+            {props.comments ? <div className=" px-3 pb-2 ">
 
+                <React.Fragment>
+                    <span className="pb-3 d-block">{props.comments.length} comment((s))</span>
+                    {props.comments.map(cur => (
+
+                        <div className={classes.comments_box} key={cur.comment + cur.uid}>
+                            <img src={cur.profilePicture} alt="" />
+                            <div>
+                                <h5 className="text-capitalize">{cur.username}</h5>
+                                <p>{cur.comment}</p>
+                            </div>
+                        </div>
+                    ))}
+                </React.Fragment>
+
+            </div>
+                : null}
         </div >
 
     )

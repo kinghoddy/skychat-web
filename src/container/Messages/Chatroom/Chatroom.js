@@ -133,6 +133,7 @@ class Chatroom extends Component {
                 var receiverData = {};
                 receiverData.profilePicture = snap.val().profilePicture;
                 receiverData.username = snap.val().username;
+                receiverData.uid = keys;
                 this.setState({ receiverData: receiverData });
                 document.title =
                   receiverData.username +
@@ -214,7 +215,7 @@ class Chatroom extends Component {
             </i>
           </Link>
           <Link
-            to={"/" + this.state.receiverData.username}
+            to={"/" + this.state.receiverData.uid}
             className={classes.icon + " p-0 navbar-brand"}
           >
             <img src={this.state.receiverData.profilePicture} alt="" />

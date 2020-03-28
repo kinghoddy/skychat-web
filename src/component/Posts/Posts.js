@@ -6,7 +6,8 @@ import 'firebase/auth';
 import 'firebase/storage';
 
 import Toast from '../UI/Toast/Toast'
-import Spinner from '../UI/Spinner/Spinner'
+import Spinner from '../UI/Spinner/Spinner';
+import play from '../Audio/Audio'
 
 export default class Posts extends Component {
     state = {
@@ -30,9 +31,8 @@ export default class Posts extends Component {
     deletePost = (id, src) => {
         if (src) {
             var desertRef = firebase.storage().ref(src);
-            desertRef.delete().then(() => {
-                firebase.database().ref('posts/' + id).set(null)
-            })
+            desertRef.delete()
+            firebase.database().ref('posts/' + id).set(null)
         } else {
             firebase.database().ref('posts/' + id).set(null)
         }
@@ -50,8 +50,10 @@ export default class Posts extends Component {
                         id: key,
                         icon: snap.val().profilePicture,
                         username: snap.val().username,
+
                         date: s.val()[key].date,
                         type: s.val()[key].type,
+                        uid: s.val()[key].uid,
                         liked: false,
                         storageRef: s.val()[key].storageRef,
                         likes: s.val()[key].likes,
@@ -60,6 +62,14 @@ export default class Posts extends Component {
                     if (s.val()[key].uid === this.props.likeeId) {
                         post.isMine = true
                     }
+                    if (s.val()[key].comments) {
+                        const com = []
+                        for (let keys in s.val()[key].comments) {
+                            com.push(s.val()[key].comments[keys])
+                        }
+                        post.comments = com.reverse()
+                    }
+
                     if (post.likes) {
 
                         if (post.likes[this.props.likeeId]) {
@@ -76,6 +86,23 @@ export default class Posts extends Component {
 
         })
     }
+    postComment = (e, text, id) => {
+        e.preventDefault()
+        console.log('post', text, id);
+        firebase.database().ref('users/' + this.props.likeeId).once('value', s => {
+            const comment = {
+                username: s.val().username,
+                profilePicture: s.val().profilePicture,
+                uid: this.props.likeeId,
+                date: Date.now(),
+                comment: text
+            }
+            firebase.database().ref('posts/' + id + "/comments").push(comment).then(() => {
+                play('success')
+            })
+        })
+
+    }
     render() {
         return (
             this.state.loading ? <div style={{ height: "5rem" }}><Spinner fontSize="3px" /></div> : <div className="pt-2 ">
@@ -84,11 +111,12 @@ export default class Posts extends Component {
                 {this.state.posts.map(cur => (
 
                     <Post
-
                         {...cur}
                         key={cur.id}
+                        postComment={(e, val) => { this.postComment(e, val, cur.id) }}
                         deletePost={() => { this.deletePost(cur.id, cur.storageRef) }}
                         likeeId={this.props.likeeId}
+
                     />
                 ))}
                 <p className="text-center">No more posts </p>

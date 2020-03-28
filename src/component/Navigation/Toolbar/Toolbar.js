@@ -44,7 +44,7 @@ const toolbar = props => {
                         <i style={{ cursor: "pointer" }} onClick={props.history.goBack} className=" material-icons px-3">arrow_back</i>
                     )} />
                     <Link to="/" className=" navbar-brand p-0 pl-lg-3 h-100">
-                        {localStorage.getItem('skychatTheme') === 'dark' ? <Logo type={'l5'} width="10rem" /> : <Logo type={logoType} width="10rem" />}
+                        {localStorage.getItem('skychatTheme') === 'dark' ? <Logo type={'l5'} width="7rem" /> : <Logo type={logoType} />}
 
                     </Link>
                     <div className="navbar-collapse collapse">

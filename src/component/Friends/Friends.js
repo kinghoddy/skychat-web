@@ -18,6 +18,7 @@ class Friends extends Component {
     }
     componentDidMount() {
         this.getFriends(this.props.uid)
+        
     }
     componentDidUpdate() {
         if (this.state.uid !== this.props.uid) {
@@ -35,15 +36,19 @@ class Friends extends Component {
                     for (let keys in s.val().friendsId) {
                         firebase.database().ref('users/' + s.val().friendsId[keys])
                             .once('value', snap => {
+                                if(snap.val()){
+
                                 const friend = {
                                     username: snap.val().username,
                                     profilePicture: snap.val().profilePicture,
-                                    link: s.val().friendsId[keys]
+                                    uid: s.val().friendsId[keys]
                                 }
                                 friendsData.push(friend)
+                                }
                             })
                     }
                     this.setState({ friendsData: friendsData.reverse(), loading: false })
+        console.log(friendsData);
                 } else {
                     this.setState({ friendsData: [], loading: false })
 
@@ -70,7 +75,7 @@ class Friends extends Component {
                     {this.state.friendsData.map((cur, i) => (
                         !this.state.seeMore ? i < 2 ?
                             <Link
-                                to={"/" + cur.username}
+                                to={"/" + cur.uid}
                                 className={classes.friendList}
                                 onClick={() => { this.setState({ showAllFriends: false, seeMore: false }) }}
                                 key={cur.username}
@@ -83,7 +88,7 @@ class Friends extends Component {
                             </Link>
 
                             : null : <Link
-                                to={"/" + cur.username}
+                                to={"/" + cur.uid}
                                 className={classes.friendList}
                                 key={cur.username}
                                 onClick={() => { this.setState({ showAllFriends: false, seeMore: false }) }}
@@ -116,7 +121,7 @@ class Friends extends Component {
                                     key={i}
                                 >
                                     <Link
-                                        to={"/" + cur.username}
+                                        to={"/" + cur.uid}
                                         className={classes.friendCard}
                                     >
                                         <img

@@ -261,7 +261,7 @@ class Friends extends Component {
                       key={i}
                     >
                       <div className="col-2 col-md-1" onClick={() => {
-                        this.props.history.push('/' + cur.username)
+                        this.props.history.push('/' + cur.uid)
                       }}>
                         <img
                           src={cur.profilePicture}

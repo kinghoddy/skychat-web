@@ -55,6 +55,7 @@ class Timeline extends Component {
   }
 
   componentDidUpdate() {
+
     if (this.props.match.params.profile !== this.state.profile) {
       this.setState({ profile: this.props.match.params.profile });
       this.load(this.props.match.params.profile);
@@ -179,21 +180,35 @@ class Timeline extends Component {
 
 
   load = uid => {
+
+    document.documentElement.scrollTop = 0;
+
     this.setState({ loading: true });
     var userExist = false;
     var ref = firebase.database().ref("users/");
     if (uid) {
       ref.child(uid).on('value', s => {
-        userExist = true;
         const profiledata = {
           ...this.state.profileData
         };
+
         for (let key in s.val()) {
           profiledata[key] = s.val()[key];
+          profiledata.uid = uid;
         }
+
         this.setState({
-          profileData: profiledata, loading: false
+          profileData: profiledata
         });
+        setTimeout(cur => {
+          this.setState({
+            loading: false
+          });
+        }, 1000)
+        if (profiledata.username) {
+
+          userExist = true;
+        }
         if (profiledata.username === this.props.userData.username) {
           this.setState({
             isUser: true

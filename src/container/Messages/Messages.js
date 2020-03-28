@@ -105,7 +105,7 @@ class Messages extends Component {
                 </i>)} />
                   </Switch>
                   <Link
-                    to={"/" + this.state.userData.username}
+                    to={"/" + this.state.userData.uid}
                     className={classes.icon + " p-0 navbar-brand"}
                   >
                     <img src={this.state.userData.profilePicture} alt="" />
