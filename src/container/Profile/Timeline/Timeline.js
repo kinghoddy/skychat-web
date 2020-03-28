@@ -39,9 +39,16 @@ class Timeline extends Component {
 
   componentDidMount() {
     this.load(this.props.profile);
-
+    let theme = localStorage.getItem('skychatTheme');
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", ' #171e25');
+    if (theme === 'dark') {
+      metaThemeColor.setAttribute("content", ' #171e25');
+    }
+    else if (theme === 'light') {
+      metaThemeColor.setAttribute("content", ' #fff');
+    }
+
+
   }
   titleChanged = e => {
     this.setState({

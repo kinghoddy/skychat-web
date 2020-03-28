@@ -38,13 +38,13 @@ const toolbar = props => {
 
             <nav style={{
                 background: bgColor
-            }} className={classes.Toolbar + " navbar navbar-expand  fixed-top " + shade}>
+            }} className={classes.Toolbar + " py-0   navbar navbar-expand  fixed-top " + shade}>
                 <div className="container-fluid h-100">
                     <Route path="/menu/:nest" render={() => (
                         <i style={{ cursor: "pointer" }} onClick={props.history.goBack} className=" material-icons px-3">arrow_back</i>
                     )} />
-                    <Link to="/" className=" navbar-brand p-0 pl-lg-3 h-100">
-                        {localStorage.getItem('skychatTheme') === 'dark' ? <Logo type={'l5'} width="7rem" /> : <Logo type={logoType} />}
+                    <Link to="/" className=" navbar-brand align-items-center d-flex p-0 pb-1 pl-lg-3 h-100">
+                        {localStorage.getItem('skychatTheme') === 'dark' ? <Logo type={'l5'} width="7rem" /> : <Logo type={logoType} width="7rem" />}
 
                     </Link>
                     <div className="navbar-collapse collapse">

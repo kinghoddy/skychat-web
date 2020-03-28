@@ -40,12 +40,15 @@ class App extends Component {
 
     let theme = localStorage.getItem('skychatTheme');
     let domeTheme = dark
+    var metaThemeColor = document.querySelector("meta[name=theme-color]");
     if (theme === null) {
       localStorage.setItem('skychatTheme', 'light')
     } else if (theme === 'dark') {
       domeTheme = dark
+      metaThemeColor.setAttribute("content", ' #171e25');
     }
     else if (theme === 'light') {
+      metaThemeColor.setAttribute("content", ' #fff');
       domeTheme = light
     }
     console.log(theme);

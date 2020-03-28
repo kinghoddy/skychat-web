@@ -26,8 +26,6 @@ export default class EditProfile extends Component {
     }
     componentDidMount() {
         document.title = "Edit userdata | Skychat";
-        var metaThemeColor = document.querySelector("meta[name=theme-color]");
-        metaThemeColor.setAttribute("content", '#030  ');
         this.setState({ loading: true })
         firebase.auth().onAuthStateChanged(user => {
             if (user) {

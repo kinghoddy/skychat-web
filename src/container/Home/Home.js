@@ -11,8 +11,7 @@ class Home extends Component {
     userData: null
   }
   componentDidMount() {
-    var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", "#f7f7f7");
+
     document.title = "Skychat homepage";
     this.checkUser()
   }

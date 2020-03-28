@@ -35,8 +35,17 @@ class Feed extends Component {
             this.setState({ shouldLogout: true, loading: false });
         }
         document.title = "News feed | Skychat";
+
+
+        let theme = localStorage.getItem('skychatTheme');
         var metaThemeColor = document.querySelector("meta[name=theme-color]");
-        metaThemeColor.setAttribute("content", ' #fff');
+        if (theme === 'dark') {
+            metaThemeColor.setAttribute("content", ' #171e25');
+        }
+        else if (theme === 'light') {
+            metaThemeColor.setAttribute("content", ' #fff');
+        }
+
         if (this.props.uid) {
 
             this.getPosts()

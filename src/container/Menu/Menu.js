@@ -41,8 +41,7 @@ class Menu extends Component {
         this.setState({ shouldLogout: true, loading: false });
       }
     });
-    var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", ' #fff');
+
   }
   logOutHandler = () => {
     this.setState({ loading: true });
