@@ -19,6 +19,10 @@ class Feed extends Component {
         const user = firebase.auth().currentUser
         this.setState({ loading: true });
         if (user) {
+            let hasUsed = localStorage.getItem('hasUsedSkychat');
+            if (hasUsed === null) {
+                localStorage.setItem('hasUsedSkychat', true)
+            }
             const userdata = {
                 ...this.state.userData
             };
@@ -158,7 +162,7 @@ class Feed extends Component {
                 {this.state.toast ? <Toast message={this.setState.toast} /> : null}
 
 
-                {this.state.loading ? <div style={{ height: "5rem" }}><Spinner fontSize="3px" /></div> : this.state.posts.map(cur => (
+                {this.state.loading ? <div style={{ height: '79vh', marginBottom: "3rem" }}><Spinner style={{ background: 'var(--gray)' }} /> <p className={classes.brand}>skychat by odunmilade</p></div> : this.state.posts.map(cur => (
 
                     <Post
 

@@ -1,35 +1,36 @@
 .msgInput {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: .5rem .5rem;
-    /* background: rgba(255, 255, 255, 0.7); */
-    left: 0;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  /* background: rgba(255, 255, 255, 0.7); */
+  left: 0;
 }
 
 .msgInput textarea {
-    width: 100%;
-    padding: .5rem 1rem;
-    background: white;
-    border: 0;
-    box-shadow: 0 .2rem .2rem rgba(0, 0, 0, .2);
-    border-radius: 2rem;
-    font-size: 1rem;
-    max-height: 8rem !important;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: var(--white);
+  color: var(--dark);
+  border: 0;
+  box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.2);
+  border-radius: 2rem;
+  font-size: 1rem;
+  max-height: 8rem !important;
 }
 
 .msgInput textarea:focus {
-    outline: 0 !important;
-    border: 0 !important;
+  outline: 0 !important;
+  border: 0 !important;
 }
 
 @media only screen and (min-width: 1200px) {
-    .msgInput {
-        padding: 1rem .5rem;
-    }
+  .msgInput {
+    padding: 1rem 0.5rem;
+  }
 
-    .msgInput input {
-        font-size: 1.2rem;
-        padding: .6rem 1.3rem;
-    }
+  .msgInput input {
+    font-size: 1.2rem;
+    padding: 0.6rem 1.3rem;
+  }
 }

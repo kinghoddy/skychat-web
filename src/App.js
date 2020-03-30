@@ -54,6 +54,11 @@ class App extends Component {
     console.log(theme);
     const style = document.getElementById('style')
     style.innerHTML = domeTheme
+
+    let hasUsed = localStorage.getItem('hasUsedSkychat');
+    if (hasUsed) {
+      this.setState({ shouldRedirect: true })
+    }
   }
 
   messageing = () => {
@@ -118,6 +123,7 @@ class App extends Component {
         <style id="style"></style>
         {this.state.toast ? <Toast>{this.state.toast}</Toast> : null}
         <Switch>
+          {this.state.shouldRedirect ? <Redirect exact from="/" to="/feed" /> : null}
           <Route path="/login" exact component={User} />
           <Route path="/signUp" exact component={User} />
           <Route path="/messages/:chatId" component={Messages} />

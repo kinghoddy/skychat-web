@@ -39,6 +39,7 @@ class Chatroom extends Component {
         senderData.username = user.displayName;
         senderData.profilePicture = user.photoURL;
         this.setState({ senderData: senderData });
+        
         this.getChats(this.props.match.params.chatId)
       } else {
         this.setState({ loading: false });
@@ -64,10 +65,16 @@ class Chatroom extends Component {
     }
   }
   getChats = (chatId, uid) => {
+    
     const chatref = firebase.database().ref('chats/' + chatId)
     chatref.on('value', s => {
-      let description = s.val().description
-      const groupIcon = s.val().icon
+      console.log(s.val());
+      let description
+      let groupIcon
+      if(s.val()){
+         description = s.val().description
+        groupIcon = s.val().icon
+      }
 
       // checking if its a group
       if (description !== undefined) {
@@ -79,17 +86,21 @@ class Chatroom extends Component {
               profilePicture: users.val().profilePicture,
               username: users.val().username
             }
-          }).then(res => {
+          })
+            
             var chats = []
-            for (let k in s.val().chats) {
-              const chat = {
-                ...s.val().chats[k]
+            if(s.val()){
+
+              for (let k in s.val().chats) {
+                const chat = {
+                  ...s.val().chats[k]
+                }
+                if (members[chat.sender]) {
+                  chat.name = members[chat.sender].username
+                  chat.profilePicture = members[chat.sender].profilePicture
+                }
+                chats.push(chat)
               }
-              if (members[chat.sender]) {
-                chat.name = members[chat.sender].username
-                chat.profilePicture = members[chat.sender].profilePicture
-              }
-              chats.push(chat)
             }
 
             var lastChat = chats[Object.keys(chats)[Object.keys(chats).length - 1]];
@@ -100,16 +111,22 @@ class Chatroom extends Component {
 
             var con = document.getElementById("scroll");
             if (con) {
-              con.scrollTop = con.scrollHeight + 100;
+              setTimeout(()=>{
+
+                con.scrollTop = con.scrollHeight + 100;
+              },500)
             }
-          })
+        
         }
         this.setState({ members: members })
 
 
       } else {
         this.setState({ isGroup: false })
-        var chats = s.val().chats;
+        var chats 
+        if(s.val()){
+          chats = s.val().chats;
+        }
         if (chats) {
           var chat = [];
           for (let keys in chats) {
@@ -218,7 +235,7 @@ class Chatroom extends Component {
             to={"/" + this.state.receiverData.uid}
             className={classes.icon + " p-0 navbar-brand"}
           >
-            <img src={this.state.receiverData.profilePicture} alt="" />
+            <img src={this.state.isGroup ?this.state.groupIcon : this.state.receiverData.profilePicture} alt="" />
           </Link>
           {this.state.receiverData.username ? (
             <div>
@@ -228,10 +245,15 @@ class Chatroom extends Component {
                     ? "..."
                     : "")}
               </h1>
-              <p style={{ lineHeight: "1" }} className="m-0 font-weight-light">Active now</p>
+              <p style={{ lineHeight: "1" }} className="text-dark m-0 font-weight-light">Active now</p>
             </div>
-          ) : null}
-          <div className="collapse navbar-collapse">
+          ) :       <h1 className="text-dark mb-0 h5 text-capitalize" style={{ lineHeight: "1" }}>
+              {this.state.receiverData.username.substring(0, 18) +
+                  (Array.from(this.state.receiverData.username).length > 18
+                    ? "..."
+                    : "")}
+              </h1>}
+                    <div className="collapse navbar-collapse">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link className="nav-link py-0" to="">
@@ -324,7 +346,7 @@ class Chatroom extends Component {
           value={this.state.value}
           sendChat={this.sendChats}
         />
-      </div>
+      </div >
     );
   }
 }

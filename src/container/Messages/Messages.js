@@ -5,6 +5,7 @@ import { Route, Link, Switch, Redirect } from "react-router-dom";
 import Chatroom from "./Chatroom/Chatroom";
 import PlaceHolder from "./PlaceHolder/Placeholder";
 import chatBg from "../../assets/Image/chatBg.jpg";
+import chatBgDark from "../../assets/Image/chat_bg_dark.jpg";
 import StartChat from "../../component/Chats/StartChat/StartChat";
 import firebase from "../../firebase";
 import "firebase/auth";
@@ -39,7 +40,18 @@ class Messages extends Component {
 
     document.title = "Skychat messenger";
     var metaThemeColor = document.querySelector("meta[name=theme-color]");
-    metaThemeColor.setAttribute("content", 'var(--white)  ');
+
+    let theme = localStorage.getItem('skychatTheme');
+    const userData = { ...this.state.userData }
+
+
+    if (theme === 'dark') {
+      userData.chatroomBg = chatBgDark
+      this.setState({ userData: userData })
+    } else {
+      userData.chatroomBg = chatBg
+      this.setState({ userData: userData })
+    }
   }
   componentDidUpdate() {
     if (this.props.match.params.chatId !== this.state.chatId) {

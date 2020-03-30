@@ -64,7 +64,7 @@ class Profile extends Component {
 
 
                 {this.state.loading ?
-                    <div style={{ height: '80vh' }}><Spinner /></div> : <React.Fragment>
+                    <div style={{ height: '80vh' }}><Spinner style={{ background: 'var(--gray)' }} /> <p className={classes.brand}>skychat by odunmilade</p></div> : <React.Fragment>
                         {this.state.errorMessage ? <Alert type="danger" show={true}>{this.state.errorMessage}</Alert> : ''}
 
                         <Switch>

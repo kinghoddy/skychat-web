@@ -5,6 +5,7 @@ import 'firebase/database';
 import { withRouter } from 'react-router-dom'
 import Spinner from '../../UI/Spinner/Spinner'
 import Picture from '../../../assets/Image/group.png'
+import chat from '../Chat/groupChat';
 
 class StartChat extends Component {
 
@@ -14,6 +15,7 @@ class StartChat extends Component {
         friends: [],
         username: "",
         profilePicture: "",
+        icon: Picture,
         uid: null,
         members: [],
         name: "",
@@ -121,36 +123,44 @@ class StartChat extends Component {
     }
     createGroup = (e) => {
         e.preventDefault();
-        const chatref = firebase.database().ref('chats/' + this.state.name)
-        chatref.child("chats/").push({
-            message: this.state.username + " created the group",
-            sender: 'added',
-            date: Date.now()
-        });
-        firebase.database().ref('users/' + this.state.uid + "/chatsId").push(this.state.name)
-        this.state.members.forEach(cur => {
-            const memberRef = firebase.database().ref('users/' + cur.userId)
-            memberRef.child('chatsId').push(this.state.name)
+        const chatref = firebase.database().ref('chats/' + this.state.name.toLocaleLowerCase())
+        chatref.once('value', s => {
+            if (s.val()) {
+                alert('Group name exists \n Pick another group name ')
+            } else {
+                chatref.child("chats/").push({
+                    message: this.state.username + " created the group",
+                    sender: 'added',
+                    date: Date.now()
+                });
+                firebase.database().ref('users/' + this.state.uid + "/chatsId").push(this.state.name)
+                this.state.members.forEach(cur => {
+                    const memberRef = firebase.database().ref('users/' + cur.userId)
+                    memberRef.child('chatsId').push(this.state.name)
 
-            chatref.child('metadata/' + cur.userId).set({
-                username: cur.username,
-                profilePicture: cur.profilePicture
-            })
-            chatref.child("chats/").push({
-                message: this.state.username,
-                added: cur.username,
-                sender: 'added',
-                date: Date.now()
-            });
+                    chatref.child('metadata/' + cur.userId).set({
+                        username: cur.username,
+                        profilePicture: cur.profilePicture
+                    })
+                    chatref.child("chats/").push({
+                        message: this.state.username,
+                        added: cur.username,
+                        sender: 'added',
+                        date: Date.now()
+                    });
+                })
+                chatref.child('metadata/' + this.state.uid).set({
+                    username: this.state.username,
+                    owner: true,
+                    profilePicture: this.state.profilePicture
+                })
+                chatref.child('icon').set(this.state.icon)
+                chatref.child('description').set(this.state.description).then(res => {
+                    this.props.history.push('/messages/' + this.state.name)
+                })
+            }
         })
-        chatref.child('metadata/' + this.state.uid).set({
-            username: this.state.username,
-            owner: true,
-            profilePicture: this.state.profilePicture
-        })
-        chatref.child('description').set(this.state.description).then(res => {
-            this.props.history.push('/messages/' + this.state.name)
-        })
+
 
 
 
@@ -181,7 +191,7 @@ class StartChat extends Component {
                             border: "none",
                             width: "100%",
                             padding: ".5rem 1rem "
-                        }} rows="3" placeholder="Group description" />
+                        }} rows="3" placeholder="Group description" required />
 
                         <h4 className="pt-4"><i className="material-icons pr-3">people</i>Members {this.state.members.length + 1} </h4>
                         <div className={classes.horizontal + " pb-3 mt-2"}>
