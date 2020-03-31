@@ -220,7 +220,7 @@ class Chatroom extends Component {
       <div className={classes.chatroom}>
         <nav
           className={
-            classes.navbar + " bg-white navbar navbar-expand navbar-light"
+            classes.navbar + "  navbar navbar-expand navbar-light"
           }
         >
           <Link to="/messages/">
@@ -248,12 +248,12 @@ class Chatroom extends Component {
               <p style={{ lineHeight: "1" }} className="text-dark m-0 font-weight-light">Active now</p>
             </div>
           ) :       <h1 className="text-dark mb-0 h5 text-capitalize" style={{ lineHeight: "1" }}>
-              {this.state.receiverData.username.substring(0, 18) +
-                  (Array.from(this.state.receiverData.username).length > 18
+              {this.props.match.params.chatId.substring(0, 18) +
+                (Array.from(this.props.match.params.chatId).length > 18
                     ? "..."
                     : "")}
               </h1>}
-                    <div className="collapse navbar-collapse">
+          <div className="collapse navbar-collapse">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link className="nav-link py-0" to="">
